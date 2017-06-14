@@ -1,9 +1,11 @@
 package com.shwetak3e.loading.fragments;
 
 import android.app.Dialog;
-import android.app.Fragment;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.shwetak3e.loading.IssueVideoActivity;
 import com.shwetak3e.loading.R;
 import com.shwetak3e.loading.adapter.ItemsToBeLoadedAdapter;
 import com.shwetak3e.loading.model.Booking;
@@ -157,7 +160,7 @@ public class LoadItems extends Fragment {
                                     shipmentItem.setDamaged_count(damaged_count);
 
                                 }
-
+                              startActivity(new Intent(getActivity(), IssueVideoActivity.class));
                             }
 
                         }else if("missing".equalsIgnoreCase(type)){

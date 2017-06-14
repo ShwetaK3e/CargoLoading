@@ -1,38 +1,39 @@
 package com.shwetak3e.loading;
 
-import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
 
-import com.shwetak3e.loading.adapter.DrawerAdapter;
-import com.shwetak3e.loading.adapter.DrawerItem;
-import com.shwetak3e.loading.adapter.SimpleItem;
-import com.shwetak3e.loading.adapter.SpaceItem;
+import com.shwetak3e.loading.fragments.DrawerFragment;
 import com.shwetak3e.loading.fragments.LoadItems;
+import com.shwetak3e.loading.fragments.LoadItems_itemwise;
 import com.shwetak3e.loading.fragments.LoadingSheet;
 import com.shwetak3e.loading.model.Booking;
 import com.shwetak3e.loading.model.ShipmentItem;
-import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity  implements DrawerAdapter.OnItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements DrawerFragment.FragmentDrawerListener {
 
     private static final int POS_LOAD_ITEMS = 0;
     private static final int POS_LOADED_ITEMS= 1;
@@ -44,89 +45,105 @@ public class MainActivity extends AppCompatActivity  implements DrawerAdapter.On
     public static Map<Integer,Booking> bookings=new HashMap<>();
 
 
+    Toolbar mToolbar;
+    DrawerFragment drawerFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent=getIntent();
+        String activity=intent.getStringExtra("Activity");
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         setData1();
         setData2();
         setData3();
 
-        new SlidingRootNavBuilder(this)
-                .withToolbarMenuToggle(toolbar)
-                .withMenuOpened(false)
-                .withSavedState(savedInstanceState)
-                .withMenuLayout(R.layout.menu_left_drawer)
-                .inject();
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        loadScreenIcons();
-        loadScreenTitles();
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        DrawerAdapter adapter = new DrawerAdapter(Arrays.asList(
-                createItemFor(POS_LOAD_ITEMS).setChecked(true),
-                createItemFor(POS_LOADED_ITEMS),
-                new SpaceItem(48),
-                createItemFor(POS_LOGOUT)));
-        adapter.setListener(this);
-        RecyclerView menu_list = (RecyclerView) findViewById(R.id.menu_list);
-        menu_list.setNestedScrollingEnabled(false);
-        menu_list.setLayoutManager(new GridLayoutManager(this,1));
-        menu_list.setAdapter(adapter);
-
-        adapter.setSelected(POS_LOAD_ITEMS);
+        drawerFragment = (DrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+        drawerFragment.setDrawerListener(this);
+        if("TO_LOAD".equalsIgnoreCase(activity)) {
+            displayView(2);
+        }else {
+            displayView(0);
+        }
 
     }
 
 
-    private DrawerItem createItemFor(int position) {
-        return new SimpleItem(menunIconsURI.get(position), menuTitles.get(position))
-                .withIconTint(color(R.color.textColorSecondary))
-                .withTextTint(color(R.color.textColorPrimary))
-                .withSelectedIconTint(color(R.color.colorAccent))
-                .withSelectedTextTint(color(R.color.colorAccent));
-    }
+
+
+
+
+
 
 
     @Override
-    public void onItemSelected(int position) {
-        Fragment selectedScreen=null;
-        if (position == POS_LOGOUT) {
-            finish();
-        }else if(position==POS_LOAD_ITEMS){
-            selectedScreen = LoadItems.newInstance();
-        }else if( position==POS_LOADED_ITEMS){
-            selectedScreen = LoadingSheet.newInstance();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            return true;
         }
-        showFragment(selectedScreen);
+
+        return super.onOptionsItemSelected(item);
     }
 
-
-    private void showFragment(Fragment fragment) {
-        getFragmentManager().beginTransaction()
-                .replace(R.id.container, fragment)
-                .commit();
+    @Override
+    public void onDrawerItemSelected(View view, int position) {
+        displayView(position);
     }
 
+    private void displayView(int position) {
+        Fragment fragment = null;
+        String title = getString(R.string.app_name);
+        switch (position) {
+            case 0:
+                fragment = LoadingSheet.newInstance();
+                title = getString(R.string.nav_item_home);
+                break;
+            case 1:
+                fragment = LoadItems.newInstance();
+                title = getString(R.string.nav_item_truck);
+                break;
+            case 2:
+                fragment = LoadItems_itemwise.newInstance();
+                title = getString(R.string.nav_item_to_load);
+                break;
+            case 3:
+                fragment = LoadingSheet.newInstance();
+                title = getString(R.string.nav_item_loaded);
+                break;
+            case 4:
+                fragment = LoadingSheet.newInstance();
+                title = getString(R.string.nav_item_to_unload);
+                break;
+            default:
+                break;
+        }
 
+        if (fragment != null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container_body, fragment);
+            fragmentTransaction.commit();
 
-    private void  loadScreenTitles() {
-        menuTitles.add("Load Items");
-        menuTitles.add ("Loaded Items");
-        menuTitles.add("LogOut");
-
+            // set the toolbar title
+            getSupportActionBar().setTitle(title);
+        }
     }
-
-    private  void loadScreenIcons() {
-        menunIconsURI.add(getResources().getDrawable(R.drawable.ic_home_outline_grey600_24dp));
-        menunIconsURI.add(getResources().getDrawable(R.drawable.ic_cart_outline_grey600_24dp));
-        menunIconsURI.add(getResources().getDrawable(R.drawable.ic_logout_grey600_24dp));
-
-    }
-
 
 
     void setData1() {
@@ -271,7 +288,6 @@ public class MainActivity extends AppCompatActivity  implements DrawerAdapter.On
         shipmentItem.setSame_truck_status(false);
         shipmentItems.add(shipmentItem);
 
-
         booking.setItems(shipmentItems);
         bookings.put(121,booking);
 
@@ -328,10 +344,7 @@ public class MainActivity extends AppCompatActivity  implements DrawerAdapter.On
     }
 
 
-    @ColorInt
-    private int color(@ColorRes int res) {
-        return ContextCompat.getColor(this, res);
-    }
+
 
 
 }

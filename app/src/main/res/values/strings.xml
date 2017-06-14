@@ -1,6 +1,28 @@
 <resources>
     <string name="app_name">Loading</string>
+    <string name="action_settings">Settings</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+
+    <string name="nav_item_home">Home</string>
+    <string name="nav_item_truck">Trucks</string>
+    <string name="nav_item_to_load">Load Items</string>
+    <string name="nav_item_loaded">Loaded Items</string>
+    <string name="nav_item_to_unload">Unload Items</string>
+    <string-array name="nav_drawer_labels">
+        <item>@string/nav_item_home</item>
+        <item>@string/nav_item_truck</item>
+        <item>@string/nav_item_to_load</item>
+        <item>@string/nav_item_loaded</item>
+        <item>@string/nav_item_to_unload</item>
+    </string-array>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+
+
 </resources>
