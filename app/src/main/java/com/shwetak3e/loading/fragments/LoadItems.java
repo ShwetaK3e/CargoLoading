@@ -77,10 +77,10 @@ public class LoadItems extends Fragment {
 
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.booking_id_dialog);
+        dialog.setContentView(R.layout.booking_success_dialog);
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         final EditText enter_booking_id=(EditText)dialog.findViewById(R.id.enter_booking_id);
-        Button find_booking = (Button) dialog.findViewById(R.id.find_booking);
+        Button find_booking = (Button) dialog.findViewById(R.id.confirm_booking);
 
         find_booking.setOnClickListener(new View.OnClickListener() {
 

@@ -1,9 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:padding="10dp"
+        android:gravity="center_vertical"
+        android:id="@+id/damage_desc_layout"
+        android:background="@color/white">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:hint="Describe the defect ....."
+            android:typeface="serif"
+            android:textStyle="italic"
+            android:id="@+id/damage_desc"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:gravity="center">
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_forward"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                android:id="@+id/store_damage_record"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="vertical"
+       android:weightSum="1"
+       android:layout_above="@id/damage_desc_layout"
+       android:layout_marginBottom="5dp">
+
+       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -12,7 +57,7 @@
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent">
+            android:background="@color/colorPrimary">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -24,10 +69,11 @@
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@+id/footer_video" >
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="0dp"
+           android:id="@+id/preview_layout"
+           android:layout_weight="1">
 
         <FrameLayout
             android:id="@+id/camera_preview_video"
@@ -53,20 +99,8 @@
             android:id="@+id/camera_preview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true" />
 
-
-
-
-
-
-        <ImageView
-            android:id="@+id/imgAutoFocus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/auto_focus_frame_invi" />
 
         <Button
             android:id="@+id/button_capture_video"
@@ -75,24 +109,14 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:background="@drawable/button_camera_selector" />
+            android:background="@drawable/button_camera_selector"
+            android:layout_marginBottom="10dp"/>
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/footer_video"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
 
-        android:background="@color/result_bg" >
+    </LinearLayout>
 
-        <TextView
-            android:id="@+id/lblResult_video"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:visibility="gone"
-            android:textColor="@android:color/white" />
+
+
+
     </RelativeLayout>
-
-</RelativeLayout>

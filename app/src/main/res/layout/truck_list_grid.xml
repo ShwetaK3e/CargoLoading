@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="2dp"
+    android:background="@color/colorPrimaryLight">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        android:background="@color/white">
+
+        <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2"
+        android:gravity="center"
+        android:padding="5dp">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_truck"
+            android:background="@drawable/bg_circle_white"
+            android:padding="5dp"
+            android:elevation="5dp"
+            android:translationZ="5dp"/>
+
+    </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.6"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6"
+                android:gravity="center"
+                android:padding="5dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+               <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="CJI35603H"
+                android:gravity="left"
+                android:typeface="serif"
+                android:textSize="15sp"
+                android:id="@+id/truck_id"
+                android:textStyle="bold"/>
+
+               <!--<LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4
+"
+                android:orientation="horizontal"
+                 android:gravity="right|top">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="HYD"
+                    android:gravity="center"
+                    android:typeface="serif"
+                    android:textSize="12sp"
+                    android:id="@+id/origin" />
+
+                   <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text=" - "
+                   android:gravity="center"
+                   android:typeface="serif"
+                   android:textSize="12sp"
+                   />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CHN"
+                    android:gravity="center"
+                    android:typeface="serif"
+                    android:textSize="12sp"
+                    android:id="@+id/dest" />
+
+
+            </LinearLayout>-->
+
+             </LinearLayout>
+
+            <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+                android:paddingLeft="5dp">
+              <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DRIVEN BY :"
+                android:gravity="center"
+                android:typeface="serif"
+                android:textSize="15sp"
+                android:textStyle="bold"/>
+              <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ram Lal"
+                android:gravity="center"
+                android:typeface="serif"
+                android:textSize="15sp"
+                android:id="@+id/driver_name"
+                android:paddingLeft="10dp"/>
+            </LinearLayout>
+
+
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2"
+        android:gravity="center"
+        android:padding="5dp">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_forward_arrow"
+            android:background="@drawable/bg_circle_white"
+            android:padding="5dp"
+            />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
+
+    </LinearLayout>

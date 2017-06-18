@@ -4,20 +4,16 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -27,25 +23,24 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.shwetak3e.loading.IssueVideoActivity;
+import com.shwetak3e.loading.MainActivity;
 import com.shwetak3e.loading.R;
 import com.shwetak3e.loading.adapter.ItemsToBeLoadedAdapter;
 import com.shwetak3e.loading.model.ShipmentItem;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
-public class LoadItems_itemwise extends Fragment {
+public class LoadItemsItemwise extends Fragment {
 
 
-    private static final String TAG =LoadItems_itemwise.class.getSimpleName() ;
+    private static final String TAG =LoadItemsItemwise.class.getSimpleName() ;
     RecyclerView item_to_be_loaded_list;
     public static List<ShipmentItem> booked_shipmentItems=new ArrayList<>();
     public static List<Integer> keyList=new ArrayList<>();
@@ -61,12 +56,21 @@ public class LoadItems_itemwise extends Fragment {
     int previousVolume=0;
     VideoView mVideoView=null;
     String videoPath = null;
+    String damage_desc;
+    TextView damage_desc_text;
     ImageView imgPreview;
     ImageButton record_issue_video;
+    ImageButton nxt_dest;
+    TextView drop_loc;
+    LinearLayout damage_layout;
+    static int next_loc=1;
+
+    LinearLayout enter_booking_id;
+    LinearLayout truck_details;
 
 
-    public static LoadItems_itemwise newInstance() {
-        LoadItems_itemwise fragment = new LoadItems_itemwise();
+    public static LoadItemsItemwise newInstance() {
+        LoadItemsItemwise fragment = new LoadItemsItemwise();
         return fragment;
     }
 
@@ -84,6 +88,27 @@ public class LoadItems_itemwise extends Fragment {
                  playVideo();
             }
         });
+        drop_loc=(TextView)view.findViewById(R.id.drop_loc);
+        nxt_dest=(ImageButton)view.findViewById(R.id.next_dest);
+        nxt_dest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(next_loc < MainActivity.truck_drop_loc.size()) {
+                    drop_loc.setText(MainActivity.truck_drop_loc.get(next_loc++));
+                }else {
+                    next_loc=1;
+                    drop_loc.setText(MainActivity.truck_drop_loc.get(next_loc++));
+                }
+            }
+        });
+
+        damage_layout=(LinearLayout)view.findViewById(R.id.damage_layout);
+        damage_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().startActivity(new Intent(getActivity(), IssueVideoActivity.class));
+            }
+        });
         record_issue_video=(ImageButton)view.findViewById(R.id.take_issue_video);
         record_issue_video.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,9 +117,32 @@ public class LoadItems_itemwise extends Fragment {
             }
         });
 
+        enter_booking_id=(LinearLayout)view.findViewById(R.id.enter_booking_id);
+        enter_booking_id.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), MainActivity.class);
+                i.putExtra("Activity","Enter_booking_ID");
+                startActivity(i);
+            }
+        });
+        truck_details=(LinearLayout)view.findViewById(R.id.truck_details);
+
+        damage_desc_text=(TextView)view.findViewById(R.id.damage_desc_txt);
+        damage_desc_text.setText("Is This Damaged ?");
+
         view.post(new Runnable() {
             @Override
             public void run() {
+                Intent i=getActivity().getIntent();
+                damage_desc=i.getStringExtra("Damage_desc");
+                if(damage_desc!=null) {
+                    if (damage_desc.length()!=0) {
+                        damage_desc_text.setText(damage_desc);
+                    } else {
+                        damage_desc_text.setText("This is Damaged.");
+                    }
+                }
                 setupVideoPlayer();
             }
         });

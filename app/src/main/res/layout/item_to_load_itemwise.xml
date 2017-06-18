@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    android:layout_marginBottom="20dp"
+    android:layout_marginBottom="5dp"
     android:orientation="vertical">
 
     <LinearLayout
@@ -185,27 +185,43 @@
               </LinearLayout>
               <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_height="match_parent"
                 android:layout_weight="0.5"
-                android:layout_marginLeft="0.5dp"
-                android:layout_marginRight="0.5dp"
-                android:layout_marginTop="0.5dp"
-                android:paddingBottom="5dp"
-                android:background="@color/white"
-                  android:gravity="center">
+                android:orientation="vertical"
+                android:weightSum="1">
 
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/ic_qrcode"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_gravity="center" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.33"
+                    android:orientation="horizontal"
+                    android:weightSum="1"
+                    android:gravity="center"
+                    android:paddingLeft="15dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.3"
+                        android:text="Wt :"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
+                        android:textColor="@color/black"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:text=" 50 kg"
+                        android:textSize="15sp" />
+
+
+                </LinearLayout>
+
+
 
 
             </LinearLayout>
+
 
         </LinearLayout>
 
@@ -298,7 +314,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/drop_loc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -356,30 +372,34 @@
         android:background="@color/white"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="15dp">
+        android:padding="15dp"
+        android:id="@+id/damage_layout">
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="0.8"
             android:layout_height="wrap_content"
             android:gravity="left">
            <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/ic_error"
-            android:layout_marginRight="5dp"
+               android:layout_width="25dp"
+               android:layout_height="25dp"
+               android:src="@drawable/ic_error"
+               android:layout_marginRight="5dp"
                android:layout_gravity="center"/>
 
            <TextView
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:paddingLeft="10dp"
-               android:text="Is  the Item Damaged ?"
+               android:text="Is   the jkjlkl Item Damaged ?"
                android:textColor="@color/black"
                android:textSize="18sp"
                android:layout_marginRight="5dp"
                android:layout_gravity="center"
                android:gravity="center"
-               android:typeface="serif"/>
+               android:typeface="serif"
+               android:id="@+id/damage_desc_txt"
+               android:ellipsize="end"
+               android:singleLine="true"/>
 
         </LinearLayout>
 
@@ -407,7 +427,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         android:id="@+id/issue_video_preview"
         android:layout_marginBottom="3dp">
 

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#000000"
+        android:id="@+id/booking_id_layout"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="40dp">
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.8"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="horizontal">
+       <ImageView
+           android:layout_width="30dp"
+           android:layout_height="30dp"
+           android:src="@drawable/ic_truck_edit"
+           android:background="@android:color/transparent"
+           android:scaleType="centerCrop"
+           android:layout_gravity="right|center_vertical"/>
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="5dp"
+            android:layout_height="wrap_content"
+            android:hint="Enter Truck ID"
+            android:textColorHint="#d6d6d6"
+            android:textColor="#d6d6d6"
+            android:typeface="sans"
+            android:id="@+id/new_truck_id"/>
+
+       </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_driver"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:layout_gravity="right|center_vertical"/>
+
+                <EditText
+                    android:id="@+id/driver_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_weight="1"
+                    android:hint="Enter Driver Name"
+                    android:textColorHint="#d0d0d0"
+                    android:typeface="sans"
+                    android:textColor="#d6d6d6"
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_to_fro"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:layout_gravity="right|center_vertical"/>
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_height="wrap_content"
+                    android:hint="From"
+                    android:gravity="center"
+                    android:textColorHint="#d6d6d6"
+                    android:textColor="#d6d6d6"
+                    android:typeface="sans"
+                    android:id="@+id/origin"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_height="wrap_content"
+                    android:text="--"
+                    android:gravity="center"
+                    android:typeface="sans"
+                    android:textColor="#d6d6d6"/>
+
+
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_height="wrap_content"
+                    android:hint="To"
+                    android:gravity="center"
+                    android:textColorHint="#d6d6d6"
+                    android:typeface="sans"
+                    android:id="@+id/dest"
+                    android:textColor="#d6d6d6"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+            <LinearLayout
+           android:layout_width="0dp"
+           android:layout_weight="0.2"
+           android:layout_height="match_parent"
+           android:gravity="bottom|center_horizontal"
+                android:layout_marginBottom="15dp">
+           <ImageButton
+               android:layout_width="20dp"
+               android:layout_height="20dp"
+               android:src="@drawable/ic_forward"
+               android:background="@android:color/transparent"
+               android:scaleType="centerInside"
+
+               android:id="@+id/add_new_truck"
+               />
+       </LinearLayout>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@id/booking_id_layout"
+        android:padding="5dp">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryLight">
+
+            <FrameLayout
+                android:background="#000"
+                android:id="@+id/camera_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"/>
+
+
+
+            <RelativeLayout
+                android:id="@+id/overlayView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </RelativeLayout>
+
+
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_truck"
+        android:background="@drawable/bg_circle_white"
+        android:padding="10dp"
+        android:layout_below="@id/booking_id_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-20dp"
+        android:elevation="5dp"
+        android:translationZ="5dp"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OR"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/black"/>
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

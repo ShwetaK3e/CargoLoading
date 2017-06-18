@@ -26,6 +26,8 @@ import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.OrientationEventListener;
 import android.view.ScaleGestureDetector;
@@ -34,7 +36,9 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -70,11 +74,15 @@ public class IssueVideoActivity extends AppCompatActivity {
 
     private FrameLayout preview;
     private Button captureButton;
+    private ImageButton save_damage_record;
+    private EditText damage_desc;
     private Camera mCamera;
     private MediaRecorder mMediaRecorder;
     private CameraSurfaceView mPreview;
     private CameraManager cameraManager;
     private boolean isVideoRecordingStarted = false;
+    private int preview_height=0;
+    private  RelativeLayout preview_layout;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -123,6 +131,7 @@ public class IssueVideoActivity extends AppCompatActivity {
         int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
         camToOpen = getCamNumber();
+        preview_layout=(RelativeLayout)findViewById(R.id.preview_layout);
         preview = (FrameLayout) findViewById(R.id.camera_preview);
         captureButton = (Button) findViewById(R.id.button_capture_video);
         captureButton.setOnClickListener(new View.OnClickListener() {
@@ -131,11 +140,44 @@ public class IssueVideoActivity extends AppCompatActivity {
                 recordVideo();
             }
         });
+        damage_desc=(EditText)findViewById(R.id.damage_desc);
+        save_damage_record=(ImageButton)findViewById(R.id.store_damage_record);
+        save_damage_record.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(IssueVideoActivity.this, MainActivity.class);
+                i.putExtra("Activity","TO_LOAD");
+                i.putExtra("Damage_desc",damage_desc.getText().toString().trim());
+                startActivity(i);
+                finish();
+            }
+        });
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -183,10 +225,7 @@ public class IssueVideoActivity extends AppCompatActivity {
                             if (arg1 == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
                                 releaseMediaRecorder(); // release the MediaRecorder
                                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, previousVolume, 0);
-                                Intent i = new Intent(IssueVideoActivity.this, MainActivity.class);
-                                i.putExtra("Activity","TO_LOAD");
-                                startActivity(i);
-                                finish();
+
                             }
                         }
                     });
@@ -209,10 +248,7 @@ public class IssueVideoActivity extends AppCompatActivity {
             playVideoRecordingStartedSound();
             releaseMediaRecorder();
             audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, previousVolume, 0);
-            Intent i = new Intent(IssueVideoActivity.this, MainActivity.class);
-            i.putExtra("Activity","TO_LOAD");
-            startActivity(i);
-            finish();
+
         }
     }
 
@@ -246,6 +282,15 @@ public class IssueVideoActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(hasFocus){
+            preview_height=preview_layout.getHeight();
+        }
+    }
+
     @Override
     protected void onResume() {
         try {
@@ -261,9 +306,7 @@ public class IssueVideoActivity extends AppCompatActivity {
                 builder.setMessage("SD card is not mounted.");
                 builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent i = new Intent(IssueVideoActivity.this, MainActivity.class);
-                        i.putExtra("Activity","TO_LOAD");
-                        startActivity(i);
+
                         dialog.dismiss();
                     }
                 });
@@ -320,9 +363,7 @@ public class IssueVideoActivity extends AppCompatActivity {
                 sendBroadcast(mediaScanIntent1);
             } else {
                 Toast.makeText(IssueVideoActivity.this, "Insufficient Storage...", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(IssueVideoActivity.this, MainActivity.class);
-                startActivity(i);
-                finish();
+
             }
             mMediaRecorder.setPreviewDisplay(mPreview.getHolder().getSurface());
             setVideoRotation();
@@ -497,10 +538,6 @@ public class IssueVideoActivity extends AppCompatActivity {
 
     private void exitOnException(String errorMessage) {
         Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
-        Intent i = new Intent(IssueVideoActivity.this, MainActivity.class);
-        i.putExtra("Activity","TO_LOAD");
-        startActivity(i);
-        finish();
     }
 
     @SuppressWarnings("deprecation")
@@ -823,6 +860,8 @@ public class IssueVideoActivity extends AppCompatActivity {
                 optimalDisplaySize.y = metrics.heightPixels;
                 optimalDisplaySize.x = (int) (optimalDisplaySize.y * requiredAspectRatio);
             }
+            optimalDisplaySize.x = metrics.widthPixels;
+            optimalDisplaySize.y = preview_height;
         }
 
         private void setOptimalPreviewSize(List<Camera.Size> supportedPreviewSizes, double requiredAspectRatio) {
@@ -906,7 +945,7 @@ public class IssueVideoActivity extends AppCompatActivity {
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             Log.i(TAG + "onMeasure", "Started", null);
             int widthSpec = MeasureSpec.makeMeasureSpec(cameraManager.getOptimalDisplaySize().x, MeasureSpec.EXACTLY);
-            int heightSpec = MeasureSpec.makeMeasureSpec(cameraManager.getOptimalDisplaySize().y, MeasureSpec.EXACTLY);
+            int heightSpec = MeasureSpec.makeMeasureSpec(preview_height, MeasureSpec.EXACTLY);
             super.onMeasure(widthSpec, heightSpec);
             if (mCamera != null) {
                 if (!isVideoRecordingStarted) {
@@ -943,12 +982,8 @@ public class IssueVideoActivity extends AppCompatActivity {
                         Camera.Size pictureSize = getOptimalVideoPictureSize(parameters.getSupportedPictureSizes(),
                                 getAspectRatio(profile.videoFrameWidth, profile.videoFrameHeight));
                         Log.i(TAG + "surfaceCreated", pictureSize.width + "x" + pictureSize.height+ "PictureSize");
-                        //Some notorious device.
-                        if (Build.MODEL.contains("F-02H") || Build.MODEL.contains("F-04G")) {
-                            parameters.setPictureSize(1920, 1080);
-                        } else {
-                            parameters.setPictureSize(pictureSize.width, pictureSize.height);
-                        }
+                        parameters.setPictureSize(pictureSize.width, pictureSize.height);
+
                     }
                     setParameters(parameters, "surfaceCreated");
                     mCamera.startPreview();

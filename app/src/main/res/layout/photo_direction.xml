@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:gravity="center_horizontal"
+    android:weightSum="1">
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Take a photo of Truck No. Plate"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:textColor="#d6d6d6"
+        android:textSize="20sp"
+        android:layout_marginTop="30dp"
+        android:textStyle="bold"
+        android:typeface="sans"/>
+
+
+</LinearLayout>

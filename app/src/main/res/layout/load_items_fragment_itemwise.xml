@@ -26,7 +26,8 @@
             android:layout_marginRight="0.5dp"
             android:layout_marginTop="0.5dp"
             android:paddingBottom="5dp"
-            android:background="@color/white">
+            android:background="@color/white"
+            android:id="@+id/enter_booking_id">
 
             <ImageView
                 android:layout_width="30dp"
@@ -58,7 +59,8 @@
             android:layout_marginLeft="0.5dp"
             android:layout_marginRight="0.5dp"
             android:layout_marginTop="0.5dp"
-            android:paddingBottom="5dp">
+            android:paddingBottom="5dp"
+            android:id="@+id/truck_details">
 
             <ImageView
                 android:layout_width="30dp"
@@ -118,11 +120,16 @@
 
 
 
+
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="5dp"
-        android:layout_above="@id/header">
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="2dp"
+        android:layout_above="@id/header"
+        >
 
         <include
             android:id="@+id/load_this_item"

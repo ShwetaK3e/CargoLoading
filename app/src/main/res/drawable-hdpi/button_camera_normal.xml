@@ -5,9 +5,9 @@
         <shape android:shape="oval" >
             <stroke
                 android:width="3dp"
-                android:color="#C24C62" />
+                android:color="@color/colorPrimaryDark" />
 
-            <solid android:color="#CB4961" />
+            <solid android:color="@android:color/transparent" />
 
             <corners android:radius="15dp" />
 
@@ -32,7 +32,7 @@
     <item>
         <shape android:shape="oval" >
             <corners android:radius="15dp"/>
-            <solid android:color="#E26E83" />
+            <solid android:color="@color/colorPrimary" />
         </shape>
     </item>
     <item>
