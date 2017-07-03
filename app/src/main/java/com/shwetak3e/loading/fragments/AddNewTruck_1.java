@@ -39,7 +39,6 @@ import android.widget.Toast;
 import com.shwetak3e.loading.MainActivity;
 import com.shwetak3e.loading.R;
 import com.shwetak3e.loading.model.Truck;
-import com.shwetak3e.loading.model.Truck_1;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -48,14 +47,14 @@ import java.util.List;
 import static com.shwetak3e.loading.MainActivity.trucks;
 
 
-public class AddNewTruck extends Fragment {
+public class AddNewTruck_1 extends Fragment {
 
 
-    private static final String TAG =AddNewTruck.class.getSimpleName() ;
+    private static final String TAG =AddNewTruck_1.class.getSimpleName() ;
     private static final int FOCUS_STATE_DONE =108 ;
     private static final int FOCUS_STATE_WAITING =107 ;
 
-    ImageButton add_new_truck;
+    ImageButton find_truck;
     private RelativeLayout overlayView;
     private AudioManager audioManager;
     private int previousVolume;
@@ -95,22 +94,23 @@ public class AddNewTruck extends Fragment {
     EditText id,driver,origin,dest;
 
 
-    public static AddNewTruck newInstance() {
-        AddNewTruck fragment = new AddNewTruck();
+    public static AddNewTruck_1 newInstance() {
+        AddNewTruck_1 fragment = new AddNewTruck_1();
         return fragment;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.fragment_new_truck, container, false);
+        View view= inflater.inflate(R.layout.fragment_new_truck_1, container, false);
 
-        add_new_truck=(ImageButton)view.findViewById(R.id.find_truck);
-        add_new_truck.setOnClickListener(new View.OnClickListener() {
+        find_truck=(ImageButton)view.findViewById(R.id.find_truck);
+        find_truck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Truck truck=new Truck();
                 truck.setId(id.getText().toString().trim());
+                truck.setDriver_name(driver.getText().toString().trim());
                 truck.setOrigin(origin.getText().toString().trim());
                 truck.setDestination(dest.getText().toString().trim());
                 trucks.add(truck);

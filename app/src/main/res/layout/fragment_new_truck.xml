@@ -160,7 +160,7 @@
                android:background="@android:color/transparent"
                android:scaleType="centerInside"
 
-               android:id="@+id/add_new_truck"
+               android:id="@+id/find_truck"
                />
        </LinearLayout>
 

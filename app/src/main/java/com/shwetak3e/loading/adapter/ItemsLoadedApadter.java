@@ -34,8 +34,8 @@ public class ItemsLoadedApadter extends RecyclerView.Adapter<ItemsLoadedApadter.
 
     public ItemsLoadedApadter(Context context) {
         this.context=context;
-        for(Map.Entry<Integer,Booking> entry :bookings.entrySet()) {
-            int key = entry.getKey();
+        for(Map.Entry<String,Booking> entry :bookings.entrySet()) {
+            String key = entry.getKey();
             Booking booking = bookings.get(key);
             List<ShipmentItem> shipmentItems = booking.getItems();
             for (ShipmentItem shipmentItem:shipmentItems){
@@ -47,6 +47,41 @@ public class ItemsLoadedApadter extends RecyclerView.Adapter<ItemsLoadedApadter.
             }
 
         }
+
+        ShipmentItem  shipmentItem=new ShipmentItem();
+        shipmentItem.setId("120_1");
+        shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
+        shipmentItem.getBookedItem().setCommodityName("Refrigerator");
+        shipmentItem.getBookedItem().setDescription("Handle Top part with Care ");
+        shipmentItem.setImageUri(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_refrigerator).toString());
+        shipmentItem.setShippedItemCount(20);
+        shipmentItem.setLoadedCount(0);
+        shipmentItem.setUnloadedCount(20);
+        shipmentItem.setStatus(1);
+        shipmentItem.setDamaged_count(0);
+        shipmentItem.setMissing_count(0);
+        shipmentItem.setLeakage_count(0);
+        shipmentItem.setDamagedStatus(false);
+        shipmentItem.setSame_truck_status(false);
+        shipmentItemS.add(shipmentItem);
+
+        shipmentItem=new ShipmentItem();
+        shipmentItem.setId("120_2");
+        shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
+        shipmentItem.getBookedItem().setCommodityName("Chair");
+        shipmentItem.getBookedItem().setDescription("This contains Cushion ");
+        shipmentItem.setImageUri(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_chair).toString());
+        shipmentItem.setShippedItemCount(5);
+        shipmentItem.setLoadedCount(0);
+        shipmentItem.setUnloadedCount(5);
+        shipmentItem.setStatus(1);
+        shipmentItem.setDamaged_count(0);
+        shipmentItem.setMissing_count(0);
+        shipmentItem.setLeakage_count(0);
+        shipmentItem.setDamagedStatus(false);
+        shipmentItem.setSame_truck_status(false);
+        shipmentItemS.add(shipmentItem);
+
 
 
     }
@@ -70,15 +105,12 @@ public class ItemsLoadedApadter extends RecyclerView.Adapter<ItemsLoadedApadter.
         final String booking_id=shipmentItemS.get(position).getId().toString().split("_")[0];
         final int shipped_count=shipmentItemS.get(position).getShippedItemCount();
         final int loaded_count=shipmentItemS.get(position).getLoadedCount();
-        final int damaged_count=shipmentItemS.get(position).getDamaged_count();
-        final int missinh_count=shipmentItemS.get(position).getMissing_count();
+
 
         Glide.with(context).load(shipmentItemS.get(position).getImageUri()).into(holder.commodity_icon);
         holder.commodity_name.setText(shipmentItemS.get(position).getBookedItem().getCommodityName());
         holder.unloaded_count.setText(String.valueOf(shipped_count));
         holder.desc.setText(shipmentItemS.get(position).getBookedItem().getDescription());
-        holder.damaged_count.setText(String.valueOf(damaged_count));
-        holder.missing_count.setText(String.valueOf(missinh_count));
         holder.loaded_count.setText(String.valueOf(loaded_count));
         holder.booking_id.setText(booking_id);
 
@@ -132,8 +164,6 @@ public class ItemsLoadedApadter extends RecyclerView.Adapter<ItemsLoadedApadter.
         TextView commodity_name;
         TextView unloaded_count;
         TextView loaded_count;
-        TextView damaged_count;
-        TextView missing_count;
         TextView desc;
         ImageView error_status;
         ImageView complete_status;
@@ -152,8 +182,6 @@ public class ItemsLoadedApadter extends RecyclerView.Adapter<ItemsLoadedApadter.
             error_status=(ImageView) itemView.findViewById(R.id.damaged_status);
             loaded_count=(TextView) itemView.findViewById(R.id.count_loaded);
             complete_status=(ImageView)itemView.findViewById(R.id.status);
-            damaged_count=(TextView)itemView.findViewById(R.id.damaged_count);
-            missing_count=(TextView)itemView.findViewById(R.id.missing_count);
             same_truck_status=(ImageView)itemView.findViewById(R.id.same_truck_status);
         }
 

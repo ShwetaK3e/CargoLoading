@@ -1,0 +1,751 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:id="@+id/header"
+        android:layout_marginBottom="2dp"
+        android:background="#8888"
+        android:paddingBottom="0dp"
+        android:elevation="5dp"
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="0.33"
+            android:layout_marginLeft="0.5dp"
+            android:layout_marginRight="0.5dp"
+            android:layout_marginTop="0.5dp"
+            android:paddingBottom="5dp"
+            android:background="@color/white"
+            android:id="@+id/enter_booking_id">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_qrcode"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="123490-R"
+                android:textStyle="bold"
+                android:typeface="serif"
+                android:textSize="10sp"
+                android:textColor="@color/maroon"
+                android:layout_gravity="center"
+                android:layout_marginTop="0dp"/>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="0.33"
+            android:background="@color/white"
+            android:layout_marginLeft="0.5dp"
+            android:layout_marginRight="0.5dp"
+            android:layout_marginTop="0.5dp"
+            android:paddingBottom="5dp"
+            android:id="@+id/truck_details">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_truck_1"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="JH13GJ45"
+                android:textStyle="bold"
+                android:typeface="serif"
+                android:textSize="10sp"
+                android:textColor="@color/maroon"
+                android:layout_gravity="center"
+                android:layout_marginTop="0dp"/>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="0.33"
+            android:background="@color/white"
+            android:layout_marginLeft="0.5dp"
+            android:layout_marginRight="0.5dp"
+            android:layout_marginTop="0.5dp"
+            android:paddingBottom="5dp"
+            android:id="@+id/settings">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_clock"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SETTINGS"
+                android:textStyle="bold"
+                android:typeface="serif"
+                android:textSize="10sp"
+                android:textColor="@color/maroon"
+                android:layout_gravity="center"
+                android:layout_marginTop="0dp"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/header">
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="0dp"
+        android:padding="5dp"
+        card_view:cardCornerRadius="10dp"
+        card_view:cardUseCompatPadding="true"
+        app:cardBackgroundColor="@color/light_grey"
+        app:cardElevation="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:orientation="vertical"
+            android:layout_margin="5dp">
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="10dp"
+        android:layout_marginBottom="3dp">
+
+        <LinearLayout
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:background="@color/maroon"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal">
+
+            <ImageView
+                android:id="@+id/commodity_img"
+                android:layout_width="105dp"
+                android:layout_height="105dp"
+                android:background="@color/white"
+                android:padding="10dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_truck_2" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:layout_margin="5dp">
+
+            <TextView
+                android:id="@+id/truck_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="HYD-23460344"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:typeface="serif"/>
+
+
+
+        </LinearLayout>
+
+
+
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginTop="3dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="15dp"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:gravity="left">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/ic_loading"
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:paddingLeft="10dp"
+                    android:text="HYD"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:typeface="serif"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:paddingLeft="10dp"
+                    android:text="Origin station"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:textStyle="italic"
+                    android:typeface="serif" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dp"
+                android:paddingLeft="10dp"
+                android:text=" - "
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:paddingLeft="10dp"
+                    android:text="VIZ"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:typeface="serif"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:paddingLeft="10dp"
+                    android:text="Drop station"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:textStyle="italic"
+                    android:typeface="serif" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:gravity="right">
+
+
+            <ImageButton
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="5dp"
+                android:background="@android:color/transparent"
+                android:padding="5dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_forward_arrow" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+          <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="15dp"
+                android:weightSum="1">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.8"
+                    android:gravity="left">
+
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/ic_clock" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="bottom"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="5dp"
+                            android:paddingLeft="10dp"
+                            android:text="11:30 AM"
+                            android:textColor="@color/black"
+                            android:textSize="15sp"
+                            android:typeface="serif"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="5dp"
+                            android:paddingLeft="10dp"
+                            android:text="Origin"
+                            android:textColor="@color/black"
+                            android:textSize="12sp"
+                            android:textStyle="italic"
+                            android:typeface="serif" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:paddingLeft="10dp"
+                        android:text=" - "
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/drop_loc_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="5dp"
+                            android:paddingLeft="10dp"
+                            android:text="13:00PM"
+                            android:textColor="@color/black"
+                            android:textSize="15sp"
+                            android:typeface="serif"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="5dp"
+                            android:paddingLeft="10dp"
+                            android:text="Drop (ETA)"
+                            android:textColor="@color/black"
+                            android:textSize="12sp"
+                            android:textStyle="italic"
+                            android:typeface="serif" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:gravity="right">
+
+
+                    <ImageButton
+
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@android:color/transparent"
+                        android:padding="5dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_forward_arrow" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:weightSum="1"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="15dp"
+                android:id="@+id/damage_layout">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.8"
+                    android:layout_height="wrap_content"
+                    android:gravity="left">
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_driver_user"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="15dp"
+                        android:text="Ram Lal"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:typeface="serif"
+                        android:id="@+id/driver_name"
+                        android:ellipsize="end"
+                        android:singleLine="true"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.2"
+                    android:layout_height="wrap_content"
+                    android:gravity="right">
+
+
+                    <ImageButton
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:padding="5dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_forward_arrow"
+                        android:background="@android:color/transparent"
+                        android:layout_marginRight="5dp"
+                        android:id="@+id/take_issue_video"/>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="15dp"
+                android:weightSum="1">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.8"
+                    android:gravity="left"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/ic_drop_loc"
+                        />
+
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="HYD"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:typeface="serif"/>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:paddingLeft="10dp"
+                        android:text=" - "
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+
+
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="VIJ"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:typeface="serif"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:paddingLeft="10dp"
+                        android:text=" - "
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="VIZ"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:typeface="serif" />
+
+
+
+
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:gravity="right">
+
+
+                    <ImageButton
+
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@android:color/transparent"
+                        android:padding="5dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_forward_arrow" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="15dp"
+                android:weightSum="1">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.8"
+                    android:gravity="left"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/ic_clock"
+                        />
+
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="11:30AM"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:typeface="serif"/>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:paddingLeft="10dp"
+                        android:text=" - "
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+
+
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="12:50PM"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:typeface="serif"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:paddingLeft="10dp"
+                        android:text=" - "
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="13:00PM"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:typeface="serif" />
+
+
+
+
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:gravity="right">
+
+
+                    <ImageButton
+
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@android:color/transparent"
+                        android:padding="5dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_forward_arrow" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+          </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    </ScrollView>
+
+</RelativeLayout>

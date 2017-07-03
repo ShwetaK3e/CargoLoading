@@ -2,6 +2,7 @@ package com.shwetak3e.loading;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import android.support.v4.app.Fragment;
@@ -23,20 +24,26 @@ import com.shwetak3e.loading.fragments.LoadItems;
 import com.shwetak3e.loading.fragments.LoadItemsItemwise;
 import com.shwetak3e.loading.fragments.LoadingSheet;
 import com.shwetak3e.loading.fragments.ReadBookingID;
+import com.shwetak3e.loading.fragments.TruckDetails;
 import com.shwetak3e.loading.fragments.TruckList;
 import com.shwetak3e.loading.model.Booking;
 import com.shwetak3e.loading.model.ShipmentItem;
 import com.shwetak3e.loading.model.Truck;
+import com.shwetak3e.loading.model.Truck_1;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements DrawerFragment.FragmentDrawerListener {
 
-    public static Map<Integer,Booking> bookings=new HashMap<>();
+    public static Map<String,Booking> bookings=new HashMap<>();
     static int i=-1;
 
 
@@ -44,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
     DrawerFragment drawerFragment;
     static public List<String> truck_drop_loc=new ArrayList<>();
     static public List<Truck> trucks=new LinkedList<>();
+    static public Map<String,Truck_1> trucks_1=new HashMap<>();
     static public Truck current_truck=new Truck();
     static public boolean express=false;
 
@@ -60,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
             setData2();
             setData3();
             setTruckList();
+            setTruckLoc();
         }
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -75,8 +84,10 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         }else if("Enter_booking_ID".equalsIgnoreCase(activity)) {
             displayView(3);
         }else if("Add_New_Truck".equalsIgnoreCase(activity)){
-            displayView(1);
-        } else{
+            displayView(6);
+        } else if("Truck_Details".equalsIgnoreCase(activity)){
+            displayView(5);
+        }else{
             displayView(0);
         }
 
@@ -115,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
                 title = getString(R.string.nav_truck_list);
                 break;
             case 1:
-                fragment = AddNewTruck.newInstance();
+                fragment = LoadingSheet.newInstance();
                 title = getString(R.string.nav_add_new_truck);
                 break;
             case 2:
@@ -128,7 +139,15 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
                 break;
             case 4:
                 fragment = LoadingSheet.newInstance();
-                title = getString(R.string.nav_item_to_unload);
+                title = getString(R.string.nav_item_loaded);
+                break;
+            case 5:
+                fragment = TruckDetails.newInstance();
+                title = getString(R.string.nav_truck_details);
+                break;
+            case 6:
+                fragment = AddNewTruck.newInstance();
+                title = getString(R.string.nav_add_new_truck);
                 break;
             default:
                 break;
@@ -149,12 +168,12 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
     void setData1() {
 
         Booking booking=new Booking();
-        booking.setBookingID(120);
+        booking.setBookingID("RTYUFG");
 
         List<ShipmentItem> shipmentItems=new ArrayList<>();
 
         ShipmentItem  shipmentItem=new ShipmentItem();
-        shipmentItem.setId("120_1");
+        shipmentItem.setId("RTYUFG_REF");
         shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
         shipmentItem.getBookedItem().setCommodityName("Refrigerator");
         shipmentItem.getBookedItem().setDescription("Handle Top part with Care ");
@@ -171,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItems.add(shipmentItem);
 
         shipmentItem=new ShipmentItem();
-        shipmentItem.setId("120_2");
+        shipmentItem.setId("RTYUFG_CHR");
         shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
         shipmentItem.getBookedItem().setCommodityName("Chair");
         shipmentItem.getBookedItem().setDescription("This contains Cushion ");
@@ -188,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItems.add(shipmentItem);
 
         shipmentItem=new ShipmentItem();
-        shipmentItem.setId("120_3");
+        shipmentItem.setId("RTYUFG_BED");
         shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
         shipmentItem.getBookedItem().setCommodityName("Bed");
         shipmentItem.getBookedItem().setDescription("Keep Beside Soft Items ");
@@ -205,22 +224,21 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItems.add(shipmentItem);
 
         booking.setItems(shipmentItems);
-        bookings.put(120,booking);
+        bookings.put("RTYUFG",booking);
 
 
     }
 
 
-
     void setData2() {
 
         Booking booking=new Booking();
-        booking.setBookingID(121);
+        booking.setBookingID("DJKFGH");
 
         List<ShipmentItem> shipmentItems=new ArrayList<>();
 
         ShipmentItem shipmentItem=new ShipmentItem();
-        shipmentItem.setId("121_1");
+        shipmentItem.setId("DJKFGH_DEO");
         shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
         shipmentItem.getBookedItem().setCommodityName("AXE Deo");
         shipmentItem.getBookedItem().setDescription("Keep Liquid safe. ");
@@ -237,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItems.add(shipmentItem);
 
         shipmentItem=new ShipmentItem();
-        shipmentItem.setId("121_2");
+        shipmentItem.setId("DJKFGH_BLB");
         shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
         shipmentItem.getBookedItem().setCommodityName("Bulbs");
         shipmentItem.getBookedItem().setDescription("Contains Glass Items ");
@@ -254,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItems.add(shipmentItem);
 
         shipmentItem=new ShipmentItem();
-        shipmentItem.setId("121_3");
+        shipmentItem.setId("DJKFGH_WALL");
         shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
         shipmentItem.getBookedItem().setCommodityName("Wallpaper");
         shipmentItem.getBookedItem().setDescription("Contains Paper Items");
@@ -272,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
 
 
         shipmentItem=new ShipmentItem();
-        shipmentItem.setId("121_4");
+        shipmentItem.setId("DJKFGH_BLN");
         shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
         shipmentItem.getBookedItem().setCommodityName("Blanket");
         shipmentItem.getBookedItem().setDescription("Handle with care ");
@@ -289,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItems.add(shipmentItem);
 
         booking.setItems(shipmentItems);
-        bookings.put(121,booking);
+        bookings.put("DJKFGH",booking);
 
 
     }
@@ -298,12 +316,12 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
     void setData3() {
 
         Booking booking=new Booking();
-        booking.setBookingID(122);
+        booking.setBookingID("CJKLRR");
 
         List<ShipmentItem> shipmentItems=new ArrayList<>();
 
         ShipmentItem  shipmentItem=new ShipmentItem();
-        shipmentItem.setId("122_1");
+        shipmentItem.setId("CJKLRR_SCS");
         shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
         shipmentItem.getBookedItem().setCommodityName("Suitcase");
         shipmentItem.getBookedItem().setDescription("Place this on top");
@@ -320,7 +338,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItems.add(shipmentItem);
 
         shipmentItem=new ShipmentItem();
-        shipmentItem.setId("122_2");
+        shipmentItem.setId("CJKLRR_ACL");
         shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
         shipmentItem.getBookedItem().setCommodityName("AC -Lenovo");
         shipmentItem.getBookedItem().setDescription("Contains Electrical Equipment ");
@@ -338,10 +356,11 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
 
 
         booking.setItems(shipmentItems);
-        bookings.put(122,booking);
+        bookings.put("CJKLRR",booking);
 
 
     }
+
 
     void setTruckList(){
         Truck truck =new Truck();
@@ -350,6 +369,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         truck.setDriver_name("Rana Ji");
         truck.setOrigin("HYD");
         truck.setDestination("VIZ");
+
         trucks.add(truck);
 
         truck =new Truck();
@@ -451,6 +471,80 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         trucks.add(truck);
 
 
+    }
+
+    public static final Map<String,ShipmentItem> shipments_1=new HashMap<>();
+    void setTruckList_1(){
+        Truck_1 truck_1=new Truck_1();
+
+        for(Map.Entry<String, Booking> booking:bookings.entrySet()){
+            List<ShipmentItem> shipments=booking.getValue().getItems();
+            for(ShipmentItem shipmentItem:shipments){
+                shipments_1.put(shipmentItem.getId(),shipmentItem);
+            }
+        }
+
+        List<ShipmentItem> shipment_list=(List<ShipmentItem>)shipments_1.values();
+
+        truck_1.setId("CJJKLDRT56");
+        truck_1.setOrigin("HYD");
+        truck_1.setDestination("VIZ");
+        truck_1.setStops(Arrays.asList("HYD","KOL","CHN","DEL","VIZ"));
+        truck_1.setShipmentItems(shipment_list);
+        trucks_1.put(truck_1.getId(),truck_1);
+
+        truck_1=new Truck_1();
+        truck_1.setId("CJFLRGHT67");
+        truck_1.setOrigin("HYD");
+        truck_1.setDestination("AHM");
+        truck_1.setStops(Arrays.asList("HYD","CAL","MUM","SUR","AHM"));
+        truck_1.setShipmentItems(shipment_list);
+        trucks_1.put(truck_1.getId(),truck_1);
+
+
+        truck_1=new Truck_1();
+        truck_1.setId("GJKFJRTU59");
+        truck_1.setOrigin("HYD");
+        truck_1.setDestination("BHP");
+        truck_1.setStops(Arrays.asList("HYD","TEA","HJK","BHL","BHP"));
+        truck_1.setShipmentItems(shipment_list);
+        trucks_1.put(truck_1.getId(),truck_1);
+
+
+
+        truck_1=new Truck_1();
+        truck_1.setId("GKBNRNTI89");
+        truck_1.setOrigin("HYD");
+        truck_1.setDestination("CGP");
+        truck_1.setStops(Arrays.asList("HYD","CGK","FIT","HKL","CGP"));
+        truck_1.setShipmentItems(shipment_list);
+        trucks_1.put(truck_1.getId(),truck_1);
+
+
+        truck_1=new Truck_1();
+        truck_1.setId("GJHLYPOT67");
+        truck_1.setOrigin("HYD");
+        truck_1.setDestination("BHP");
+        truck_1.setStops(Arrays.asList("HYD","TEA","HJK","BHL","BHP"));
+        truck_1.setShipmentItems(shipment_list);
+        trucks_1.put(truck_1.getId(),truck_1);
+
+        truck_1=new Truck_1();
+        truck_1.setId("HKGOPTMG56");
+        truck_1.setOrigin("HYD");
+        truck_1.setDestination("BHP");
+        truck_1.setStops(Arrays.asList("HYD","TEA","HJK","BHL","BHP"));
+        truck_1.setShipmentItems(shipment_list);
+        trucks_1.put(truck_1.getId(),truck_1);
+
+    }
+
+    void setTruckLoc(){
+        truck_drop_loc.add("HYD");
+        truck_drop_loc.add("CHN");
+        truck_drop_loc.add("VIZ");
+        truck_drop_loc.add("KOL");
+        truck_drop_loc.add("DEL");
     }
 
 

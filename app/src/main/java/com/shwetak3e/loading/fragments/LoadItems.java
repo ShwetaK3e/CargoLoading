@@ -53,27 +53,23 @@ public class LoadItems extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.load_items_fragment, container, false);
 
-        booking_id=(TextView)view.findViewById(R.id.booking_id);
-        new_bookiing_id=(LinearLayout)view.findViewById(R.id.new_booking_id);
-        new_bookiing_id.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enterBookingIdDialog();
-            }
-        });
-
-
         item_to_be_loaded_list = (RecyclerView) view.findViewById(R.id.items_loaded);
         item_to_be_loaded_list.setLayoutManager(new GridLayoutManager(getActivity(),1));
+        adapter=new ItemsToBeLoadedAdapter(getActivity(), new ItemsToBeLoadedAdapter.OnMyItemClickListener() {
+            @Override
+            public void onClick(int pos, String order, String type) {
+
+            }
+        });
+        item_to_be_loaded_list.setAdapter(adapter);
 
 
-        enterBookingIdDialog();
 
         return view;
     }
 
 
-    public void enterBookingIdDialog() {
+    /*public void enterBookingIdDialog() {
 
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -221,7 +217,7 @@ public class LoadItems extends Fragment {
         dialog.show();
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(true);
-    }
+    }*/
 
 
 

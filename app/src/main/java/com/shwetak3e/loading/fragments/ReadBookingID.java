@@ -48,6 +48,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.shwetak3e.loading.MainActivity.bookings;
 import static com.shwetak3e.loading.MainActivity.current_truck;
 import static com.shwetak3e.loading.MainActivity.express;
 
@@ -98,6 +99,7 @@ public class ReadBookingID extends Fragment {
 
     EditText new_booking_id;
     Dialog dialog;
+    ImageButton express_status;
 
 
     public static ReadBookingID newInstance() {
@@ -109,8 +111,20 @@ public class ReadBookingID extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_booking_id, container, false);
-        express=true;
 
+        express_status=(ImageButton)view.findViewById(R.id.express_status);
+        express_status.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(express) {
+                    express_status.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_normal));
+                    express = false;
+                }else{
+                    express_status.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_express));
+                    express = true;
+                }
+            }
+        });
         new_booking_id=(EditText)view.findViewById(R.id.new_booking_id);
         find_parcel=(ImageButton)view.findViewById(R.id.find_parcel);
         find_parcel.setOnClickListener(new View.OnClickListener() {
@@ -120,11 +134,12 @@ public class ReadBookingID extends Fragment {
 
                 if(!express) {
                     Intent i = new Intent(getActivity(), MainActivity.class);
+                    int bookingID=Integer.parseInt(new_booking_id.getText().toString().trim());
+                    LoadItems.booked_shipmentItems=bookings.get(bookingID).getItems();
                     i.putExtra("Activity", "TO_LOAD");
                     startActivity(i);
                 }else{
                     dialog = new Dialog(getActivity());
-
                     showSuccessDialog(new_booking_id.getText().toString().trim());
                     final Handler handler  = new Handler();
                     final Runnable runnable = new Runnable() {
@@ -132,6 +147,7 @@ public class ReadBookingID extends Fragment {
                         public void run() {
                             if (dialog.isShowing()) {
                                 dialog.dismiss();
+                                new_booking_id.setText("");
                             }
                         }
                     };
@@ -143,7 +159,7 @@ public class ReadBookingID extends Fragment {
                         }
                     });
 
-                    handler.postDelayed(runnable, 10000);
+                    handler.postDelayed(runnable, 5000);
 
                 }
             }

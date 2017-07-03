@@ -127,6 +127,14 @@ public class LoadItemsItemwise extends Fragment {
             }
         });
         truck_details=(LinearLayout)view.findViewById(R.id.truck_details);
+        truck_details.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), MainActivity.class);
+                i.putExtra("Activity","Truck_Details");
+                startActivity(i);
+            }
+        });
 
         damage_desc_text=(TextView)view.findViewById(R.id.damage_desc_txt);
         damage_desc_text.setText("Is This Damaged ?");

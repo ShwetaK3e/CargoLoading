@@ -9,14 +9,14 @@ import java.util.List;
 
 public class Booking {
 
-    int bookingID;
+    String bookingID;
     List<ShipmentItem> items=new ArrayList<>();
 
-    public int getBookingID() {
+    public String getBookingID() {
         return bookingID;
     }
 
-    public void setBookingID(int bookingID) {
+    public void setBookingID(String bookingID) {
         this.bookingID = bookingID;
     }
 

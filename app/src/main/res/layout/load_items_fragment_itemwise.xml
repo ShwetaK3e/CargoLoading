@@ -92,12 +92,13 @@
             android:layout_marginLeft="0.5dp"
             android:layout_marginRight="0.5dp"
             android:layout_marginTop="0.5dp"
-            android:paddingBottom="5dp">
+            android:paddingBottom="5dp"
+            android:id="@+id/settings">
 
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_qrcode"
+                android:src="@drawable/ic_clock"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
@@ -105,7 +106,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="123490-R"
+                android:text="SETTINGS"
                 android:textStyle="bold"
                 android:typeface="serif"
                 android:textSize="10sp"
@@ -125,11 +126,9 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="5dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="2dp"
-        android:layout_above="@id/header"
-        >
+        android:layout_marginBottom="42dp"
+        android:layout_above="@+id/header"
+        android:layout_centerHorizontal="true">
 
         <include
             android:id="@+id/load_this_item"

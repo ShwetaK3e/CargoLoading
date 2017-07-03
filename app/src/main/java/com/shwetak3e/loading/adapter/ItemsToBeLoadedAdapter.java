@@ -220,12 +220,8 @@ public class ItemsToBeLoadedAdapter extends RecyclerView.Adapter<ItemsToBeLoaded
             error_status=(ImageView) itemView.findViewById(R.id.damaged_status);
             loaded_count=(TextView) itemView.findViewById(R.id.loaded_count);
             status=(ImageView)itemView.findViewById(R.id.status);
-            decrease_damage_count=(ImageButton) itemView.findViewById(R.id.decrease_damage_count);
-            increase_damage_count=(ImageButton) itemView.findViewById(R.id.increase_damaged_count);
-            decrease_missing_count=(ImageButton) itemView.findViewById(R.id.decrease_missing_count);
-            increase_missing_count=(ImageButton) itemView.findViewById(R.id.increase_missing_count);
-            damaged_count=(TextView)itemView.findViewById(R.id.damaged_count);
-            missing_count=(TextView)itemView.findViewById(R.id.missing_count);
+
+
             same_truck_status=(ImageView)itemView.findViewById(R.id.same_truck_status);
         }
 

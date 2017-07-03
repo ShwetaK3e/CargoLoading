@@ -10,14 +10,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="1"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:paddingBottom="5dp">
 
         <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.2"
         android:gravity="center"
-        android:padding="5dp">
+            android:background="@color/white">
 
         <ImageView
             android:layout_width="30dp"
@@ -34,7 +35,7 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="0.6"
+            android:layout_weight="0.7"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -49,22 +50,21 @@
                 android:weightSum="1">
                <TextView
                 android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_weight="0.5"
                 android:layout_height="wrap_content"
                 android:text="CJI35603H"
                 android:gravity="left"
                 android:typeface="serif"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:id="@+id/truck_id"
                 android:textStyle="bold"/>
 
-               <!--<LinearLayout
+               <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.4
-"
+                android:layout_weight="0.5"
                 android:orientation="horizontal"
-                 android:gravity="right|top">
+                   android:gravity="right|top">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
                     android:id="@+id/dest" />
 
 
-            </LinearLayout>-->
+            </LinearLayout>
 
              </LinearLayout>
 
@@ -108,15 +108,14 @@
                 android:text="DRIVEN BY :"
                 android:gravity="center"
                 android:typeface="serif"
-                android:textSize="15sp"
-                android:textStyle="bold"/>
+                android:textSize="12sp" />
               <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ram Lal"
                 android:gravity="center"
                 android:typeface="serif"
-                android:textSize="15sp"
+                android:textSize="12sp"
                 android:id="@+id/driver_name"
                 android:paddingLeft="10dp"/>
             </LinearLayout>
@@ -130,7 +129,7 @@
         <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.2"
+        android:layout_weight="0.1"
         android:gravity="center"
         android:padding="5dp">
 

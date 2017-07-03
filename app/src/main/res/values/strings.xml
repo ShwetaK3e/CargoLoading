@@ -7,18 +7,21 @@
 
     <string name="nav_item_home">Home</string>
     <string name="nav_truck_list">Trucks</string>
+    <string name="nav_truck_details">Truck Details</string>
     <string name="nav_add_new_truck">New Truck</string>
     <string name="nav_item_truck">Trucks</string>
     <string name="nav_item_to_load">Load Items</string>
     <string name="nav_item_loaded">Loaded Items</string>
     <string name="nav_item_to_unload">Unload Items</string>
     <string name="nav_booking_id">Booking ID</string>
+    <string name="nav_blank"></string>
+    <string name="nav_log_out">Log Out</string>
     <string-array name="nav_drawer_labels">
-        <item>@string/nav_item_home</item>
-        <item>@string/nav_item_truck</item>
-        <item>@string/nav_item_to_load</item>
+        <item>@string/nav_truck_list</item>
         <item>@string/nav_item_loaded</item>
         <item>@string/nav_item_to_unload</item>
+        <item>@string/nav_blank</item>
+        <item>@string/nav_log_out</item>
     </string-array>
 
 
