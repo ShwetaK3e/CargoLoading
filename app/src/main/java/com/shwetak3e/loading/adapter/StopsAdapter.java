@@ -28,7 +28,7 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.ViewHolder> 
 
     @Override
     public StopsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.drop_loc_grid,parent);
+        View itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.drop_loc_grid,null);
         return new ViewHolder(itemView);
     }
 

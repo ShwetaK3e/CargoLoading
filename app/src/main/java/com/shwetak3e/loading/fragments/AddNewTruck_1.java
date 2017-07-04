@@ -39,12 +39,14 @@ import android.widget.Toast;
 import com.shwetak3e.loading.MainActivity;
 import com.shwetak3e.loading.R;
 import com.shwetak3e.loading.model.Truck;
+import com.shwetak3e.loading.model.Truck_1;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import static com.shwetak3e.loading.MainActivity.trucks;
+import static com.shwetak3e.loading.MainActivity.trucks_1;
 
 
 public class AddNewTruck_1 extends Fragment {
@@ -91,7 +93,10 @@ public class AddNewTruck_1 extends Fragment {
     private CameraPreview cameraPreview;
     private boolean isPreviewReady;
 
-    EditText id,driver,origin,dest;
+    static public Truck_1 current_truck;
+
+    EditText id;
+    /*EditText driver,origin,dest;*/
 
 
     public static AddNewTruck_1 newInstance() {
@@ -104,26 +109,29 @@ public class AddNewTruck_1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_new_truck_1, container, false);
 
+
+        for(String key: trucks_1.keySet()){
+            Log.i(TAG,key);
+        }
+
         find_truck=(ImageButton)view.findViewById(R.id.find_truck);
         find_truck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Truck truck=new Truck();
-                truck.setId(id.getText().toString().trim());
-                truck.setDriver_name(driver.getText().toString().trim());
-                truck.setOrigin(origin.getText().toString().trim());
-                truck.setDestination(dest.getText().toString().trim());
-                trucks.add(truck);
-                Intent i = new Intent(getActivity(), MainActivity.class);
-                i.putExtra("Activity","Enter_booking_ID");
-                startActivity(i);
+                String truck_id=id.getText().toString().trim();
+                if(trucks_1.containsKey(truck_id)) {
+                    current_truck=trucks_1.get(truck_id);
+                    Intent i = new Intent(getActivity(), MainActivity.class);
+                    i.putExtra("Activity", "TRUCK_DETAILS_1");
+                    startActivity(i);
+                }else{
+                    Log.i(TAG," Truck Not Found");
+                }
             }
         });
 
         id=(EditText)view.findViewById(R.id.new_truck_id);
-        driver=(EditText)view.findViewById(R.id.driver_name);
-        origin=(EditText)view.findViewById(R.id.origin);
-        dest=(EditText)view.findViewById(R.id.dest);
+
 
         overlayView = (RelativeLayout)view.findViewById(R.id.overlayView);
         audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);

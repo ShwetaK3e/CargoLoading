@@ -52,6 +52,7 @@
             android:layout_marginBottom="5dp"
             android:layout_height="wrap_content"
             android:hint="Enter Truck ID"
+            android:text="ABCDEFGH12"
             android:textColorHint="#d6d6d6"
             android:textColor="#d6d6d6"
             android:typeface="sans"

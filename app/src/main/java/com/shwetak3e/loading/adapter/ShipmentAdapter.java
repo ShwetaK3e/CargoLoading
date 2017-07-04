@@ -35,7 +35,7 @@ public class ShipmentAdapter extends RecyclerView.Adapter<ShipmentAdapter.ViewHo
 
     @Override
     public ShipmentAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.shipment_list_grid,parent);
+        View itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.shipment_list_grid,null);
         return new ViewHolder(itemView);
     }
 
@@ -43,9 +43,9 @@ public class ShipmentAdapter extends RecyclerView.Adapter<ShipmentAdapter.ViewHo
     public void onBindViewHolder(ShipmentAdapter.ViewHolder holder, final int position) {
         Glide.with(context).load(shipmentItems.get(position).getImageUri()).into(holder.commodity_img);
         holder.shipment_id.setText(shipmentItems.get(position).getId());
-        holder.total_count.setText(shipmentItems.get(position).getShippedItemCount());
-        holder.loaded_count.setText(shipmentItems.get(position).getLoadedCount());
-        holder.missing_count.setText(shipmentItems.get(position).getMissing_count());
+        holder.total_count.setText(shipmentItems.get(position).getShippedItemCount().toString());
+        holder.loaded_count.setText(shipmentItems.get(position).getLoadedCount().toString());
+        holder.missing_count.setText(shipmentItems.get(position).getMissing_count().toString());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

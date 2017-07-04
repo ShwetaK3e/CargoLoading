@@ -13,18 +13,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 
 import com.shwetak3e.loading.fragments.AddNewTruck;
+import com.shwetak3e.loading.fragments.AddNewTruck_1;
 import com.shwetak3e.loading.fragments.DrawerFragment;
 import com.shwetak3e.loading.fragments.LoadItems;
 import com.shwetak3e.loading.fragments.LoadItemsItemwise;
 import com.shwetak3e.loading.fragments.LoadingSheet;
 import com.shwetak3e.loading.fragments.ReadBookingID;
 import com.shwetak3e.loading.fragments.TruckDetails;
+import com.shwetak3e.loading.fragments.TruckDetails_1;
 import com.shwetak3e.loading.fragments.TruckList;
 import com.shwetak3e.loading.model.Booking;
 import com.shwetak3e.loading.model.ShipmentItem;
@@ -67,8 +70,9 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
             setData1();
             setData2();
             setData3();
-            setTruckList();
-            setTruckLoc();
+            //setTruckList();
+            setTruckList_1();
+            //setTruckLoc();
         }
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -79,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         drawerFragment = (DrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
-        if("TO_LOAD".equalsIgnoreCase(activity)) {
+        /*if("TO_LOAD".equalsIgnoreCase(activity)) {
             displayView(2);
         }else if("Enter_booking_ID".equalsIgnoreCase(activity)) {
             displayView(3);
@@ -87,6 +91,12 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
             displayView(6);
         } else if("Truck_Details".equalsIgnoreCase(activity)){
             displayView(5);
+        }else{
+            displayView(0);
+        }*/
+
+        if("TRUCK_DETAILS_1".equalsIgnoreCase(activity)){
+            displayView(1);
         }else{
             displayView(0);
         }
@@ -122,14 +132,18 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         String title = getString(R.string.app_name);
         switch (position) {
             case 0:
-                fragment = TruckList.newInstance();;
-                title = getString(R.string.nav_truck_list);
+                fragment = AddNewTruck_1.newInstance();
+                title = getString(R.string.nav_add_new_truck);
+                /*fragment = TruckList.newInstance();;
+                title = getString(R.string.nav_truck_list);*/
                 break;
             case 1:
-                fragment = LoadingSheet.newInstance();
-                title = getString(R.string.nav_add_new_truck);
+                fragment = TruckDetails_1.newInstance();
+                title = getString(R.string.nav_truck_details);
+                /*fragment = LoadingSheet.newInstance();
+                title = getString(R.string.nav_add_new_truck);*/
                 break;
-            case 2:
+            /*case 2:
                 fragment = LoadItemsItemwise.newInstance();
                 title = getString(R.string.nav_item_to_load);
                 break;
@@ -148,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
             case 6:
                 fragment = AddNewTruck.newInstance();
                 title = getString(R.string.nav_add_new_truck);
-                break;
+                break;*/
             default:
                 break;
         }
@@ -484,9 +498,14 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
             }
         }
 
-        List<ShipmentItem> shipment_list=(List<ShipmentItem>)shipments_1.values();
 
-        truck_1.setId("CJJKLDRT56");
+        List<ShipmentItem> shipment_list=new ArrayList<>();
+
+        for(Map.Entry<String,ShipmentItem> entry:shipments_1.entrySet()){
+            shipment_list.add(entry.getValue());
+        }
+
+        truck_1.setId("ABCDEFGH12");
         truck_1.setOrigin("HYD");
         truck_1.setDestination("VIZ");
         truck_1.setStops(Arrays.asList("HYD","KOL","CHN","DEL","VIZ"));
