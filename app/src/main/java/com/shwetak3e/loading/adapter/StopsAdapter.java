@@ -1,5 +1,6 @@
 package com.shwetak3e.loading.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +21,13 @@ import java.util.List;
 public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.ViewHolder> {
 
     List<String> stops=new ArrayList<>();
+    Context context;
 
-    public StopsAdapter(List<String> stops) {
+    public StopsAdapter(Context context, List<String> stops) {
+        this.context=context;
         this.stops=stops;
     }
+
 
 
     @Override
@@ -35,8 +39,19 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(StopsAdapter.ViewHolder holder, int position) {
 
-        holder.stop.setText(stops.get(position));
+        if(position==0 || position==stops.size()-1){
+            holder.stop.setTextColor(context.getResources().getColor(R.color.maroon));
+        }
 
+        holder.stop.setText(stops.get(position)+ addForwardArrow(position));
+
+    }
+
+    private String addForwardArrow(int pos){
+        if(pos==stops.size()-1){
+            return "";
+        }
+        return " >";
     }
 
     @Override

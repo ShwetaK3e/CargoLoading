@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
@@ -44,7 +45,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.shwetak3e.loading.fragments.TruckDetails_1;
+import com.shwetak3e.loading.model.Issues;
+
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -52,12 +58,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
 public class IssueVideoActivity extends AppCompatActivity {
-    public static final int MEDIA_TYPE_VIDEO = 2;
+
     private static final int REAR_CAM_ID = 0;
+    private static final int MEDIA_TYPE_PHOTO=1;
+    private static final int MEDIA_TYPE_VIDEO = 2;
+
 
     AudioManager audioManager = null;
     int imageRotation;
@@ -65,6 +75,8 @@ public class IssueVideoActivity extends AppCompatActivity {
     private Boolean isSDPresent = true;
     private int camToOpen;
     private long startTime = 60000;
+    private boolean isFlashOn=false;
+    File outputFile=null;
 
 
 
@@ -73,16 +85,52 @@ public class IssueVideoActivity extends AppCompatActivity {
 
 
     private FrameLayout preview;
-    private Button captureButton;
-    private ImageButton save_damage_record;
-    private EditText damage_desc;
-    private Camera mCamera;
-    private MediaRecorder mMediaRecorder;
-    private CameraSurfaceView mPreview;
-    private CameraManager cameraManager;
-    private boolean isVideoRecordingStarted = false;
     private int preview_height=0;
     private  RelativeLayout preview_layout;
+    private Camera mCamera;
+    private CameraSurfaceView mPreview;
+    private CameraManager cameraManager;
+
+    private ImageButton issue_videocaptureButton;
+    private MediaRecorder mMediaRecorder;
+    private boolean isVideoRecordingStarted = false;
+
+
+    private ImageButton issue_photocaptureButton;
+    private boolean isPhotoCapturingStarted=false;
+    private Camera.PictureCallback mPictureCallback=new Camera.PictureCallback() {
+        @Override
+        public void onPictureTaken(byte[] data, Camera camera) {
+             outputFile=getOutputMediaFile(MEDIA_TYPE_PHOTO);
+             if(outputFile!=null){
+                 try {
+                     FileOutputStream fos=new FileOutputStream(outputFile);
+                     fos.write(data);
+                     fos.close();
+                 } catch (FileNotFoundException e) {
+                     e.printStackTrace();
+                 } catch (IOException e) {
+                     e.printStackTrace();
+                 }
+
+             }else{
+
+                 return;
+             }
+        }
+    };
+
+    private Camera.ShutterCallback shutterCallback=new Camera.ShutterCallback() {
+        @Override
+        public void onShutter() {
+            MediaPlayer media=MediaPlayer.create(IssueVideoActivity.this, R.raw.camera_shutter_click_01);
+            media.start();
+        }
+    };
+
+
+    private EditText damage_desc;
+    private ImageButton save_damage_record;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -124,30 +172,66 @@ public class IssueVideoActivity extends AppCompatActivity {
         }
 
 
-        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        audioManager.setMode(AudioManager.MODE_RINGTONE);
-        audioManager.setSpeakerphoneOn(true);
-        previousVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
+
+        setAudioManagerForClickSound();
         camToOpen = getCamNumber();
         preview_layout=(RelativeLayout)findViewById(R.id.preview_layout);
         preview = (FrameLayout) findViewById(R.id.camera_preview);
-        captureButton = (Button) findViewById(R.id.button_capture_video);
-        captureButton.setOnClickListener(new View.OnClickListener() {
+
+
+        issue_videocaptureButton = (ImageButton) findViewById(R.id.button_capture_issue_video);
+        issue_videocaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 recordVideo();
             }
         });
+
+        issue_photocaptureButton = (ImageButton) findViewById(R.id.button_capture_issue_pic);
+        issue_photocaptureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                captureImage();
+            }
+        });
+
+
+
+
         damage_desc=(EditText)findViewById(R.id.damage_desc);
         save_damage_record=(ImageButton)findViewById(R.id.store_damage_record);
         save_damage_record.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String damagedesc=damage_desc.getText().toString().trim();
+                List<Issues> issuesList=TruckDetails_1.current_item.getIssues();
+                if(issuesList==null){
+                    issuesList=new LinkedList<>();
+                }
+                Issues issue=new Issues();
+                issue.setIssueType(0);
+                if (outputFile == null) {
+                    if(damagedesc.length()==0){
+                        Toast.makeText(IssueVideoActivity.this,"Please add a Issue Defn", Toast.LENGTH_LONG).show();
+                        return;
+                    }else {
+                        issue.setUri("");
+                        issue.setIssueDefn(2);  //only text
+                        issue.setIssueDescription(damagedesc);
+                    }
+                }else{
+                    issue.setUri(outputFile.getAbsolutePath());
+                    issue.setIssueDescription(damagedesc);
+                    if(outputFile.getName().endsWith(".mp4")){
+                        issue.setIssueDefn(0);
+                    }else if(outputFile.getName().endsWith(".jpeg")){
+                        issue.setIssueDefn(1);
+                    }
+                }
+                issuesList.add(issue);
+                TruckDetails_1.current_item.setIssues(issuesList);
                 Intent i = new Intent(IssueVideoActivity.this, MainActivity.class);
-                i.putExtra("Activity","TO_LOAD");
-                i.putExtra("Damage_desc",damage_desc.getText().toString().trim());
+                i.putExtra("Activity","LOAD_THIS_ITEM");
                 startActivity(i);
                 finish();
             }
@@ -162,7 +246,7 @@ public class IssueVideoActivity extends AppCompatActivity {
 
 
 
-    @Override
+   /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
@@ -178,26 +262,255 @@ public class IssueVideoActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }*/
+
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(hasFocus){
+            preview_height=preview_layout.getHeight();
+        }
     }
 
+
+
+    @Override
+    protected void onResume() {
+        try {
+            super.onResume();
+            issue_videocaptureButton.setEnabled(true);
+            issue_photocaptureButton.setEnabled(true);
+
+            isVideoRecordingStarted = false;
+            isPhotoCapturingStarted=false;
+
+
+            isSDPresent = android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
+            isSDPresent = isSDPresent && !(Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED_READ_ONLY));
+            if (!isSDPresent) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(IssueVideoActivity.this);
+                builder.setTitle("Warning");
+                builder.setMessage("SD card is not mounted.");
+                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setCancelable(false);
+                builder.setIcon(android.R.drawable.ic_dialog_alert);
+                Dialog d = builder.create();
+                d.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        finish();
+                    }
+                });
+                d.show();
+            } else {
+                startCam();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG,"Error in recording video");
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause()");
+        releaseMediaRecorder();
+        stopCam();
+    }
+
+
+
+    //setting up of Camera
+    private void setParameters(Camera.Parameters parameters, String miscellaneous) {
+        try {
+            mCamera.setParameters(parameters);
+        } catch (Exception e) {
+            Log.e(TAG + "SetParameters", miscellaneous);
+        }
+    }
+
+
+    private void setAudioManagerForClickSound(){
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setSpeakerphoneOn(true);
+        previousVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
+        audioManager.setMode(AudioManager.MODE_NORMAL);
+
+            /*
+            In Camera api, the system plays media sounds(when video recording starts and end) by default,
+            but not when ringer mode is silent(this only an observation, not a fact).
+            So since we are playing our own audio, we need to ensure that the System sound is not played simultaneously.
+            So, we set ringer mode to silent, and prevent system played media sound from surfacing.
+            */
+        audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+    }
+
+    void addOverlay(){
+        LayoutInflater inflater=(LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+        View view= inflater.inflate(R.layout.record_issue_overlay_layout,preview,true);
+        final OverlayHolder holder=new OverlayHolder(view);
+        if(getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
+            holder.flash_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!isFlashOn){
+                        switchOnFlash();
+                        holder.flash_button.setImageDrawable(getResources().getDrawable(R.drawable.ic_flash_on));
+                        isFlashOn=true;
+                }else{
+                        isFlashOn=false;
+                        switchOffFlash();
+                        holder.flash_button.setImageDrawable(getResources().getDrawable(R.drawable.ic_flash_off));
+                    }
+            }});
+        }else{
+            holder.flash_button.setVisibility(View.GONE);
+        }
+        view.setTag(holder);
+
+    }
+
+
+    private void switchOnFlash(){
+
+        Camera.Parameters flashCamParams = mCamera.getParameters();
+        try {
+            List<String> modes = flashCamParams.getSupportedFlashModes();
+            if (modes != null) {
+                if (modes.contains(Camera.Parameters.FLASH_MODE_TORCH)) {
+                    flashCamParams.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                } else if (modes.contains(Camera.Parameters.FLASH_MODE_ON)) {
+                    flashCamParams.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
+                }
+                setParameters(flashCamParams, "flash_Param");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void switchOffFlash(){
+        Camera.Parameters flashCamParams=mCamera.getParameters();
+        try{
+            flashCamParams.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+            setParameters(flashCamParams,"Flash_off");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * Create a File for saving an image or video
+     */
+    private File getOutputMediaFile(int type) {
+        File issue_file;
+        long requiredMemAvailable = 32 * 1024;
+        boolean isSpaceAvailable = isMemoryAvailable(requiredMemAvailable);
+        if (isSpaceAvailable) {
+            File mediaStorageDir = new File(getApplicationContext().getExternalFilesDir(null), "Issues");
+            if (!mediaStorageDir.exists()) {
+                Log.i(TAG + "getOutputMediaFile", "mediaStorageDir does not exist");
+                if (!mediaStorageDir.mkdirs()) {
+                    Log.i(TAG + "getOutputMediaFile", "failed to create mediaStorageDir");
+                    return null;
+                } else {
+                    Log.i(TAG + "getOutputMediaFile", "mediaStorageDir created");
+                }
+            }
+            // Create a video file name
+            if (type == MEDIA_TYPE_VIDEO) {
+                issue_file = new File(mediaStorageDir.getPath() + File.separator + findnoOfIssues()+ "_ISSUE_VIDEO.mp4");
+                Log.i(TAG + "MediaFile path", issue_file.getAbsolutePath());
+            } else if(type==MEDIA_TYPE_PHOTO){
+                issue_file=new File(mediaStorageDir.getPath()+File.separator+findnoOfIssues()+"_ISSUE_PHOTO.jpeg");
+                Log.i(TAG + "MediaFile path", issue_file.getAbsolutePath());
+            }else{
+                return null;
+            }
+            return issue_file;
+        } else {
+            Toast.makeText(IssueVideoActivity.this, "Insufficient Storage....", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+    }
+
+    //used for naming the files
+    private int findnoOfIssues(){
+        List<Issues> issuesList=TruckDetails_1.current_item.getIssues();
+        if(issuesList==null){
+            return 0;
+        }else{
+            return issuesList.size();
+        }
+    }
+
+    private void setImageRotation(int iAngle) {
+        try {
+            android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
+            Camera.getCameraInfo(camToOpen, info);
+            int orientation = (iAngle + 45) / 90 * 90;
+            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                imageRotation = (info.orientation - orientation + 360) % 360;
+            } else {
+                imageRotation = (info.orientation + orientation) % 360;
+            }
+            Log.i(TAG + "setImageRotation", Integer.toString(imageRotation));
+        } catch (Exception e) {
+            Log.e(TAG + "exception", e.getMessage());
+        }
+    }
+
+
+    boolean isMemoryAvailable(long requiredMemory) {
+        if (getAvailableExternalMemorySize() > requiredMemory)
+            return true;
+        if (getAvailableInternalMemorySize() > requiredMemory)
+            return true;
+        return false;
+    }
+
+
+    private void startCam() {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+                mCamera = Camera.open(camToOpen);
+                mCamera.stopPreview();
+                mCamera.lock();
+                mCamera.setDisplayOrientation(getCameraOrientation());
+                cameraManager = new CameraManager(mCamera);
+            }
+
+            mPreview = new CameraSurfaceView(this, mCamera);
+            preview.addView(mPreview);
+            addOverlay();
+        } catch (Exception e) {
+            Log.e(TAG + "Cannot open camera:" ,e.getMessage());
+        }
+    }
+
+
+
+
+
+
+    /*
+    * Recording Issue Video
+    * */
 
     private void recordVideo() {
         if(!isVideoRecordingStarted) {
             isVideoRecordingStarted = true;
-            Camera.Parameters rearCamParams = mCamera.getParameters();
-            try {
-                List<String> modes = rearCamParams.getSupportedFlashModes();
-                if (modes != null) {
-                    if (modes.contains(Camera.Parameters.FLASH_MODE_TORCH)) {
-                        rearCamParams.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-                    } else if (modes.contains(Camera.Parameters.FLASH_MODE_ON)) {
-                        rearCamParams.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
-                    }
-                    setParameters(rearCamParams, "onClick");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
 
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
@@ -225,6 +538,7 @@ public class IssueVideoActivity extends AppCompatActivity {
                             if (arg1 == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
                                 releaseMediaRecorder(); // release the MediaRecorder
                                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, previousVolume, 0);
+                                issue_photocaptureButton.setEnabled(true);
 
                             }
                         }
@@ -237,7 +551,7 @@ public class IssueVideoActivity extends AppCompatActivity {
                     });
                 } catch (Exception e) {
                     Log.e(TAG + "onClick", "Exception_Point2");
-                    exitOnException("Error starting Camera Video Test.");
+                    Log.e(TAG,"Error starting Camera Video Test.");
                 }
             } else {
                 // prepare didn't work, release the camera and recorder.
@@ -252,29 +566,8 @@ public class IssueVideoActivity extends AppCompatActivity {
         }
     }
 
-    private void setParameters(Camera.Parameters parameters, String miscellaneous) {
-        try {
-            mCamera.setParameters(parameters);
-        } catch (Exception e) {
-            Log.e(TAG + "SetParameters", miscellaneous);
-        }
-    }
-
     private void playVideoRecordingStartedSound() {
         try {
-            audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-            audioManager.setSpeakerphoneOn(true);
-            int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
-            audioManager.setMode(AudioManager.MODE_NORMAL);
-
-            /*
-            In Camera api, the system plays media sounds(when video recording starts and end) by default,
-            but not when ringer mode is silent(this only an observation, not a fact).
-            So since we are playing our own audio, we need to ensure that the System sound is not played simultaneously.
-            So, we set ringer mode to silent, and prevent system played media sound from surfacing.
-            */
-            audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
             MediaPlayer media = MediaPlayer.create(this, R.raw.beep_tone);
             media.start();
         } catch (Exception e) {
@@ -282,67 +575,25 @@ public class IssueVideoActivity extends AppCompatActivity {
         }
     }
 
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if(hasFocus){
-            preview_height=preview_layout.getHeight();
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        try {
-            super.onResume();
-            captureButton.setEnabled(true);
-            isVideoRecordingStarted = false;
-            audioManager.setMode(AudioManager.MODE_NORMAL);
-            isSDPresent = android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
-            isSDPresent = isSDPresent && !(Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED_READ_ONLY));
-            if (!isSDPresent) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(IssueVideoActivity.this);
-                builder.setTitle("Warning");
-                builder.setMessage("SD card is not mounted.");
-                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        dialog.dismiss();
-                    }
-                });
-                builder.setCancelable(false);
-                builder.setIcon(android.R.drawable.ic_dialog_alert);
-                Dialog d = builder.create();
-                d.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        finish();
-                    }
-                });
-                d.show();
-            } else {
-                startCam();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            exitOnException("Error in recording video");
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i(TAG, "onPause()");
-        releaseMediaRecorder();
-        stopCam();
-    }
-
     private boolean prepareVideoRecorder() {
+        issue_photocaptureButton.setEnabled(false);
         try {
             if (mMediaRecorder == null) {
                 mMediaRecorder = new MediaRecorder();
             } else {
                 Log.i(TAG + "Alpha", "MediaRecoder is Not Null");
+            }
+            Camera.Parameters focusParams= mCamera.getParameters();
+            List<String> focusModes=focusParams.getSupportedFocusModes();
+            try {
+
+                if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
+                    focusParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+                }
+                setParameters(focusParams, "Focus_params");
+            }catch (Exception e){
+                Toast.makeText(this, "AutoFocus Not Working !!", Toast.LENGTH_SHORT).show();
+                return false;
             }
 
             mCamera.unlock();
@@ -354,11 +605,11 @@ public class IssueVideoActivity extends AppCompatActivity {
             }
 
             //  Set output file
-            File ff = getOutputMediaFile(MEDIA_TYPE_VIDEO);
-            if (null != ff) {
-                mMediaRecorder.setOutputFile(ff.toString());
+            outputFile = getOutputMediaFile(MEDIA_TYPE_VIDEO);
+            if (null != outputFile) {
+                mMediaRecorder.setOutputFile(outputFile.toString());
                 Intent mediaScanIntent1 = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                Uri contentUri = Uri.fromFile(ff);
+                Uri contentUri = Uri.fromFile(outputFile);
                 mediaScanIntent1.setData(contentUri);
                 sendBroadcast(mediaScanIntent1);
             } else {
@@ -366,7 +617,7 @@ public class IssueVideoActivity extends AppCompatActivity {
 
             }
             mMediaRecorder.setPreviewDisplay(mPreview.getHolder().getSurface());
-            setVideoRotation();
+            setRotation();
             try {
                 mMediaRecorder.setMaxDuration((int) startTime);
                 mMediaRecorder.setMaxFileSize(32 * 1024 * 1024);
@@ -375,21 +626,31 @@ public class IssueVideoActivity extends AppCompatActivity {
                 Log.e("Alpha", "IllegalStateException preparing MediaRecorder: " + e.getMessage());
                 Log.e(TAG + "prepareMediaRecorder", "IllegalStateException");
                 releaseMediaRecorder();
-                exitOnException(TAG + "Error:" + e.toString());
+                Log.e(TAG + "Error:" ,e.toString());
                 return false;
             } catch (IOException e) {
                 Log.e("Alpha", "IOException preparing MediaRecorder: " + e.getMessage());
                 Log.e(TAG + "prepareMediaRecorder", "IOException");
                 releaseMediaRecorder();
-                exitOnException(TAG + "Error :" + e.toString());
+                Log.e(TAG + "Error :" , e.toString());
                 return false;
             }
             return true;
         } catch (Exception e) {
             Log.e(TAG + "prepareMediaRecorder", "Exception");
             releaseMediaRecorder();
-            exitOnException(TAG + "Error-:" + e.toString());
+            Log.e(TAG + "Error-:" , e.toString());
             return false;
+        }
+    }
+
+    private void releaseMediaRecorder() {
+        Log.i(TAG, " releaseMediaRecorder() ");
+        if (mMediaRecorder != null) {
+            mMediaRecorder.reset();
+            mMediaRecorder.release(); // release the recorder object
+            mMediaRecorder = null;
+            mCamera.lock(); // lock camera for later use
         }
     }
 
@@ -409,136 +670,35 @@ public class IssueVideoActivity extends AppCompatActivity {
         }
     }
 
-    private void releaseMediaRecorder() {
-        Log.i(TAG, " releaseMediaRecorder() ");
-        if (mMediaRecorder != null) {
-            mMediaRecorder.reset();
-            mMediaRecorder.release(); // release the recorder object
-            mMediaRecorder = null;
-            mCamera.lock(); // lock camera for later use
-        }
-    }
 
-    private void setImageRotation(int iAngle) {
-        try {
-            android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
-            Camera.getCameraInfo(camToOpen, info);
-            int orientation = (iAngle + 45) / 90 * 90;
-            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-                imageRotation = (info.orientation - orientation + 360) % 360;
-            } else {
-                imageRotation = (info.orientation + orientation) % 360;
-            }
-            Log.i(TAG + "setImageRotation", Integer.toString(imageRotation));
-        } catch (Exception e) {
-            Log.e(TAG + "exception", e.getMessage());
-        }
-    }
-
-
-
-    /**
-     * Create a File for saving an image or video
+    /*
+    Taking Issue Image
      */
-    private File getOutputMediaFile(int type) {
-        File issue_video_file;
-        long requiredMemAvailable = 32 * 1024;
-        boolean isSpaceAvailable = isMemoryAvailable(requiredMemAvailable);
-        if (isSpaceAvailable) {
-            File mediaStorageDir = new File(getApplicationContext().getExternalFilesDir(null), "Issues");
-            if (!mediaStorageDir.exists()) {
-                Log.i(TAG + "getOutputMediaFile", "mediaStorageDir does not exist");
-                if (!mediaStorageDir.mkdirs()) {
-                    Log.i(TAG + "getOutputMediaFile", "failed to create mediaStorageDir");
-                    return null;
-                } else {
-                    Log.i(TAG + "getOutputMediaFile", "mediaStorageDir created");
-                }
-            }
-            // Create a video file name
-            if (type == MEDIA_TYPE_VIDEO) {
-                issue_video_file = new File(mediaStorageDir.getPath() + File.separator + "ISSUE_VIDEO.mp4");
-                Log.i(TAG + "MediaFile path", issue_video_file.getAbsolutePath());
-            } else {
-                return null;
-            }
-            return issue_video_file;
-        } else {
-            Toast.makeText(IssueVideoActivity.this, "Insufficient Storage....", Toast.LENGTH_SHORT).show();
-            return null;
-        }
-    }
 
-
-    boolean isMemoryAvailable(long requiredMemory) {
-        if (getAvailableExternalMemorySize() > requiredMemory)
-            return true;
-        if (getAvailableInternalMemorySize() > requiredMemory)
-            return true;
-        return false;
-    }
-
-
-    private void startCam() {
+    private void captureImage(){
+        Camera.Parameters focusParams=mCamera.getParameters();
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-                mCamera = Camera.open(camToOpen);
-                mCamera.stopPreview();
-                mCamera.lock();
-                cameraManager = new CameraManager(mCamera);
-                if (camToOpen == REAR_CAM_ID) {
-                    Camera.Parameters rearCamParams = mCamera.getParameters();
-                    List<String> focusModes = rearCamParams.getSupportedFocusModes();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
-                        rearCamParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-                    } else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
-                        rearCamParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
-                    }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-                        mCamera.setDisplayOrientation(getCameraOrientation());
-                    }
-                    setParameters(rearCamParams, "startCam");
-                }
+            List<String> focusModes = focusParams.getSupportedFocusModes();
+            if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+                focusParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
             }
-
-
-            try {
-                Log.e("Brand", Build.BRAND);
-                Log.e("Model", Build.MODEL);
-                Log.e("OS Version", String.valueOf(Build.VERSION.SDK_INT));
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                    Log.d("onAutoFocus", "onAutoFocus working");
-                    mCamera.setAutoFocusMoveCallback(new Camera.AutoFocusMoveCallback() {
-                        @Override
-                        public void onAutoFocusMoving(boolean start, Camera camera) {
-                            if (start) {
-                               /* imgAutoFocus.setBackgroundResource(R.drawable.auto_focus_frame_invi);
-                                lblZoomLev.setVisibility(View.INVISIBLE);*/
-                            } else {
-                                /*imgAutoFocus.setBackgroundResource(R.drawable.auto_frame_failed);
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        imgAutoFocus.setVisibility(View.INVISIBLE);
-                                    }
-                                }, 2000);*/
-                            }
-                        }
-                    });
-                }
-            } catch (Exception e) {
-                exitOnException(TAG + "Error-:" + e.toString());
-            }
-            mPreview = new CameraSurfaceView(this, mCamera);
-            preview.addView(mPreview);
-        } catch (Exception e) {
-            exitOnException(TAG + "Cannot open camera:" + e);
+            setParameters(focusParams, "Focus_Param_image");
+        }catch (Exception e){
+            Log.e(TAG, "AutoFocus Not Working");
+        }try {
+            mCamera.takePicture(shutterCallback, null, mPictureCallback);
+        }catch(Exception e){
+            Toast.makeText(this, "Try Again !!", Toast.LENGTH_SHORT).show();
         }
-    }
+    };
 
-    private void exitOnException(String errorMessage) {
-        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
-    }
+
+
+
+
+
+
+
 
     @SuppressWarnings("deprecation")
     public long getAvailableInternalMemorySize() {
@@ -568,9 +728,6 @@ public class IssueVideoActivity extends AppCompatActivity {
         size /= 1024;
         return size;
     }
-
-
-
 
 
     public Camera.Size getOptimalVideoPictureSize(List<Camera.Size> sizes, double targetRatio) {
@@ -636,24 +793,16 @@ public class IssueVideoActivity extends AppCompatActivity {
         int result;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
             Log.e("info Orientation", info.orientation + "");
-            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-                result = (info.orientation + degrees) % 360;
-                result = (360 - result) % 360;
-            } else {
                 result = (info.orientation - degrees + 360) % 360;
-            }
         } else {
-            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+
                 result = 90;
-            } else {
-                result = 90;
-            }
+
         }
         return result;
     }
 
-
-    private void setVideoRotation() {
+    private void setRotation() {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
                 mMediaRecorder.setOrientationHint(imageRotation);
@@ -683,7 +832,6 @@ public class IssueVideoActivity extends AppCompatActivity {
 
         return -1;
     }
-
 
     public class CameraManager {
         private int cameraId;
@@ -990,7 +1138,7 @@ public class IssueVideoActivity extends AppCompatActivity {
 
                 }
             } catch (Exception e) {
-                exitOnException("Exception:" + e.toString());
+                Log.e("Exception:" , e.toString());
             }
         }
 
@@ -1017,6 +1165,17 @@ public class IssueVideoActivity extends AppCompatActivity {
             y = height;
         }
     }
+
+    private static class OverlayHolder{
+        ImageButton flash_button;
+
+        OverlayHolder(View view){
+            flash_button=(ImageButton)view.findViewById(R.id.flash_button);
+        }
+
+    }
+
+
 
 }
 

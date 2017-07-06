@@ -11,14 +11,19 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Take a photo of Truck No. Plate"
+        android:text="Tap to take a photo of Truck No. Plate"
         android:background="@android:color/transparent"
         android:gravity="center"
         android:textColor="#d6d6d6"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:layout_marginTop="30dp"
-        android:textStyle="bold"
-        android:typeface="sans"/>
+        android:typeface="serif"/>
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_touch_logo"
+        android:background="@android:color/transparent"/>
 
 
 </LinearLayout>

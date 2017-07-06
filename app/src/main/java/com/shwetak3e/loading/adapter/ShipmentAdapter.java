@@ -14,6 +14,7 @@ import com.shwetak3e.loading.R;
 import com.shwetak3e.loading.model.ShipmentItem;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ import java.util.List;
 
 public class ShipmentAdapter extends RecyclerView.Adapter<ShipmentAdapter.ViewHolder> {
 
-    List<ShipmentItem> shipmentItems=new ArrayList<>();
+    List<ShipmentItem> shipmentItems=new LinkedList<>();
     Context context;
     OnItemClickListener onItemClickListener;
 
@@ -41,6 +42,10 @@ public class ShipmentAdapter extends RecyclerView.Adapter<ShipmentAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ShipmentAdapter.ViewHolder holder, final int position) {
+        if(shipmentItems.get(position).getStatus()==0){
+            holder.shipment_id.setTextColor(context.getResources().getColor(R.color.light_grey));
+
+        }
         Glide.with(context).load(shipmentItems.get(position).getImageUri()).into(holder.commodity_img);
         holder.shipment_id.setText(shipmentItems.get(position).getId());
         holder.total_count.setText(shipmentItems.get(position).getShippedItemCount().toString());

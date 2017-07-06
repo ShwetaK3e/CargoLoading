@@ -6,6 +6,8 @@ package com.shwetak3e.loading.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 
 public class ShipmentItem {
 
@@ -42,6 +44,17 @@ public class ShipmentItem {
     private Boolean damagedStatus;
 
     private Boolean same_truck_status;
+
+
+    private List<Issues> issues;
+
+    public List<Issues> getIssues() {
+        return issues;
+    }
+
+    public void setIssues(List<Issues> issues) {
+        this.issues = issues;
+    }
 
     public Boolean getSame_truck_status() {
         return same_truck_status;

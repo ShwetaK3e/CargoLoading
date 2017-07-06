@@ -24,6 +24,7 @@ import com.shwetak3e.loading.fragments.AddNewTruck_1;
 import com.shwetak3e.loading.fragments.DrawerFragment;
 import com.shwetak3e.loading.fragments.LoadItems;
 import com.shwetak3e.loading.fragments.LoadItemsItemwise;
+import com.shwetak3e.loading.fragments.LoadItemsItemwise_1;
 import com.shwetak3e.loading.fragments.LoadingSheet;
 import com.shwetak3e.loading.fragments.ReadBookingID;
 import com.shwetak3e.loading.fragments.TruckDetails;
@@ -97,6 +98,8 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
 
         if("TRUCK_DETAILS_1".equalsIgnoreCase(activity)){
             displayView(1);
+        }else if("LOAD_THIS_ITEM".equalsIgnoreCase(activity)){
+            displayView(2);
         }else{
             displayView(0);
         }
@@ -143,6 +146,9 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
                 /*fragment = LoadingSheet.newInstance();
                 title = getString(R.string.nav_add_new_truck);*/
                 break;
+            case 2:
+                fragment = LoadItemsItemwise_1.newInstance();
+                title = getString(R.string.nav_item_to_load);
             /*case 2:
                 fragment = LoadItemsItemwise.newInstance();
                 title = getString(R.string.nav_item_to_load);
@@ -201,6 +207,10 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.setLeakage_count(0);
         shipmentItem.setDamagedStatus(false);
         shipmentItem.setSame_truck_status(false);
+        shipmentItem.getBookedItem().setLength(1045);
+        shipmentItem.getBookedItem().setWidth(2066);
+        shipmentItem.getBookedItem().setHeight(344);
+        shipmentItem.getBookedItem().setActualWeight(345);
         shipmentItems.add(shipmentItem);
 
         shipmentItem=new ShipmentItem();
@@ -218,6 +228,10 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.setLeakage_count(0);
         shipmentItem.setDamagedStatus(false);
         shipmentItem.setSame_truck_status(false);
+        shipmentItem.getBookedItem().setLength(105);
+        shipmentItem.getBookedItem().setWidth(5660);
+        shipmentItem.getBookedItem().setHeight(357);
+        shipmentItem.getBookedItem().setActualWeight(450);
         shipmentItems.add(shipmentItem);
 
         shipmentItem=new ShipmentItem();
@@ -236,6 +250,10 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.setDamagedStatus(false);
         shipmentItem.setSame_truck_status(false);
         shipmentItems.add(shipmentItem);
+        shipmentItem.getBookedItem().setLength(144);
+        shipmentItem.getBookedItem().setWidth(2056);
+        shipmentItem.getBookedItem().setHeight(345);
+        shipmentItem.getBookedItem().setActualWeight(4550);
 
         booking.setItems(shipmentItems);
         bookings.put("RTYUFG",booking);
@@ -256,17 +274,22 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
         shipmentItem.getBookedItem().setCommodityName("AXE Deo");
         shipmentItem.getBookedItem().setDescription("Keep Liquid safe. ");
+        shipmentItem.getBookedItem().setLength(10);
+        shipmentItem.getBookedItem().setWidth(20);
+        shipmentItem.getBookedItem().setHeight(30);
+        shipmentItem.getBookedItem().setActualWeight(20);
         shipmentItem.setImageUri(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_body_spray).toString());
         shipmentItem.setShippedItemCount(500);
         shipmentItem.setLoadedCount(0);
         shipmentItem.setUnloadedCount(500);
-        shipmentItem.setStatus(1);
+        shipmentItem.setStatus(0);
         shipmentItem.setDamaged_count(0);
         shipmentItem.setMissing_count(0);
         shipmentItem.setLeakage_count(0);
         shipmentItem.setDamagedStatus(false);
         shipmentItem.setSame_truck_status(false);
         shipmentItems.add(shipmentItem);
+
 
         shipmentItem=new ShipmentItem();
         shipmentItem.setId("DJKFGH_BLB");
@@ -283,6 +306,10 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.setLeakage_count(0);
         shipmentItem.setDamagedStatus(false);
         shipmentItem.setSame_truck_status(false);
+        shipmentItem.getBookedItem().setLength(45);
+        shipmentItem.getBookedItem().setWidth(56);
+        shipmentItem.getBookedItem().setHeight(45);
+        shipmentItem.getBookedItem().setActualWeight(144);
         shipmentItems.add(shipmentItem);
 
         shipmentItem=new ShipmentItem();
@@ -300,6 +327,10 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.setLeakage_count(0);
         shipmentItem.setDamagedStatus(false);
         shipmentItem.setSame_truck_status(false);
+        shipmentItem.getBookedItem().setLength(106);
+        shipmentItem.getBookedItem().setWidth(520);
+        shipmentItem.getBookedItem().setHeight(45);
+        shipmentItem.getBookedItem().setActualWeight(67);
         shipmentItems.add(shipmentItem);
 
 
@@ -318,6 +349,10 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.setLeakage_count(0);
         shipmentItem.setDamagedStatus(false);
         shipmentItem.setSame_truck_status(false);
+        shipmentItem.getBookedItem().setLength(10);
+        shipmentItem.getBookedItem().setWidth(20);
+        shipmentItem.getBookedItem().setHeight(330);
+        shipmentItem.getBookedItem().setActualWeight(2560);
         shipmentItems.add(shipmentItem);
 
         booking.setItems(shipmentItems);
@@ -349,6 +384,10 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.setLeakage_count(0);
         shipmentItem.setDamagedStatus(false);
         shipmentItem.setSame_truck_status(false);
+        shipmentItem.getBookedItem().setLength(45);
+        shipmentItem.getBookedItem().setWidth(345);
+        shipmentItem.getBookedItem().setHeight(670);
+        shipmentItem.getBookedItem().setActualWeight(40);
         shipmentItems.add(shipmentItem);
 
         shipmentItem=new ShipmentItem();
@@ -366,6 +405,10 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.setLeakage_count(0);
         shipmentItem.setDamagedStatus(false);
         shipmentItem.setSame_truck_status(false);
+        shipmentItem.getBookedItem().setLength(550);
+        shipmentItem.getBookedItem().setWidth(25);
+        shipmentItem.getBookedItem().setHeight(37);
+        shipmentItem.getBookedItem().setActualWeight(220);
         shipmentItems.add(shipmentItem);
 
 

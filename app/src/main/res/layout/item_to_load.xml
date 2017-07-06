@@ -169,7 +169,7 @@
                         android:id="@+id/decrease_count"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/bg_circle_red"
+                        android:background="@drawable/bg_circle_maroon"
                         android:padding="5dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/ic_minus" />

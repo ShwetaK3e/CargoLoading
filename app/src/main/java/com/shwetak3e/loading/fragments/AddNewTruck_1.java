@@ -110,10 +110,6 @@ public class AddNewTruck_1 extends Fragment {
         View view= inflater.inflate(R.layout.fragment_new_truck_1, container, false);
 
 
-        for(String key: trucks_1.keySet()){
-            Log.i(TAG,key);
-        }
-
         find_truck=(ImageButton)view.findViewById(R.id.find_truck);
         find_truck.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,6 +150,12 @@ public class AddNewTruck_1 extends Fragment {
             Log.i(TAG+"onCreate", "Failed to enable orientationListener");
             Toast.makeText(getActivity(), "Cannot Detect Orientation", Toast.LENGTH_LONG).show();
         }
+        preview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                captureImage();
+            }
+        });
 
 
 
@@ -895,7 +897,7 @@ public class AddNewTruck_1 extends Fragment {
         }
     }
 
-    class CameraManager {
+      class CameraManager {
         private Camera mCamera;
         private Camera.Size pictureSize;
         private Camera.Size previewSize;

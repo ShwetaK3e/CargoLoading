@@ -132,7 +132,8 @@
             android:gravity="center"
             android:orientation="horizontal"
             android:padding="5dp"
-            android:weightSum="1">
+            android:weightSum="1"
+                android:layout_marginTop="-10dp">
 
 
             <LinearLayout
@@ -140,16 +141,15 @@
                 android:layout_weight="0.5"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="left"
-                android:layout_gravity="left"
-                android:layout_marginTop="-5dp">
+                android:gravity="left|top"
+                android:layout_gravity="left">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="MISSING :"
-                    android:textSize="12sp"
+                    android:textSize="10sp"
                     android:typeface="serif" />
 
                 <TextView
@@ -159,7 +159,7 @@
                     android:gravity="center"
                     android:paddingLeft="10dp"
                     android:text="0"
-                    android:textSize="12sp"
+                    android:textSize="10sp"
                     android:typeface="serif" />
             </LinearLayout>
             <LinearLayout
@@ -168,7 +168,7 @@
                 android:layout_weight="0.5"
                 android:gravity="right|top"
                 android:orientation="horizontal"
-                android:layout_marginTop="-5dp">
+                android:layout_marginTop="5dp">
 
                 <ImageView
                     android:id="@+id/damaged_status"

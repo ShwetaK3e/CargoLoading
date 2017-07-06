@@ -18,6 +18,7 @@ import com.shwetak3e.loading.MainActivity;
 import com.shwetak3e.loading.R;
 import com.shwetak3e.loading.adapter.ShipmentAdapter;
 import com.shwetak3e.loading.adapter.StopsAdapter;
+import com.shwetak3e.loading.model.ShipmentItem;
 import com.shwetak3e.loading.model.Truck_1;
 
 import org.w3c.dom.Text;
@@ -32,6 +33,7 @@ public class TruckDetails_1 extends Fragment {
     private TextView driver_name;
     private RecyclerView stops_list;
     private RecyclerView shipment_list;
+    public static ShipmentItem current_item;
 
 
 
@@ -64,13 +66,16 @@ public class TruckDetails_1 extends Fragment {
         truck_no.setText(AddNewTruck_1.current_truck.getId().toString().trim());
         //driver_name.setText("Ram Lal");
         stops_list.setLayoutManager(new GridLayoutManager(getActivity(),3));
-        stops_list.setAdapter(new StopsAdapter(AddNewTruck_1.current_truck.getStops()));
+        stops_list.setAdapter(new StopsAdapter(getActivity(),AddNewTruck_1.current_truck.getStops()));
 
         shipment_list.setLayoutManager(new GridLayoutManager(getActivity(),1));
         shipment_list.setAdapter(new ShipmentAdapter(getActivity(),AddNewTruck_1.current_truck.getShipmentItems(), new ShipmentAdapter.OnItemClickListener() {
             @Override
             public void onClick(String shipment_id) {
-
+                 current_item=MainActivity.shipments_1.get(shipment_id);
+                 Intent intent=new Intent(getActivity(), MainActivity.class);
+                 intent.putExtra("Activity","LOAD_THIS_ITEM");
+                 startActivity(intent);
             }
         }));
 
