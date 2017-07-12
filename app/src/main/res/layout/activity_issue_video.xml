@@ -78,21 +78,12 @@
         <FrameLayout
             android:id="@+id/camera_preview_video"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="#d6d6d6"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="8dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:id="@+id/video_timer"
-            android:textSize="20sp"
-            android:text="00:00:00"
-            android:gravity="center_horizontal"
-            android:background="@android:color/transparent"
-            android:textColor="@color/white"/>
 
         <FrameLayout
             android:background="#000"
@@ -104,7 +95,6 @@
            <LinearLayout
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:background="@drawable/bg_circle_white"
                android:orientation="horizontal"
                android:layout_alignParentBottom="true"
                android:gravity="center"
@@ -112,7 +102,8 @@
                android:weightSum="1"
                android:layout_marginLeft="20dp"
                android:layout_marginRight="20dp"
-               android:layout_marginBottom="-50dp">
+               android:background="@drawable/bg_selected_category_holder_camera"
+               android:layout_marginBottom="2dp">
 
 
                <LinearLayout
@@ -120,7 +111,7 @@
                    android:layout_weight="0.5"
                    android:layout_height="wrap_content"
                    android:gravity="right"
-                   android:paddingRight="10dp">
+                   android:layout_margin="5dp">
 
                <ImageButton
                    android:id="@+id/button_capture_issue_pic"
@@ -135,13 +126,18 @@
 
                </LinearLayout>
 
+               <ImageView
+                   android:layout_width="20dp"
+                   android:layout_height="40dp"
+                   android:src="@drawable/ic_separator"/>
+
 
            <LinearLayout
                android:layout_width="0dp"
                android:layout_weight="0.5"
                android:layout_height="wrap_content"
                android:gravity="left"
-               android:paddingLeft="10dp">
+               android:layout_margin="5dp">
 
                <ImageButton
                    android:id="@+id/button_capture_issue_video"

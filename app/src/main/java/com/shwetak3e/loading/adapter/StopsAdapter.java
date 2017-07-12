@@ -39,8 +39,14 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(StopsAdapter.ViewHolder holder, int position) {
 
-        if(position==0 || position==stops.size()-1){
-            holder.stop.setTextColor(context.getResources().getColor(R.color.maroon));
+        if(position==0){
+            holder.stop.setTextColor(context.getResources().getColor(R.color.white));
+            holder.stop.setBackground(context.getResources().getDrawable(R.drawable.bg_rounded_square_holder_green));
+            holder.stop.setPadding(20,20,20,20);
+        }else if(position==stops.size()-1){
+
+            holder.stop.setBackground(context.getResources().getDrawable(R.drawable.bg_selected_category_holder_grey));
+            holder.stop.setPadding(20,20,20,20);  // set paddng after bg setting
         }
 
         holder.stop.setText(stops.get(position)+ addForwardArrow(position));

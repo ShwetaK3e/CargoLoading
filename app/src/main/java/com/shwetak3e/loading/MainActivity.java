@@ -22,6 +22,7 @@ import android.view.View;
 import com.shwetak3e.loading.fragments.AddNewTruck;
 import com.shwetak3e.loading.fragments.AddNewTruck_1;
 import com.shwetak3e.loading.fragments.DrawerFragment;
+import com.shwetak3e.loading.fragments.IssueList;
 import com.shwetak3e.loading.fragments.LoadItems;
 import com.shwetak3e.loading.fragments.LoadItemsItemwise;
 import com.shwetak3e.loading.fragments.LoadItemsItemwise_1;
@@ -31,6 +32,7 @@ import com.shwetak3e.loading.fragments.TruckDetails;
 import com.shwetak3e.loading.fragments.TruckDetails_1;
 import com.shwetak3e.loading.fragments.TruckList;
 import com.shwetak3e.loading.model.Booking;
+import com.shwetak3e.loading.model.Issues;
 import com.shwetak3e.loading.model.ShipmentItem;
 import com.shwetak3e.loading.model.Truck;
 import com.shwetak3e.loading.model.Truck_1;
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
     static public Map<String,Truck_1> trucks_1=new HashMap<>();
     static public Truck current_truck=new Truck();
     static public boolean express=false;
+    public static Map<String,List<Issues>> issueList=new HashMap<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,7 +103,9 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
             displayView(1);
         }else if("LOAD_THIS_ITEM".equalsIgnoreCase(activity)){
             displayView(2);
-        }else{
+        }else if("ISSUES".equalsIgnoreCase(activity)){
+            displayView(3);
+        } else{
             displayView(0);
         }
 
@@ -149,6 +154,12 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
             case 2:
                 fragment = LoadItemsItemwise_1.newInstance();
                 title = getString(R.string.nav_item_to_load);
+                break;
+
+            case 3:
+                fragment= IssueList.newInstance();
+                title="Issues";
+                break;
             /*case 2:
                 fragment = LoadItemsItemwise.newInstance();
                 title = getString(R.string.nav_item_to_load);
@@ -211,6 +222,8 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.getBookedItem().setWidth(2066);
         shipmentItem.getBookedItem().setHeight(344);
         shipmentItem.getBookedItem().setActualWeight(345);
+        shipmentItem.setOrigin("HYD");
+        shipmentItem.setDestination("DEL");
         shipmentItems.add(shipmentItem);
 
         shipmentItem=new ShipmentItem();
@@ -232,7 +245,10 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.getBookedItem().setWidth(5660);
         shipmentItem.getBookedItem().setHeight(357);
         shipmentItem.getBookedItem().setActualWeight(450);
+        shipmentItem.setDestination("REW");
+        shipmentItem.setOrigin("HYD");
         shipmentItems.add(shipmentItem);
+
 
         shipmentItem=new ShipmentItem();
         shipmentItem.setId("RTYUFG_BED");
@@ -253,6 +269,8 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.getBookedItem().setLength(144);
         shipmentItem.getBookedItem().setWidth(2056);
         shipmentItem.getBookedItem().setHeight(345);
+        shipmentItem.setDestination("OMA");
+        shipmentItem.setOrigin("HYD");
         shipmentItem.getBookedItem().setActualWeight(4550);
 
         booking.setItems(shipmentItems);
@@ -282,12 +300,14 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.setShippedItemCount(500);
         shipmentItem.setLoadedCount(0);
         shipmentItem.setUnloadedCount(500);
-        shipmentItem.setStatus(0);
+        shipmentItem.setStatus(1);
         shipmentItem.setDamaged_count(0);
         shipmentItem.setMissing_count(0);
         shipmentItem.setLeakage_count(0);
         shipmentItem.setDamagedStatus(false);
         shipmentItem.setSame_truck_status(false);
+        shipmentItem.setDestination("FGT");
+        shipmentItem.setOrigin("HYD");
         shipmentItems.add(shipmentItem);
 
 
@@ -310,6 +330,8 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.getBookedItem().setWidth(56);
         shipmentItem.getBookedItem().setHeight(45);
         shipmentItem.getBookedItem().setActualWeight(144);
+        shipmentItem.setDestination("RTY");
+        shipmentItem.setOrigin("HYD");
         shipmentItems.add(shipmentItem);
 
         shipmentItem=new ShipmentItem();
@@ -331,6 +353,8 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.getBookedItem().setWidth(520);
         shipmentItem.getBookedItem().setHeight(45);
         shipmentItem.getBookedItem().setActualWeight(67);
+        shipmentItem.setDestination("GYJ");
+        shipmentItem.setOrigin("HYD");
         shipmentItems.add(shipmentItem);
 
 
@@ -353,6 +377,8 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.getBookedItem().setWidth(20);
         shipmentItem.getBookedItem().setHeight(330);
         shipmentItem.getBookedItem().setActualWeight(2560);
+        shipmentItem.setDestination("FRG");
+        shipmentItem.setOrigin("HYD");
         shipmentItems.add(shipmentItem);
 
         booking.setItems(shipmentItems);
@@ -388,6 +414,8 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.getBookedItem().setWidth(345);
         shipmentItem.getBookedItem().setHeight(670);
         shipmentItem.getBookedItem().setActualWeight(40);
+        shipmentItem.setDestination("TUY");
+        shipmentItem.setOrigin("HYD");
         shipmentItems.add(shipmentItem);
 
         shipmentItem=new ShipmentItem();
@@ -409,6 +437,8 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.getBookedItem().setWidth(25);
         shipmentItem.getBookedItem().setHeight(37);
         shipmentItem.getBookedItem().setActualWeight(220);
+        shipmentItem.setDestination("THJ");
+        shipmentItem.setOrigin("HYD");
         shipmentItems.add(shipmentItem);
 
 
@@ -542,7 +572,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         }
 
 
-        List<ShipmentItem> shipment_list=new ArrayList<>();
+        LinkedList<ShipmentItem> shipment_list=new LinkedList<>();
 
         for(Map.Entry<String,ShipmentItem> entry:shipments_1.entrySet()){
             shipment_list.add(entry.getValue());

@@ -61,7 +61,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="left"
                         android:text="CJI35603H"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
                         android:typeface="serif" />
 
@@ -71,7 +71,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="left"
                         android:text=" ("
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         android:typeface="serif" />
 
                     <TextView
@@ -81,7 +81,7 @@
                         android:gravity="left"
                         android:text="20"
                         android:textColor="@color/maroon"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         android:typeface="serif" />
 
                     <TextView
@@ -89,7 +89,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="left"
                         android:text=") "
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         android:typeface="serif" />
 
                     <TextView
@@ -97,7 +97,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="left"
                         android:text="("
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         android:typeface="serif" />
 
                     <TextView
@@ -106,7 +106,7 @@
                         android:gravity="left"
                         android:text="20"
                         android:textColor="@android:color/holo_green_dark"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         android:typeface="serif"
                         android:id="@+id/loaded_count"/>
 
@@ -116,7 +116,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="left"
                         android:text=")"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         android:typeface="serif" />
 
                 </LinearLayout>
@@ -127,21 +127,47 @@
 
 
             <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="5dp"
-            android:weightSum="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:weightSum="1"
                 android:layout_marginTop="-10dp">
-
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
                 android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="left">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="TAKE TO :"
+                        android:textSize="12sp"
+                        android:typeface="serif" />
+
+                    <TextView
+                        android:id="@+id/destination"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingLeft="15dp"
+                        android:text="DEL"
+                        android:textSize="12sp"
+                        android:typeface="serif" />
+                </LinearLayout>
+                <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="left|top"
                 android:layout_gravity="left">
 
                 <TextView
@@ -149,7 +175,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="MISSING :"
-                    android:textSize="10sp"
+                    android:textSize="12sp"
                     android:typeface="serif" />
 
                 <TextView
@@ -159,9 +185,14 @@
                     android:gravity="center"
                     android:paddingLeft="10dp"
                     android:text="0"
-                    android:textSize="10sp"
+                    android:textSize="12sp"
                     android:typeface="serif" />
             </LinearLayout>
+
+
+            </LinearLayout>
+
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -177,12 +208,7 @@
                     android:padding="5dp"
                     android:src="@drawable/ic_error" />
 
-                <ImageView
-                    android:id="@+id/same_truck_status"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:padding="5dp"
-                    android:src="@drawable/ic_truck" />
+
                 <ImageView
                     android:id="@+id/loading_status"
                     android:layout_width="20dp"

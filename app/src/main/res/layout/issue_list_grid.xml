@@ -11,35 +11,54 @@
         android:background="@color/white"
         android:orientation="horizontal"
         android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         android:weightSum="1"
         android:gravity="center">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
             android:background="@color/white"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_gravity="center">
 
             <ImageView
-                android:id="@+id/commodity_pic"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/bg_circle_primary_color"
+                android:id="@+id/issue_type"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_circle_white"
                 android:elevation="5dp"
-                android:padding="5dp"
-                android:src="@drawable/ic_video"
+                android:padding="8dp"
+                android:src="@drawable/ic_error"
                 android:translationZ="5dp"
-                android:layout_margin="5dp"/>
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="15dp" />
 
-        </LinearLayout>
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_video"
+                android:background="@drawable/bg_circle_primary_color"
+                android:layout_alignBottom="@id/issue_type"
+                android:layout_alignRight="@id/issue_type"
+                android:padding="5dp"
+                android:translationZ="10dp"
+                android:layout_marginBottom="-10dp"
+                android:layout_marginRight="-5dp"
+                android:id="@+id/issue_desc_type" />
+
+        </RelativeLayout>
 
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.7"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="center">
 
 
          <TextView
@@ -49,7 +68,9 @@
              android:singleLine="true"
              android:ellipsize="end"
              android:textSize="15sp"
-             android:padding="10dp" />
+             android:padding="10dp"
+             android:layout_gravity="center"
+             android:id="@+id/issue_desc"/>
 
 
 
@@ -73,7 +94,7 @@
                 android:padding="5dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_forward_arrow"
-                android:id="@+id/load_shipment"/>
+                android:id="@+id/see_issue"/>
 
         </LinearLayout>
 

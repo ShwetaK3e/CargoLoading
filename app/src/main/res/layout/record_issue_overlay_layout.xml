@@ -3,8 +3,42 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
-    android:gravity="bottom|right"
     android:padding="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#55000000"
+        android:orientation="vertical"
+        android:id="@+id/suggstn">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="Record a Video (OR) Capture an Image of the defect."
+            android:padding="5dp"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            android:typeface="serif"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="2dp"
+            android:minHeight="2dp"
+            android:text="SKIP"
+            android:textColor="#0000ff"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:background="@android:color/transparent"
+            android:id="@+id/skip"/>
+
+    </LinearLayout>
+
+
+
 
     <ImageButton
         android:layout_width="25dp"
@@ -14,6 +48,7 @@
         android:scaleType="fitCenter"
         android:layout_margin="5dp"
         android:padding="5dp"
+        android:layout_gravity="right|bottom"
         android:id="@+id/flash_button"/>
 
 </LinearLayout>

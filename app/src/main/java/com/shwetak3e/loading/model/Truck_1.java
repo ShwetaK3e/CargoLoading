@@ -1,5 +1,6 @@
 package com.shwetak3e.loading.model;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ public class Truck_1 {
     String origin;
     String destination;
     List<String> stops;
-    List<ShipmentItem> shipmentItems;
+    LinkedList<ShipmentItem> shipmentItems;
 
 
     public String getId() {
@@ -48,11 +49,12 @@ public class Truck_1 {
         this.stops = stops;
     }
 
-    public List<ShipmentItem> getShipmentItems() {
-        return shipmentItems;
+    public LinkedList<ShipmentItem> getShipmentItems() {
+        if(shipmentItems!=null) return shipmentItems;
+        return new LinkedList<>();
     }
 
-    public void setShipmentItems(List<ShipmentItem> shipmentItems) {
+    public void setShipmentItems(LinkedList<ShipmentItem> shipmentItems) {
         this.shipmentItems = shipmentItems;
     }
 }

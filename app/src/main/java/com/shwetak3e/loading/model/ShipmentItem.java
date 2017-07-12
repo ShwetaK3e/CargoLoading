@@ -6,6 +6,7 @@ package com.shwetak3e.loading.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -47,6 +48,45 @@ public class ShipmentItem {
 
 
     private List<Issues> issues;
+
+
+    private String destination;
+    private String origin;
+    private LinkedList<String> stops;
+    private boolean stopSet;
+
+    public boolean isStopSet() {
+        return stopSet;
+    }
+
+    public void setStopSet(boolean stopSet) {
+        this.stopSet = stopSet;
+    }
+
+    public LinkedList<String> getStops() {
+        if(stops!=null) return stops;
+        else return new LinkedList<>();
+    }
+
+    public void setStops(LinkedList<String> stops) {
+        this.stops = stops;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
 
     public List<Issues> getIssues() {
         return issues;

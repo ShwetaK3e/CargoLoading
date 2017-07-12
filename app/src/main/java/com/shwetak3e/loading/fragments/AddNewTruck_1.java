@@ -1215,7 +1215,7 @@ public class AddNewTruck_1 extends Fragment {
             //initImmersiveMode();
             logMessage("onResume", "onResume started", null);
             audioManager.setMode(AudioManager.MODE_NORMAL);
-            startCam();
+            //startCam();
         }
         catch (Exception e)
         {

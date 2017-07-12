@@ -2,20 +2,23 @@
 <resources>
 
     <color name="colorPrimary">#ffc401</color>
-    <color name="colorPrimaryLight">#66ffc401</color>
+    <color name="colorPrimaryLight">#44ffc401</color>
     <color name="colorPrimaryDark">#cb9c00</color>
     <color name="textColorPrimary">#ffffff</color>
     <color name="windowBackground">#d6d6d6</color>
     <color name="navigationBarColor">#000000</color>
     <color name="colorAccent">#BBd6d6d6</color>
-    <color name="textColorSecondary">#757575</color>
+    <color name="textColorSecondary">#353232</color>
 
     <color name="selected_menu">#d6d6d6</color>
+    <color name="translucent_bg">#BB000000</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="maroon">#d72d2d</color>
     <color name="red">#FF0000</color>
-    <color name="light_grey">#d6d6d6</color>
+    <color name="light_grey">#a3a1a1</color>
+
+    <color name="lightest_grey">#dfdcdc</color>
     <color name="result_bg">#434A54</color>
     <color name="zoom_color">#40FF00</color>
     

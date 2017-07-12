@@ -21,6 +21,20 @@
         <item name="android:windowBackground">@drawable/splash_bg</item>
     </style>
 
+    <style name="MyDialogTheme" parent="android:Theme.Dialog">
+        <!-- Fill the screen -->
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">center</item>
+
+        <!-- No backgrounds, titles or window float -->
+        <item name="android:windowBackground">@color/translucent_bg</item>
+        <item name="android:windowNoTitle">false</item>
+        <item name="android:windowIsFloating">false</item>
+
+
+    </style>
+
 
 
 </resources>

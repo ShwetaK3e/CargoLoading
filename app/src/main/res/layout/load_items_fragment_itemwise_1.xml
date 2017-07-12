@@ -127,7 +127,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/header"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorPrimaryLight">
 
         <include
             android:id="@+id/load_this_item"

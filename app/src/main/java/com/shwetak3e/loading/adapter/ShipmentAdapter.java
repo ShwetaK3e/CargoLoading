@@ -44,17 +44,17 @@ public class ShipmentAdapter extends RecyclerView.Adapter<ShipmentAdapter.ViewHo
     public void onBindViewHolder(ShipmentAdapter.ViewHolder holder, final int position) {
         if(shipmentItems.get(position).getStatus()==0){
             holder.shipment_id.setTextColor(context.getResources().getColor(R.color.light_grey));
-
         }
         Glide.with(context).load(shipmentItems.get(position).getImageUri()).into(holder.commodity_img);
         holder.shipment_id.setText(shipmentItems.get(position).getId());
         holder.total_count.setText(shipmentItems.get(position).getShippedItemCount().toString());
         holder.loaded_count.setText(shipmentItems.get(position).getLoadedCount().toString());
         holder.missing_count.setText(shipmentItems.get(position).getMissing_count().toString());
+        holder.destination.setText(shipmentItems.get(position).getDestination());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemClickListener.onClick(shipmentItems.get(position).getId());
+                onItemClickListener.onClick(shipmentItems.get(position).getId(), position);
             }
         });
 
@@ -74,7 +74,9 @@ public class ShipmentAdapter extends RecyclerView.Adapter<ShipmentAdapter.ViewHo
         TextView total_count;
         TextView loaded_count;
         TextView missing_count;
+        TextView destination;
         ImageButton load_shipment;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -85,11 +87,12 @@ public class ShipmentAdapter extends RecyclerView.Adapter<ShipmentAdapter.ViewHo
             total_count=(TextView)itemView.findViewById(R.id.total_count);
             loaded_count=(TextView)itemView.findViewById(R.id.loaded_count);
             missing_count=(TextView)itemView.findViewById(R.id.missing_count);
+            destination=(TextView)itemView.findViewById(R.id.destination);
             load_shipment=(ImageButton) itemView.findViewById(R.id.load_shipment);
         }
     }
 
     public interface OnItemClickListener{
-        void onClick(String shipment_id);
+        void onClick(String shipment_id, int pos);
     }
 }

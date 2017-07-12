@@ -10,7 +10,9 @@
         android:text="HYD"
         android:padding="5dp"
         android:textSize="12sp"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:background="@drawable/bg_selected_category_holder"
+        android:layout_margin="5dp"/>
 
 
 </LinearLayout>

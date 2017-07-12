@@ -21,7 +21,11 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.StatFs;
 import android.provider.Settings;
+import android.support.design.widget.TextInputEditText;
+import android.support.v4.media.MediaBrowserCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -36,17 +40,20 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shwetak3e.loading.fragments.TruckDetails_1;
 import com.shwetak3e.loading.model.Issues;
+import com.shwetak3e.loading.model.ShipmentItem;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -61,6 +68,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 public class IssueVideoActivity extends AppCompatActivity {
 
@@ -131,6 +141,10 @@ public class IssueVideoActivity extends AppCompatActivity {
 
     private EditText damage_desc;
     private ImageButton save_damage_record;
+    private String shipment_ID;
+
+    private  Issues issue=null;
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -147,6 +161,11 @@ public class IssueVideoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_issue_video);
+
+
+        shipment_ID=getIntent().getStringExtra("Shipment_ID");
+
+        showIssueTypeDialog();
 
         //Backup the bundle that came with the starting intent.
         OrientationEventListener myOrientationEventListener = new OrientationEventListener(IssueVideoActivity.this, SensorManager.SENSOR_DELAY_NORMAL) {
@@ -173,8 +192,7 @@ public class IssueVideoActivity extends AppCompatActivity {
 
 
 
-        setAudioManagerForClickSound();
-        camToOpen = getCamNumber();
+
         preview_layout=(RelativeLayout)findViewById(R.id.preview_layout);
         preview = (FrameLayout) findViewById(R.id.camera_preview);
 
@@ -204,28 +222,32 @@ public class IssueVideoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String damagedesc=damage_desc.getText().toString().trim();
+                Issues issue=new Issues();
                 List<Issues> issuesList=TruckDetails_1.current_item.getIssues();
                 if(issuesList==null){
                     issuesList=new LinkedList<>();
+                }else{
+                    issue=issuesList.get(issuesList.size()-1);
+                    issuesList.remove(issue);
                 }
-                Issues issue=new Issues();
+
                 issue.setIssueType(0);
                 if (outputFile == null) {
                     if(damagedesc.length()==0){
-                        Toast.makeText(IssueVideoActivity.this,"Please add a Issue Defn", Toast.LENGTH_LONG).show();
+                        Toast.makeText(IssueVideoActivity.this,"Please Describe the Issue", Toast.LENGTH_LONG).show();
                         return;
                     }else {
                         issue.setUri("");
-                        issue.setIssueDefn(2);  //only text
+                        issue.setIssueDescriptionType(2);  //only text
                         issue.setIssueDescription(damagedesc);
                     }
                 }else{
                     issue.setUri(outputFile.getAbsolutePath());
-                    issue.setIssueDescription(damagedesc);
+                    if(damagedesc.length()!=0)issue.setIssueDescription(damagedesc);
                     if(outputFile.getName().endsWith(".mp4")){
-                        issue.setIssueDefn(0);
+                        issue.setIssueDescriptionType(0);
                     }else if(outputFile.getName().endsWith(".jpeg")){
-                        issue.setIssueDefn(1);
+                        issue.setIssueDescriptionType(1);
                     }
                 }
                 issuesList.add(issue);
@@ -246,23 +268,6 @@ public class IssueVideoActivity extends AppCompatActivity {
 
 
 
-   /* @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
 
 
     @Override
@@ -277,43 +282,7 @@ public class IssueVideoActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        try {
-            super.onResume();
-            issue_videocaptureButton.setEnabled(true);
-            issue_photocaptureButton.setEnabled(true);
-
-            isVideoRecordingStarted = false;
-            isPhotoCapturingStarted=false;
-
-
-            isSDPresent = android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
-            isSDPresent = isSDPresent && !(Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED_READ_ONLY));
-            if (!isSDPresent) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(IssueVideoActivity.this);
-                builder.setTitle("Warning");
-                builder.setMessage("SD card is not mounted.");
-                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.setCancelable(false);
-                builder.setIcon(android.R.drawable.ic_dialog_alert);
-                Dialog d = builder.create();
-                d.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        finish();
-                    }
-                });
-                d.show();
-            } else {
-                startCam();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e(TAG,"Error in recording video");
-        }
+        super.onResume();
     }
 
     @Override
@@ -372,8 +341,19 @@ public class IssueVideoActivity extends AppCompatActivity {
                     }
             }});
         }else{
-            holder.flash_button.setVisibility(View.GONE);
+            holder.flash_button.setVisibility(GONE);
         }
+
+        holder.skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(IssueVideoActivity.this, MainActivity.class);
+                i.putExtra("Activity","TRUCK_DETAILS_1");
+                startActivity(i);
+            }
+        });
+
+
         view.setTag(holder);
 
     }
@@ -479,8 +459,48 @@ public class IssueVideoActivity extends AppCompatActivity {
         return false;
     }
 
+    private void startingCamera(){
+        try {
+            issue_videocaptureButton.setEnabled(true);
+            issue_photocaptureButton.setEnabled(true);
+
+            isVideoRecordingStarted = false;
+            isPhotoCapturingStarted=false;
+
+
+            isSDPresent = android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
+            isSDPresent = isSDPresent && !(Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED_READ_ONLY));
+            if (!isSDPresent) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(IssueVideoActivity.this);
+                builder.setTitle("Warning");
+                builder.setMessage("SD card is not mounted.");
+                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setCancelable(false);
+                builder.setIcon(android.R.drawable.ic_dialog_alert);
+                Dialog d = builder.create();
+                d.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        finish();
+                    }
+                });
+                d.show();
+            } else {
+                startCam();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG,"Error in recording video");
+        }
+    }
 
     private void startCam() {
+        setAudioManagerForClickSound();
+        camToOpen = getCamNumber();
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
                 mCamera = Camera.open(camToOpen);
@@ -866,7 +886,7 @@ public class IssueVideoActivity extends AppCompatActivity {
                         setCamcorderProfileNames();
                         setAvailableProfiles(cameraId);
                     } catch (Exception e) {
-                        Log.e(TAG + "CameraManager", "Exception_Point1");
+                        Log.e(TAG + "CameraManager", "Exception_Point1  "+e.getMessage());
                     }
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -1168,12 +1188,309 @@ public class IssueVideoActivity extends AppCompatActivity {
 
     private static class OverlayHolder{
         ImageButton flash_button;
+        Button skip;
 
-        OverlayHolder(View view){
+        OverlayHolder(View view) {
             flash_button=(ImageButton)view.findViewById(R.id.flash_button);
+            skip=(Button)view.findViewById(R.id.skip);
         }
 
     }
+
+    Dialog issueTypedialog;
+    int dialog_face=0;
+    boolean suggstn_1_visible=false;
+    boolean suggstn_2_visible=false;
+    boolean suggstn_3_visible=false;
+    String issue_selected;
+    void showIssueTypeDialog(){
+
+        issueTypedialog=new Dialog(this, R.style.MyDialogTheme);
+        issueTypedialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        issueTypedialog.getWindow().setContentView(R.layout.issue_type_dialog);
+        issueTypedialog.getWindow().getAttributes().windowAnimations=R.style.DialogAnimation;
+
+
+
+        final IssueTypeDialogHolder holder=new IssueTypeDialogHolder(issueTypedialog);
+
+        holder.issue_type_1_suggstn.setVisibility(GONE);
+        holder.issue_type_2_suggstn.setVisibility(GONE);
+        holder.issue_type_3_suggstn.setVisibility(GONE);
+        holder.buttons_layout.setVisibility(GONE);
+        holder.add_details.setVisibility(GONE);
+        holder.done.setEnabled(false);
+
+        holder.go_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(dialog_face==0){
+                    Intent intent=new Intent(IssueVideoActivity.this,MainActivity.class);
+                    intent.putExtra("Activity","TRUCK_DETAILS_1");
+                    startActivity(intent);
+                }else if(dialog_face==1){
+                    dialog_face=0;
+                    holder.title.setText("Select Issue Type");
+                    holder.buttons_layout.setVisibility(GONE);
+                    holder.issue_type_1_layout.setVisibility(VISIBLE);
+                    holder.issue_type_2_layout.setVisibility(VISIBLE);
+                    holder.issue_type_3_layout.setVisibility(VISIBLE);
+                    holder.add_details.setVisibility(GONE);
+                }
+            }
+        });
+
+        holder.issue_type_1_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_face=1;
+                issue_selected="damage";
+                holder.issue_type_2_layout.setVisibility(GONE);
+                holder.issue_type_3_layout.setVisibility(GONE);
+                holder.title.setText("Change Issue Type");
+                holder.buttons_layout.setVisibility(VISIBLE);
+                holder.add_details.setVisibility(VISIBLE);
+                holder.separator_1.setVisibility(GONE);
+                holder.separator_2.setVisibility(GONE);
+                holder.add_details.setHint("Damage Count");
+            }
+        });
+
+        holder.issue_type_2_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_face=1;
+                issue_selected="missing";
+                holder.issue_type_1_layout.setVisibility(GONE);
+                holder.issue_type_3_layout.setVisibility(GONE);
+                holder.title.setText("Change Issue Type");
+                holder.buttons_layout.setVisibility(VISIBLE);
+                holder.add_details.setVisibility(VISIBLE);
+                holder.separator_1.setVisibility(GONE);
+                holder.separator_2.setVisibility(GONE);
+                holder.add_details.setHint("Missing Count");
+            }
+        });
+
+        holder.issue_type_3_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_face=1;
+                issue_selected="weight_loss";
+                holder.issue_type_1_layout.setVisibility(GONE);
+                holder.issue_type_2_layout.setVisibility(GONE);
+                holder.title.setText("Change Issue Type");
+                holder.buttons_layout.setVisibility(VISIBLE);
+                holder.add_details.setVisibility(VISIBLE);
+                holder.separator_1.setVisibility(GONE);
+                holder.separator_2.setVisibility(GONE);
+                holder.add_details.setHint("Loading Weight (in kgs)");
+            }
+        });
+
+
+        holder.issue_type_1_see_more_details.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(suggstn_1_visible){
+                    suggstn_1_visible=false;
+                    holder.issue_type_1_suggstn.setVisibility(GONE);
+                    holder.issue_type_1_see_more_details.setImageDrawable(getResources().getDrawable(R.drawable.ic_drop_arrow_1));
+                }else{
+                    suggstn_1_visible=true;
+                    holder.issue_type_1_suggstn.setVisibility(VISIBLE);
+                    holder.issue_type_1_see_more_details.setImageDrawable(getResources().getDrawable(R.drawable.ic_up_arrow));
+                }
+            }
+        });
+
+        holder.issue_type_2_see_more_details.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(suggstn_2_visible){
+                    suggstn_2_visible=false;
+                    holder.issue_type_2_suggstn.setVisibility(GONE);
+                    holder.issue_type_2_see_more_details.setImageDrawable(getResources().getDrawable(R.drawable.ic_drop_arrow_1));
+                }else{
+                    suggstn_2_visible=true;
+                    holder.issue_type_2_suggstn.setVisibility(VISIBLE);
+                    holder.issue_type_2_see_more_details.setImageDrawable(getResources().getDrawable(R.drawable.ic_up_arrow));
+                }
+            }
+        });
+
+
+        holder.issue_type_3_see_more_details.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(suggstn_3_visible){
+                    suggstn_3_visible=false;
+                    holder.issue_type_3_suggstn.setVisibility(GONE);
+                    holder.issue_type_3_see_more_details.setImageDrawable(getResources().getDrawable(R.drawable.ic_drop_arrow_1));
+                }else{
+                    suggstn_3_visible=true;
+                    holder.issue_type_3_suggstn.setVisibility(VISIBLE);
+                    holder.issue_type_3_see_more_details.setImageDrawable(getResources().getDrawable(R.drawable.ic_up_arrow));
+                }
+            }
+        });
+
+
+        holder.add_more_details.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                issue=new Issues();
+                if("damage".equals(issue_selected)) {
+                    issue.setIssueType(0);
+                    issue.setIssueDescriptionShort("Damage Count : "+ holder.add_details.getText().toString());
+                }else if("missing".equals(issue_selected)){
+                    issue.setIssueType(1);
+                    issue.setIssueDescriptionShort("Missing Count : "+ holder.add_details.getText().toString());
+                }else if("weight_loss".equals(issue_selected)){
+                    issue.setIssueType(2);
+                    issue.setIssueDescriptionShort("Loading Weight : "+ holder.add_details.getText().toString()+" kg");
+                }
+                saveIssueDetails();
+                issueTypedialog.dismiss();
+                startingCamera();
+            }
+        });
+
+        holder.done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                issue=new Issues();
+                if("damage".equals(issue_selected)) {
+                    issue.setIssueType(0);
+                    issue.setIssueDescriptionShort("Damage Count : "+ holder.add_details.getText().toString());
+                }else if("missing".equals(issue_selected)){
+                    issue.setIssueType(1);
+                    issue.setIssueDescriptionShort("Missing Count : "+ holder.add_details.getText().toString());
+                }else if("weight_loss".equals(issue_selected)){
+                    issue.setIssueType(2);
+                    issue.setIssueDescriptionShort("Loading Weight : "+ holder.add_details.getText().toString());
+                }
+                saveIssueDetails();
+                issue=null;
+                Intent intent=new Intent(IssueVideoActivity.this,MainActivity.class);
+                intent.putExtra("Activity","TRUCK_DETAILS_1");
+                startActivity(intent);
+            }
+        });
+
+        issueTypedialog.show();
+
+    }
+
+    void saveIssueDetails() {
+        if(issue!=null) {
+            LinkedList<Issues> issues = new LinkedList<>();
+            if (MainActivity.issueList != null && MainActivity.issueList.containsKey(shipment_ID)) {
+                issues = (LinkedList) MainActivity.issueList.get(shipment_ID);
+                MainActivity.issueList.remove(shipment_ID);
+            }
+            issues.add(issue);
+
+            MainActivity.issueList.put(shipment_ID, issues);
+            ShipmentItem item = MainActivity.shipments_1.get(shipment_ID);
+            item.setIssues(issues);
+        }else{
+            Toast.makeText(this, "No Issue Recorded", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
+
+    class IssueTypeDialogHolder{
+        ImageButton go_back;
+        TextView title;
+
+        LinearLayout issue_type_1_layout;
+        ImageView issue_type_1_img;
+        TextView issue_type_1_name;
+        ImageButton issue_type_1_see_more_details;
+        TextView issue_type_1_suggstn;
+
+        View separator_1;
+
+        LinearLayout issue_type_2_layout;
+        ImageView issue_type_2_img;
+        TextView issue_type_2_name;
+        ImageButton issue_type_2_see_more_details;
+        TextView issue_type_2_suggstn;
+
+        View separator_2;
+
+        LinearLayout issue_type_3_layout;
+        ImageView issue_type_3_img;
+        TextView issue_type_3_name;
+        ImageButton issue_type_3_see_more_details;
+        TextView issue_type_3_suggstn;
+
+        TextInputEditText add_details;
+
+        LinearLayout buttons_layout;
+        Button add_more_details;
+        Button done;
+
+        IssueTypeDialogHolder(Dialog dialog){
+
+            go_back=(ImageButton)dialog.findViewById(R.id.go_back);
+            title=(TextView)dialog.findViewById(R.id.title);
+
+            issue_type_1_layout=(LinearLayout)dialog.findViewById(R.id.issue_type_1_layout);
+            issue_type_1_img=(ImageView)dialog.findViewById(R.id.issue_type_1_img);
+            issue_type_1_name=(TextView)dialog.findViewById(R.id.issue_type_1_name);
+            issue_type_1_see_more_details=(ImageButton)dialog.findViewById(R.id.issue_type_1_see_more);
+            issue_type_1_suggstn=(TextView)dialog.findViewById(R.id.issue_type_1_suggstn);
+
+            separator_1=dialog.findViewById(R.id.separator_1);
+
+            issue_type_2_layout=(LinearLayout)dialog.findViewById(R.id.issue_type_2_layout);
+            issue_type_2_img=(ImageView)dialog.findViewById(R.id.issue_type_2_img);
+            issue_type_2_name=(TextView)dialog.findViewById(R.id.issue_type_2_name);
+            issue_type_2_see_more_details=(ImageButton)dialog.findViewById(R.id.issue_type_2_see_more);
+            issue_type_2_suggstn=(TextView)dialog.findViewById(R.id.issue_type_2_suggstn);
+
+            separator_2=dialog.findViewById(R.id.separator_2);
+
+            issue_type_3_layout=(LinearLayout)dialog.findViewById(R.id.issue_type_3_layout);
+            issue_type_3_img=(ImageView)dialog.findViewById(R.id.issue_type_3_img);
+            issue_type_3_name=(TextView)dialog.findViewById(R.id.issue_type_3_name);
+            issue_type_3_see_more_details=(ImageButton)dialog.findViewById(R.id.issue_type_3_see_more);
+            issue_type_3_suggstn=(TextView)dialog.findViewById(R.id.issue_type_3_suggstn);
+
+            add_details=(TextInputEditText)dialog.findViewById(R.id.issue_details);
+            add_details.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    done.setTextColor(getResources().getColor(R.color.colorPrimary));
+                    done.setEnabled(true);
+                }
+            });
+
+            buttons_layout=(LinearLayout)dialog.findViewById(R.id.button_layout);
+            add_more_details=(Button)dialog.findViewById(R.id.button_1);
+            done=(Button)dialog.findViewById(R.id.button_2);
+
+
+
+        }
+
+    }
+
+
 
 
 
