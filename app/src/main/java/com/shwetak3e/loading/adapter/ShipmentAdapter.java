@@ -44,6 +44,13 @@ public class ShipmentAdapter extends RecyclerView.Adapter<ShipmentAdapter.ViewHo
     public void onBindViewHolder(ShipmentAdapter.ViewHolder holder, final int position) {
         if(shipmentItems.get(position).getStatus()==0){
             holder.shipment_id.setTextColor(context.getResources().getColor(R.color.light_grey));
+            holder.loading_status.setImageResource(R.drawable.ic_complete);
+            holder.itemView.setEnabled(false);
+        }
+        if(shipmentItems.get(position).getDamagedStatus()){
+            holder.damage_status.setVisibility(View.VISIBLE);
+        }else{
+            holder.damage_status.setVisibility(View.INVISIBLE);
         }
         Glide.with(context).load(shipmentItems.get(position).getImageUri()).into(holder.commodity_img);
         holder.shipment_id.setText(shipmentItems.get(position).getId());
@@ -69,7 +76,7 @@ public class ShipmentAdapter extends RecyclerView.Adapter<ShipmentAdapter.ViewHo
 
         ImageView commodity_img;
         ImageView loading_status;
-        ImageView same_truck_status;
+        ImageView damage_status;
         TextView shipment_id;
         TextView total_count;
         TextView loaded_count;
@@ -82,7 +89,7 @@ public class ShipmentAdapter extends RecyclerView.Adapter<ShipmentAdapter.ViewHo
             super(itemView);
             commodity_img=(ImageView)itemView.findViewById(R.id.commodity_pic);
             loading_status=(ImageView)itemView.findViewById(R.id.loading_status);
-            same_truck_status=(ImageView)itemView.findViewById(R.id.same_truck_status);
+            damage_status=(ImageView)itemView.findViewById(R.id.damaged_status);
             shipment_id=(TextView)itemView.findViewById(R.id.shipment_id);
             total_count=(TextView)itemView.findViewById(R.id.total_count);
             loaded_count=(TextView)itemView.findViewById(R.id.loaded_count);

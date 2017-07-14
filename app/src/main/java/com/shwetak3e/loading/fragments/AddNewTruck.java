@@ -109,7 +109,7 @@ public class AddNewTruck extends Fragment {
         add_new_truck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Truck truck=new Truck();
+                Truck_1 truck=new Truck_1();
                 truck.setId(id.getText().toString().trim());
                 truck.setOrigin(origin.getText().toString().trim());
                 truck.setDestination(dest.getText().toString().trim());

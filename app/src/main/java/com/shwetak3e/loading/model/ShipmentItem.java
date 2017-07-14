@@ -34,9 +34,15 @@ public class ShipmentItem {
     private String imageUri;
 
 
-    private Integer damaged_count;
+    private Integer damaged_count=0;
 
-    private Integer missing_count;
+    private Integer missing_count=0;
+
+    private Integer weight_count=0;
+
+    private List<Issues> damaged_list;
+
+    private List<Issues> weight_list;
 
     private  Integer leakage_count;
 
@@ -47,7 +53,6 @@ public class ShipmentItem {
     private Boolean same_truck_status;
 
 
-    private List<Issues> issues;
 
 
     private String destination;
@@ -88,13 +93,38 @@ public class ShipmentItem {
         this.origin = origin;
     }
 
-    public List<Issues> getIssues() {
-        return issues;
+
+    public Integer getWeight_count() {
+        return weight_count;
     }
 
-    public void setIssues(List<Issues> issues) {
-        this.issues = issues;
+    public void setWeight_count(Integer weight_count) {
+        this.weight_count = weight_count;
     }
+
+    public List<Issues> getDamaged_list() {
+        if(damaged_count==0){
+            return new LinkedList<>();
+        }
+        return damaged_list;
+    }
+
+    public void setDamaged_list(List<Issues> damaged_list) {
+        this.damaged_list = damaged_list;
+    }
+
+    public List<Issues> getWeight_list() {
+        if(weight_count==0){
+            return new LinkedList<>();
+        }
+        return weight_list;
+    }
+
+    public void setWeight_list(List<Issues> weight_list) {
+        this.weight_list = weight_list;
+    }
+
+
 
     public Boolean getSame_truck_status() {
         return same_truck_status;

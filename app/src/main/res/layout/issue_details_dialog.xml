@@ -41,13 +41,15 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="300dp"
         android:id="@+id/issue_content">
-    <RelativeLayout
+        <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="match_parent"
         android:id="@+id/issue_video_preview"
-        android:layout_marginBottom="3dp">
+        android:layout_margin="3dp"
+            android:padding="2dp"
+            android:background="@color/lightest_grey">
 
 
         <VideoView
@@ -80,7 +82,9 @@
             android:id="@+id/issue_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="5dp" />
+            android:padding="5dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_load"/>
 
 
     </FrameLayout>
@@ -90,7 +94,9 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:id="@+id/short_desc"
-        android:layout_margin="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_gravity="center"
         android:text="Damage Count :1"
         android:padding="5dp"

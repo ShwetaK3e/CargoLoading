@@ -8,7 +8,6 @@
 
 
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,7 +16,10 @@
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
         android:paddingTop="20dp"
-        android:layout_margin="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/bg_dialog"
         android:id="@+id/main_dialog"
         android:layout_gravity="center">
@@ -103,8 +105,6 @@
 
 
         </LinearLayout>
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -262,8 +262,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"/>
 
-
-            <LinearLayout
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -448,7 +447,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"/>
 
-    <LinearLayout
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -459,17 +458,12 @@
         android:paddingRight="15dp"
         android:paddingBottom="10dp"
         android:paddingTop="5dp"
-        android:weightSum="1">
-
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="0.6"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:layout_gravity="top"
-                android:layout_marginTop="10dp"
-                android:id="@+id/raise_issue_layout">
+        android:weightSum="1"
+        android:id="@+id/raise_issue_layout">
+         <RelativeLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:gravity="center">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -480,47 +474,13 @@
                     android:textStyle="italic"
                     android:typeface="serif"
                     android:textSize="12sp"
-                    android:background="@android:color/transparent"/>
-            </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="0.4"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="1"
-            android:gravity="right">
-
-            <ImageView
-                android:layout_width="10dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_separator"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp"/>
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/go_to_issues">
-
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Issues"
-                    android:gravity="center"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp"
                     android:background="@drawable/bg_rounded_square_holder"
-                    android:id="@+id/issue_label"
-                    android:textSize="15sp"
-                    android:textColor="@color/black"
+                    android:id="@+id/create_issue"
+                    android:padding="5dp"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/black"/>
 
-                    android:layout_marginTop="10dp"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -532,20 +492,16 @@
                     android:id="@+id/issue_nos"
                     android:textSize="12sp"
                     android:background="@drawable/ic_error_bubble"
-                    android:layout_toRightOf="@id/issue_label"
-                    android:layout_marginLeft="-10dp"
+                    android:layout_toRightOf="@id/create_issue"
+                    android:layout_marginLeft="-15dp"
                     android:padding="2dp"
                     />
 
-
-
-            </RelativeLayout>
+         </RelativeLayout>
 
 
 
         </LinearLayout>
-
-    </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -555,7 +511,6 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"/>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -574,7 +529,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
-                android:text="SKIP"
+                android:text="CANCEL"
                 android:textSize="15sp"
                 android:layout_gravity="center"
                 android:minWidth="2dp"
@@ -624,14 +579,10 @@
 
         </LinearLayout>
 
-
-
-
-
-
     </LinearLayout>
 
-    <com.shwetak3e.loading.CustomWidgets.SlidingLinearLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -835,7 +786,7 @@
             </LinearLayout>
         </LinearLayout>
 
-    </com.shwetak3e.loading.CustomWidgets.SlidingLinearLayout>
+    </LinearLayout>
 
 
 

@@ -12,10 +12,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +26,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -51,6 +55,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 
@@ -64,16 +69,33 @@ public class IssueList extends Fragment {
     TextView shipmentID_txtview;
 
     FrameLayout content;
-    TextView no_issues;
+
+    RelativeLayout select_issue_type;
+    TextView damage_count,missing_count,weight_change_count;
+    LinearLayout damage,missing,weight;
+    ImageView damagebtn,missingbtn,weightbtn;
+
+    RelativeLayout missing_layout;
+    EditText missing_layout_count;
+    int missing_no=0;
+
     RecyclerView issue_list;
     IssuesAdapter issuesAdapter;
     List<Issues> currentIssueList=new LinkedList<>();
+    List<Issues> damageList=new LinkedList<>();
+    List<Issues> weightIssueList=new LinkedList<>();
+
+    FloatingActionButton change_type;
+
+
+    String IssueType="NO_TYPE";
 
 
 
     LinearLayout add_issue;
 
     private String shipmentID;
+    private  String from;
 
 
 
@@ -88,86 +110,239 @@ public class IssueList extends Fragment {
         View view= inflater.inflate(R.layout.fragment_list_issues, container, false);
 
         shipmentID=getActivity().getIntent().getStringExtra("Shipment_ID");
-        Log.i("ABCDS",shipmentID+"yritro");
+        from=getActivity().getIntent().getStringExtra("From");
+
         shipmentID_txtview=(TextView)view.findViewById(R.id.shipment_id);
         shipmentID_txtview.setText(shipmentID);
+
         prev_shipment=(ImageButton) view.findViewById(R.id.prev_shipment);
+        if("item".equalsIgnoreCase(from)){
+            prev_shipment.setVisibility(INVISIBLE);
+            prev_shipment.setEnabled(false);
+        }
         prev_shipment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getAnotherShipment(false);
                 shipmentID_txtview.setText(shipmentID);
-                currentIssueList=MainActivity.issueList.get(shipmentID);
-                if(currentIssueList!=null) {
-                    no_issues.setVisibility(GONE);
-                    issue_list.setVisibility(VISIBLE);
-                    if(issuesAdapter!=null) {
-                        issuesAdapter = new IssuesAdapter(getActivity(), currentIssueList, new IssuesAdapter.OnItemClickListener() {
-                            @Override
-                            public void onClick(int pos) {
-                                openIssue(currentIssueList.get(pos));
-                            }
-                        });
-                        issue_list.setAdapter(issuesAdapter);
-                    }else{
-                        issuesAdapter = new IssuesAdapter(getActivity(), currentIssueList, new IssuesAdapter.OnItemClickListener() {
-                            @Override
-                            public void onClick(int pos) {
-                                openIssue(currentIssueList.get(pos));
-                            }
-                        });
-                        issue_list.setAdapter(issuesAdapter);
-                    }
-                }else{
-                    no_issues.setVisibility(VISIBLE);
-                    issue_list.setVisibility(GONE);
-                }
+                issue_list.setVisibility(INVISIBLE);
+                missing_layout.setVisibility(INVISIBLE);
+                select_issue_type.setVisibility(VISIBLE);
+                setCountsonSelectIssue();
             }
         });
 
         next_shipment=(ImageButton)view.findViewById(R.id.next_shipment);
+        if("item".equalsIgnoreCase(from)){
+            next_shipment.setVisibility(INVISIBLE);
+            next_shipment.setEnabled(false);
+        }
         next_shipment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getAnotherShipment(true);
                 shipmentID_txtview.setText(shipmentID);
-                currentIssueList=MainActivity.issueList.get(shipmentID);
-                if(currentIssueList!=null) {
-                    no_issues.setVisibility(GONE);
-                    issue_list.setVisibility(VISIBLE);
-                    if(issuesAdapter!=null) {
-                        issuesAdapter = new IssuesAdapter(getActivity(), currentIssueList, new IssuesAdapter.OnItemClickListener() {
-                            @Override
-                            public void onClick(int pos) {
-                                openIssue(currentIssueList.get(pos));
-                            }
-                        });
-                        issue_list.setAdapter(issuesAdapter);
-                    }else{
-                        issuesAdapter = new IssuesAdapter(getActivity(), currentIssueList, new IssuesAdapter.OnItemClickListener() {
-                            @Override
-                            public void onClick(int pos) {
-                                openIssue(currentIssueList.get(pos));
-                            }
-                        });
-                        issue_list.setAdapter(issuesAdapter);
+                issue_list.setVisibility(INVISIBLE);
+                missing_layout.setVisibility(INVISIBLE);
+                select_issue_type.setVisibility(VISIBLE);
+                setCountsonSelectIssue();
+            }
+        }
+                );
+
+
+
+
+        content=(FrameLayout)view.findViewById(R.id.content);
+
+        //select issue Layout
+
+
+        select_issue_type=(RelativeLayout)view.findViewById(R.id.select_issue_type);
+        damage=(LinearLayout) view.findViewById(R.id.damage_layout);
+        damagebtn=(ImageView)view.findViewById(R.id.damage);
+        damagebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                IssueType="damage";
+                currentIssueList=damageList;
+                change_type.setVisibility(VISIBLE);
+                change_type.setImageResource(R.drawable.ic_error);
+                add_issue.setVisibility(VISIBLE);
+                select_issue_type.setVisibility(INVISIBLE);
+                missing_layout.setVisibility(INVISIBLE);
+                issue_list.setVisibility(VISIBLE);
+                issue_list.setAdapter(new IssuesAdapter(getActivity(), damageList, new IssuesAdapter.OnItemClickListener() {
+                    @Override
+                    public void onClick(int pos) {
+                        openIssue(damageList.get(pos));
                     }
-                }else{
-                    no_issues.setVisibility(VISIBLE);
-                    issue_list.setVisibility(GONE);
-                }
+                }));
+            }
+        });
+        damage_count=(TextView)view.findViewById(R.id.damage_issue_nos);
+        damage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                IssueType="damage";
+                currentIssueList=damageList;
+                change_type.setVisibility(VISIBLE);
+                change_type.setImageResource(R.drawable.ic_error);
+                add_issue.setVisibility(VISIBLE);
+                select_issue_type.setVisibility(INVISIBLE);
+                missing_layout.setVisibility(INVISIBLE);
+                issue_list.setVisibility(VISIBLE);
+                issue_list.setAdapter(new IssuesAdapter(getActivity(), damageList, new IssuesAdapter.OnItemClickListener() {
+                    @Override
+                    public void onClick(int pos) {
+                        openIssue(damageList.get(pos));
+                    }
+                }));
+            }
+        });
+        missing=(LinearLayout) view.findViewById(R.id.missing_layout);
+        missingbtn=(ImageView)view.findViewById(R.id.missing);
+        missing_count=(TextView)view.findViewById(R.id.missing_issue_nos);
+        missingbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IssueType="missing";
+                change_type.setVisibility(VISIBLE);
+                change_type.setImageResource(R.drawable.ic_missing);
+                add_issue.setVisibility(VISIBLE);
+                select_issue_type.setVisibility(INVISIBLE);
+                missing_layout.setVisibility(View.VISIBLE);
+                issue_list.setVisibility(INVISIBLE);
+            }
+        });
+        missing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IssueType="missing";
+                change_type.setVisibility(VISIBLE);
+                change_type.setImageResource(R.drawable.ic_missing);
+                add_issue.setVisibility(VISIBLE);
+                select_issue_type.setVisibility(INVISIBLE);
+                missing_layout.setVisibility(View.VISIBLE);
+                issue_list.setVisibility(INVISIBLE);
+
             }
         });
 
 
-        content=(FrameLayout)view.findViewById(R.id.content);
+        weight=(LinearLayout) view.findViewById(R.id.weight_layout);
+        weightbtn=(ImageView)view.findViewById(R.id.weight);
+        weight_change_count=(TextView)view.findViewById(R.id.weight_issue_nos);
+        weightbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IssueType="weight";
+                currentIssueList=weightIssueList;
+                change_type.setVisibility(VISIBLE);
+                change_type.setImageResource(R.drawable.ic_load);
+                add_issue.setVisibility(VISIBLE);
+                select_issue_type.setVisibility(INVISIBLE);
+                missing_layout.setVisibility(INVISIBLE);
+                issue_list.setVisibility(VISIBLE);
+                issue_list.setAdapter(new IssuesAdapter(getActivity(),weightIssueList, new IssuesAdapter.OnItemClickListener() {
+                    @Override
+                    public void onClick(int pos) {
+                        openIssue(weightIssueList.get(pos));
+                    }
+                }));
+            }
+        });
+        weight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IssueType="weight";
+                currentIssueList=weightIssueList;
+                change_type.setVisibility(VISIBLE);
+                change_type.setImageResource(R.drawable.ic_load);
+                add_issue.setVisibility(VISIBLE);
+                select_issue_type.setVisibility(INVISIBLE);
+                missing_layout.setVisibility(INVISIBLE);
+                issue_list.setVisibility(VISIBLE);
+                issue_list.setAdapter(new IssuesAdapter(getActivity(),weightIssueList, new IssuesAdapter.OnItemClickListener() {
+                    @Override
+                    public void onClick(int pos) {
+                        openIssue(weightIssueList.get(pos));
+                    }
+                }));
+            }
+        });
+
+
+        setCountsonSelectIssue();
+
+
+        //missing
+        missing_layout=(RelativeLayout) view.findViewById(R.id.missing_category_layout);
+        missing_layout.setVisibility(INVISIBLE);
+        missing_layout_count=(EditText)view.findViewById(R.id.missing_count);
+        missing_layout_count.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+               if(!"".equalsIgnoreCase(s.toString())) {
+                   List<ShipmentItem> items = AddNewTruck_1.current_truck.getShipmentItems();
+                   items.remove(TruckDetails_1.current_item);
+                   missing_no = Integer.parseInt(s.toString());
+                   TruckDetails_1.current_item.setMissing_count(Integer.parseInt(s.toString()));
+                   items.add(TruckDetails_1.current_item);
+                   AddNewTruck_1.current_truck.setShipmentItems((LinkedList) items);
+               }
+            }
+        });
+        missing_layout_count.setText(String.valueOf(missing_no));
+
+
+        //List for damage and weight
         issue_list = (RecyclerView) view.findViewById(R.id.issue_list);
+        issue_list.setVisibility(INVISIBLE);
         issue_list.setLayoutManager(new GridLayoutManager(getActivity(),1));
 
-        no_issues=(TextView)view.findViewById(R.id.no_issue_text);
-        currentIssueList=MainActivity.issueList.get(shipmentID);
-        if(currentIssueList!=null) {
-            no_issues.setVisibility(GONE);
+
+        //floating button
+        change_type=(FloatingActionButton)view.findViewById(R.id.change_type);
+        Glide.with(getContext()).load(TruckDetails_1.current_item.getImageUri()).into(change_type);
+        change_type.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentIssueList=new LinkedList<>();
+                if(!"NO_TYPE".equalsIgnoreCase(IssueType)){
+                   IssueType="NO_TYPE";
+                   Glide.with(getContext()).load(TruckDetails_1.current_item.getImageUri()).into(change_type);
+                   setCountsonSelectIssue();
+                   add_issue.setVisibility(INVISIBLE);
+                   select_issue_type.setVisibility(VISIBLE);
+                   missing_layout.setVisibility(INVISIBLE);
+                   issue_list.setVisibility(INVISIBLE);
+                }else{
+                    Intent i=new Intent(getActivity(), MainActivity.class);
+                    i.putExtra("Activity","TRUCK_DETAILS_1");
+                    startActivity(i);
+
+                }
+
+
+            }
+        });
+
+
+        if(currentIssueList!=null && currentIssueList.size()!=0) {
+
             issue_list.setVisibility(VISIBLE);
             issuesAdapter = new IssuesAdapter(getActivity(), currentIssueList, new IssuesAdapter.OnItemClickListener() {
                 @Override
@@ -177,24 +352,52 @@ public class IssueList extends Fragment {
             });
             issue_list.setAdapter(issuesAdapter);
         }else{
-            no_issues.setVisibility(VISIBLE);
             issue_list.setVisibility(GONE);
         }
 
 
         add_issue=(LinearLayout)view.findViewById(R.id.add_issue);
+        add_issue.setVisibility(INVISIBLE);
         add_issue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getActivity(), IssueVideoActivity.class);
-                intent.putExtra("Shipment_ID",shipmentID);
-                startActivity(intent);
+                if(!"missing".equalsIgnoreCase(IssueType)) {
+                    Intent intent = new Intent(getActivity(), IssueVideoActivity.class);
+                    intent.putExtra("Shipment_ID", shipmentID);
+                    intent.putExtra("IssueType", IssueType);
+                    startActivity(intent);
+                }else{
+                     missing_no ++;
+                     missing_layout_count.setText(String.valueOf(missing_no));
+                     List<ShipmentItem> items=AddNewTruck_1.current_truck.getShipmentItems();
+                     items.remove(TruckDetails_1.current_item);
+                     TruckDetails_1.current_item.setMissing_count(missing_no);
+                     items.add(TruckDetails_1.current_item);
+                     AddNewTruck_1.current_truck.setShipmentItems((LinkedList)items);
+
+
+                    // updetCounts();
+
+                }
             }
         });
 
         return view;
     }
 
+
+
+
+
+    void updetCounts(){
+        List<ShipmentItem> items=AddNewTruck_1.current_truck.getShipmentItems();
+        items.remove(TruckDetails_1.current_item);
+        TruckDetails_1.current_item.setDamaged_count(damageList.size());
+        TruckDetails_1.current_item.setMissing_count(missing_no);
+        TruckDetails_1.current_item.setWeight_count(weightIssueList.size());
+        items.add(TruckDetails_1.current_item);
+        AddNewTruck_1.current_truck.setShipmentItems((LinkedList)items);
+    }
 
     void  getAnotherShipment(boolean next){
         String prev_ID=null;
@@ -226,6 +429,24 @@ public class IssueList extends Fragment {
 
     }
 
+    void  setCountsonSelectIssue(){
+        List<ShipmentItem> items=AddNewTruck_1.current_truck.getShipmentItems();
+        for(ShipmentItem item: items){
+            if(shipmentID.equalsIgnoreCase(item.getId())){
+                damageList=item.getDamaged_list();
+                weightIssueList=item.getWeight_list();
+                missing_no=item.getMissing_count();
+                damage_count.setText(String.valueOf(damageList.size()));
+                weight_change_count.setText(String.valueOf(weightIssueList.size()));
+                missing_count.setText(String.valueOf(missing_no));
+                Log.i("COUNT123",damageList.size()+ " "+weightIssueList.size()+ " "+missing_no);
+                break;
+            }
+        }
+
+    }
+
+
     Dialog issue_details;
     boolean isPlayClicked=false;
     AudioManager audioManager;
@@ -256,7 +477,7 @@ public class IssueList extends Fragment {
                 public void onCompletion(MediaPlayer mp)
                 {
                     audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, previousVolume, 0);
-                    holder.play_video.setVisibility(View.VISIBLE);
+                    holder.play_layout.setVisibility(View.VISIBLE);
                     isPlayClicked=false;
                 }
             });
@@ -269,17 +490,28 @@ public class IssueList extends Fragment {
             holder.issue_image.setVisibility(GONE);
         }
 
-        if(issue.getIssueDescriptionShort()!=null){
-            holder.short_desc.setText(issue.getIssueDescriptionShort());
+        if(issue.getIssueType()==0){
+            holder.short_desc.setText("DAMAGE");
+        }else if(issue.getIssueType()==1){
+            holder.short_desc.setText("MISSING");
+        }else if(issue.getIssueType()==2){
+            holder.short_desc.setText("WEIGHT CHANGE" + " ( "+TruckDetails_1.current_item.getBookedItem().getActualWeight()+" )");
         }
         if(issue.getIssueDescription()!=null){
             holder.desc.setText(issue.getIssueDescription());
         }
 
+        holder.play_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.play_layout.setVisibility(INVISIBLE);
+                playVideo(holder.issue_video, issue.getUri());
+            }
+        });
         holder.play_video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.play_video.setVisibility(View.INVISIBLE);
+                holder.play_layout.setVisibility(INVISIBLE);
                 playVideo(holder.issue_video, issue.getUri());
             }
         });
@@ -290,7 +522,7 @@ public class IssueList extends Fragment {
             public void onCompletion(MediaPlayer mp)
             {
                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, previousVolume, 0);
-                holder.play_video.setVisibility(View.VISIBLE);
+                holder.play_layout.setVisibility(View.VISIBLE);
                 isPlayClicked=false;
             }
         });
@@ -402,7 +634,9 @@ public class IssueList extends Fragment {
 
         RelativeLayout issue_video_preview;
         VideoView issue_video;
-        LinearLayout play_video;
+        LinearLayout play_layout;
+        ImageButton play_video;
+
         ImageView issue_image;
 
         TextView short_desc;
@@ -414,7 +648,8 @@ public class IssueList extends Fragment {
             issue_details=(FrameLayout)dialog.findViewById(R.id.issue_content);
             issue_video_preview=(RelativeLayout)dialog.findViewById(R.id.issue_video_preview);
             issue_video=(VideoView)dialog.findViewById(R.id.issue_video);
-            play_video=(LinearLayout) dialog.findViewById(R.id.play_layout);
+            play_layout=(LinearLayout) dialog.findViewById(R.id.play_layout);
+            play_video=(ImageButton) dialog.findViewById(R.id.play_video);
             issue_image=(ImageView)dialog.findViewById(R.id.issue_image);
 
             short_desc=(TextView)dialog.findViewById(R.id.short_desc);

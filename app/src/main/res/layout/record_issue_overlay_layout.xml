@@ -21,14 +21,15 @@
             android:gravity="center"
             android:textSize="15sp"
             android:textStyle="italic"
-            android:typeface="serif"/>
+            android:typeface="serif"
+            android:id="@+id/suggestion"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="2dp"
             android:minHeight="2dp"
-            android:text="SKIP"
+            android:text="CANCEL"
             android:textColor="#0000ff"
             android:layout_gravity="center"
             android:layout_margin="5dp"

@@ -25,6 +25,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -51,6 +52,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.shwetak3e.loading.fragments.AddNewTruck;
+import com.shwetak3e.loading.fragments.AddNewTruck_1;
+import com.shwetak3e.loading.fragments.TruckDetails;
 import com.shwetak3e.loading.fragments.TruckDetails_1;
 import com.shwetak3e.loading.model.Issues;
 import com.shwetak3e.loading.model.ShipmentItem;
@@ -107,7 +111,6 @@ public class IssueVideoActivity extends AppCompatActivity {
 
 
     private ImageButton issue_photocaptureButton;
-    private boolean isPhotoCapturingStarted=false;
     private Camera.PictureCallback mPictureCallback=new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
@@ -142,6 +145,7 @@ public class IssueVideoActivity extends AppCompatActivity {
     private EditText damage_desc;
     private ImageButton save_damage_record;
     private String shipment_ID;
+    private  String issue_type;
 
     private  Issues issue=null;
 
@@ -164,11 +168,16 @@ public class IssueVideoActivity extends AppCompatActivity {
 
 
         shipment_ID=getIntent().getStringExtra("Shipment_ID");
+        issue_type=getIntent().getStringExtra("IssueType");
 
-        showIssueTypeDialog();
+        //showIssueTypeDialog();
 
         //Backup the bundle that came with the starting intent.
-        OrientationEventListener myOrientationEventListener = new OrientationEventListener(IssueVideoActivity.this, SensorManager.SENSOR_DELAY_NORMAL) {
+
+        setAudioManagerForClickSound();
+        camToOpen = getCamNumber();
+
+        /*OrientationEventListener myOrientationEventListener = new OrientationEventListener(IssueVideoActivity.this, SensorManager.SENSOR_DELAY_NORMAL) {
             public void onOrientationChanged(int iAngle) {
                 if (iAngle != ORIENTATION_UNKNOWN) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
@@ -188,7 +197,7 @@ public class IssueVideoActivity extends AppCompatActivity {
         } else {
             Log.i(TAG + "onCreate", "Failed to enable orientationListener", null);
             Toast.makeText(this, "Cannot detect device orientation. Your image may not be oriented correctly.", Toast.LENGTH_LONG).show();
-        }
+        }*/
 
 
 
@@ -198,6 +207,9 @@ public class IssueVideoActivity extends AppCompatActivity {
 
 
         issue_videocaptureButton = (ImageButton) findViewById(R.id.button_capture_issue_video);
+        if("weight".equalsIgnoreCase(issue_type)){
+            issue_videocaptureButton.setEnabled(false);
+        }
         issue_videocaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -217,45 +229,50 @@ public class IssueVideoActivity extends AppCompatActivity {
 
 
         damage_desc=(EditText)findViewById(R.id.damage_desc);
+        if("weight".equalsIgnoreCase(issue_type)){
+            damage_desc.setHint("Recorded Weight (in kgs)");
+            damage_desc.setInputType(InputType.TYPE_CLASS_NUMBER);
+        }else if("damage".equalsIgnoreCase(issue_type)){
+            damage_desc.setHint("Describe the Damage");
+            damage_desc.setInputType(InputType.TYPE_CLASS_TEXT);
+        }
         save_damage_record=(ImageButton)findViewById(R.id.store_damage_record);
         save_damage_record.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String damagedesc=damage_desc.getText().toString().trim();
-                Issues issue=new Issues();
-                List<Issues> issuesList=TruckDetails_1.current_item.getIssues();
-                if(issuesList==null){
-                    issuesList=new LinkedList<>();
+                if(damagedesc.length()==0){
+                    Toast.makeText(IssueVideoActivity.this,"damage".equalsIgnoreCase(issue_type)?"Please Describe the Issue":"Please Record Weight Change", Toast.LENGTH_LONG).show();
                 }else{
-                    issue=issuesList.get(issuesList.size()-1);
-                    issuesList.remove(issue);
-                }
 
-                issue.setIssueType(0);
-                if (outputFile == null) {
-                    if(damagedesc.length()==0){
-                        Toast.makeText(IssueVideoActivity.this,"Please Describe the Issue", Toast.LENGTH_LONG).show();
-                        return;
-                    }else {
+                    Issues issue=new Issues();
+                    if("damage".equalsIgnoreCase(issue_type)) {
+                        issue.setIssueType(0);
+                    }else if("weight".equalsIgnoreCase(issue_type)){
+                        issue.setIssueType(2);
+                    }
+
+                    if (outputFile == null) {
                         issue.setUri("");
                         issue.setIssueDescriptionType(2);  //only text
                         issue.setIssueDescription(damagedesc);
+
+                    }else{
+                        issue.setUri(outputFile.getAbsolutePath());
+                        if(damagedesc.length()!=0)issue.setIssueDescription(damagedesc);
+                        if(outputFile.getName().endsWith(".mp4")){
+                            issue.setIssueDescriptionType(0);
+                        }else if(outputFile.getName().endsWith(".jpeg")){
+                            issue.setIssueDescriptionType(1);
+                        }
                     }
-                }else{
-                    issue.setUri(outputFile.getAbsolutePath());
-                    if(damagedesc.length()!=0)issue.setIssueDescription(damagedesc);
-                    if(outputFile.getName().endsWith(".mp4")){
-                        issue.setIssueDescriptionType(0);
-                    }else if(outputFile.getName().endsWith(".jpeg")){
-                        issue.setIssueDescriptionType(1);
-                    }
+                    List<ShipmentItem> shipmentItems=AddNewTruck_1.current_truck.getShipmentItems();
+                    shipmentItems.remove(TruckDetails_1.current_item);
+                    openSaveDialog(issue);
+
                 }
-                issuesList.add(issue);
-                TruckDetails_1.current_item.setIssues(issuesList);
-                Intent i = new Intent(IssueVideoActivity.this, MainActivity.class);
-                i.putExtra("Activity","LOAD_THIS_ITEM");
-                startActivity(i);
-                finish();
+
+
             }
         });
 
@@ -265,7 +282,6 @@ public class IssueVideoActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
     }
-
 
 
 
@@ -283,6 +299,7 @@ public class IssueVideoActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        startingCamera();
     }
 
     @Override
@@ -342,6 +359,12 @@ public class IssueVideoActivity extends AppCompatActivity {
             }});
         }else{
             holder.flash_button.setVisibility(GONE);
+        }
+
+        if("weight".equalsIgnoreCase(issue_type)){
+            holder.suggestion.setText("Take an Image of the Weight.");
+        }else if("damage".equalsIgnoreCase(issue_type)){
+            holder.suggestion.setText("Record a Video (OR) Capture an Image of the Defect.");
         }
 
         holder.skip.setOnClickListener(new View.OnClickListener() {
@@ -426,7 +449,11 @@ public class IssueVideoActivity extends AppCompatActivity {
 
     //used for naming the files
     private int findnoOfIssues(){
-        List<Issues> issuesList=TruckDetails_1.current_item.getIssues();
+        List<Issues> issuesList=TruckDetails_1.current_item.getDamaged_list();
+        if(issuesList==null){
+            issuesList=new LinkedList<>();
+        }
+        issuesList.addAll(TruckDetails_1.current_item.getWeight_list());
         if(issuesList==null){
             return 0;
         }else{
@@ -439,11 +466,7 @@ public class IssueVideoActivity extends AppCompatActivity {
             android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
             Camera.getCameraInfo(camToOpen, info);
             int orientation = (iAngle + 45) / 90 * 90;
-            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-                imageRotation = (info.orientation - orientation + 360) % 360;
-            } else {
-                imageRotation = (info.orientation + orientation) % 360;
-            }
+            imageRotation = (info.orientation + orientation) % 360;
             Log.i(TAG + "setImageRotation", Integer.toString(imageRotation));
         } catch (Exception e) {
             Log.e(TAG + "exception", e.getMessage());
@@ -461,11 +484,8 @@ public class IssueVideoActivity extends AppCompatActivity {
 
     private void startingCamera(){
         try {
-            issue_videocaptureButton.setEnabled(true);
-            issue_photocaptureButton.setEnabled(true);
 
             isVideoRecordingStarted = false;
-            isPhotoCapturingStarted=false;
 
 
             isSDPresent = android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
@@ -499,8 +519,7 @@ public class IssueVideoActivity extends AppCompatActivity {
     }
 
     private void startCam() {
-        setAudioManagerForClickSound();
-        camToOpen = getCamNumber();
+
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
                 mCamera = Camera.open(camToOpen);
@@ -558,7 +577,6 @@ public class IssueVideoActivity extends AppCompatActivity {
                             if (arg1 == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
                                 releaseMediaRecorder(); // release the MediaRecorder
                                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, previousVolume, 0);
-                                issue_photocaptureButton.setEnabled(true);
 
                             }
                         }
@@ -810,15 +828,12 @@ public class IssueVideoActivity extends AppCompatActivity {
         }
         Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(camToOpen, info);
-        int result;
+        int result=0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
             Log.e("info Orientation", info.orientation + "");
                 result = (info.orientation - degrees + 360) % 360;
-        } else {
-
-                result = 90;
-
         }
+
         return result;
     }
 
@@ -1189,21 +1204,22 @@ public class IssueVideoActivity extends AppCompatActivity {
     private static class OverlayHolder{
         ImageButton flash_button;
         Button skip;
+        TextView suggestion;
 
         OverlayHolder(View view) {
             flash_button=(ImageButton)view.findViewById(R.id.flash_button);
             skip=(Button)view.findViewById(R.id.skip);
+            suggestion=(TextView)view.findViewById(R.id.suggestion);
         }
-
     }
 
-    Dialog issueTypedialog;
+   /* Dialog issueTypedialog;
     int dialog_face=0;
     boolean suggstn_1_visible=false;
     boolean suggstn_2_visible=false;
     boolean suggstn_3_visible=false;
-    String issue_selected;
-    void showIssueTypeDialog(){
+    String issue_selected;*/
+   /* void showIssueTypeDialog(){
 
         issueTypedialog=new Dialog(this, R.style.MyDialogTheme);
         issueTypedialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -1350,7 +1366,7 @@ public class IssueVideoActivity extends AppCompatActivity {
                     issue.setIssueType(2);
                     issue.setIssueDescriptionShort("Loading Weight : "+ holder.add_details.getText().toString()+" kg");
                 }
-                saveIssueDetails();
+
                 issueTypedialog.dismiss();
                 startingCamera();
             }
@@ -1382,27 +1398,11 @@ public class IssueVideoActivity extends AppCompatActivity {
 
     }
 
-    void saveIssueDetails() {
-        if(issue!=null) {
-            LinkedList<Issues> issues = new LinkedList<>();
-            if (MainActivity.issueList != null && MainActivity.issueList.containsKey(shipment_ID)) {
-                issues = (LinkedList) MainActivity.issueList.get(shipment_ID);
-                MainActivity.issueList.remove(shipment_ID);
-            }
-            issues.add(issue);
-
-            MainActivity.issueList.put(shipment_ID, issues);
-            ShipmentItem item = MainActivity.shipments_1.get(shipment_ID);
-            item.setIssues(issues);
-        }else{
-            Toast.makeText(this, "No Issue Recorded", Toast.LENGTH_SHORT).show();
-        }
-
-    }
+    */
 
 
 
-    class IssueTypeDialogHolder{
+    /*class IssueTypeDialogHolder{
         ImageButton go_back;
         TextView title;
 
@@ -1490,6 +1490,82 @@ public class IssueVideoActivity extends AppCompatActivity {
 
     }
 
+*/
+    Dialog save_issue;
+    void openSaveDialog(final Issues issue){
+        save_issue=new Dialog(this, R.style.MyDialogTheme);
+        save_issue.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        save_issue.setContentView(R.layout.save_issue_dialog);
+        save_issue.getWindow().getAttributes().windowAnimations=R.style.DialogAnimation;
+
+
+
+        final SaveDialogHolder holder=new SaveDialogHolder(save_issue);
+        holder.save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<ShipmentItem> shipmentItems = AddNewTruck_1.current_truck.getShipmentItems();
+                shipmentItems.remove(TruckDetails_1.current_item);
+
+                if("damage".equalsIgnoreCase(issue_type)){
+                    List<Issues> issues=new LinkedList<>();
+                    Log.i("COUNT123A","1 "+ TruckDetails_1.current_item.getDamaged_count() + " "+TruckDetails_1.current_item.getDamaged_list().size());
+                    issues=TruckDetails_1.current_item.getDamaged_list();
+                    issues.add(issue);
+                    TruckDetails_1.current_item.setDamaged_list(issues);
+                    TruckDetails_1.current_item.setDamaged_count(issues.size());
+                    Log.i("COUNT123B","1 "+ TruckDetails_1.current_item.getDamaged_count() + " "+TruckDetails_1.current_item.getDamaged_list().size());
+
+                }else if("weight".equalsIgnoreCase(issue_type)){
+                    Log.i("COUNT123A","1 "+ TruckDetails_1.current_item.getWeight_count() + " "+TruckDetails_1.current_item.getWeight_list().size());
+                    Log.i("COUNT123AD","1 "+ TruckDetails_1.current_item.getDamaged_count() + " "+TruckDetails_1.current_item.getDamaged_list().size());
+
+                    List<Issues> issues=new LinkedList<>();
+                    issues=TruckDetails_1.current_item.getWeight_list();
+                    issues.add(issue);
+                    TruckDetails_1.current_item.setWeight_list(issues);
+                    TruckDetails_1.current_item.setWeight_count(issues.size());
+                    Log.i("COUNT123B","1 "+ TruckDetails_1.current_item.getWeight_count() + " "+TruckDetails_1.current_item.getWeight_list().size());
+                    Log.i("COUNT123BD","1 "+ TruckDetails_1.current_item.getDamaged_count() + " "+TruckDetails_1.current_item.getDamaged_list().size());
+
+                }
+
+                shipmentItems.add(TruckDetails_1.current_item);
+                Toast.makeText(IssueVideoActivity.this,"Issue has been Added", Toast.LENGTH_SHORT).show();
+                AddNewTruck_1.current_truck.setShipmentItems((LinkedList)shipmentItems);
+                Intent i=new Intent(IssueVideoActivity.this, MainActivity.class);
+                i.putExtra("Activity","TRUCK_DETAILS_1");
+                i.putExtra("Shipment_ID",shipment_ID);
+                startActivity(i);
+
+            }
+        });
+
+        holder.cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(IssueVideoActivity.this, MainActivity.class);
+                i.putExtra("Activity","ISSUES");
+                i.putExtra("Shipment_ID",shipment_ID);
+                i.putExtra("From","item");
+                startActivity(i);
+            }
+        });
+
+        save_issue.show();
+
+    }
+
+    class SaveDialogHolder{
+
+        Button save;
+        Button cancel;
+
+        SaveDialogHolder(Dialog dialog){
+            save=(Button)dialog.findViewById(R.id.save);
+            cancel=(Button)dialog.findViewById(R.id.cancel);
+        }
+    }
 
 
 

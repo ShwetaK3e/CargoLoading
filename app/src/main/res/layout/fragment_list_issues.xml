@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white">
 
 
@@ -61,7 +62,6 @@
                     android:textColor="@color/black"
                     android:textStyle="bold" />
             </LinearLayout>
-
 
 
 
@@ -176,39 +176,405 @@
 
     </LinearLayout>
 
+
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:layout_marginBottom="0dp"
         android:layout_below="@id/header"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:layout_above="@id/add_issue"
         android:id="@+id/content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="10dp">
-        <TextView
+
+        <!--select issue type-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/select_issue_type">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_alignParentTop="true"
+                android:gravity="center"
+                android:id="@+id/title">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Select Your Issue Type"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
+                android:typeface="serif" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimaryLight"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="2dp"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorPrimaryLight"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="10dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@id/title"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:paddingTop="5dp">
+
+                <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="center"
+                 android:orientation="horizontal"
+                 android:gravity="center"
+                 android:weightSum="1">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_margin="5dp">
+                    <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:gravity="center"
+                       android:padding="5dp"
+                       android:background="@drawable/bg_dialog"
+                       android:translationZ="5dp"
+                       android:elevation="5dp"
+                       android:layout_margin="10dp"
+                        android:id="@+id/damage_layout"
+                        android:orientation="vertical">
+
+                       <ImageButton
+                           android:layout_width="60dp"
+                           android:layout_height="60dp"
+                           android:background="@android:color/transparent"
+                           android:padding="5dp"
+                           android:src="@drawable/ic_error"
+                           android:scaleType="fitCenter"
+                           android:id="@+id/damage"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:text="Damage"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:typeface="serif"
+                                android:background="@android:color/transparent"/>
+                            <!--<TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:text="( The Item is broken )"
+                                android:textSize="12sp"
+                                android:typeface="serif"
+                                android:textStyle="italic"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:layout_marginTop="-10dp"
+                                android:background="@android:color/transparent"/>
+
+-->
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="100"
+                        android:textColor="@color/white"
+                        android:minHeight="2dip"
+                        android:minWidth="2dip"
+                        android:gravity="center"
+                        android:id="@+id/damage_issue_nos"
+                        android:textSize="15sp"
+                        android:background="@drawable/ic_error_bubble"
+                        android:layout_toRightOf="@id/damage_layout"
+                        android:layout_marginLeft="-40dp"
+                        android:padding="2dp"
+                        android:elevation="10dp"
+                        />
+
+                </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.5"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_margin="5dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:background="@drawable/bg_dialog"
+                            android:translationZ="5dp"
+                            android:elevation="5dp"
+                            android:layout_margin="10dp"
+                            android:id="@+id/missing_layout"
+                            android:orientation="vertical">
+
+                            <ImageButton
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:background="@android:color/transparent"
+                                android:padding="5dp"
+                                android:src="@drawable/ic_missing"
+                                android:scaleType="fitCenter"
+                                android:id="@+id/missing"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:padding="5dp"
+                                    android:text="Missing"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold"
+                                    android:typeface="serif"
+                                    android:background="@android:color/transparent"/>
+                                <!--<TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:padding="5dp"
+                                    android:text="( Item Not Found )"
+                                    android:textSize="12sp"
+                                    android:textStyle="italic"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:typeface="serif"
+                                    android:layout_marginTop="-10dp"
+                                    android:background="@android:color/transparent"/>
+-->
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="100"
+                            android:textColor="@color/white"
+                            android:minHeight="2dip"
+                            android:minWidth="2dip"
+                            android:gravity="center"
+                            android:id="@+id/missing_issue_nos"
+                            android:textSize="15sp"
+                            android:background="@drawable/ic_error_bubble"
+                            android:layout_toRightOf="@id/missing_layout"
+                            android:layout_marginLeft="-40dp"
+                            android:padding="2dp"
+                            android:elevation="10dp"
+                            />
+
+                    </RelativeLayout>
+
+
+
+            </LinearLayout>
+                <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:layout_margin="15dp"
+               android:orientation="horizontal"
+               android:gravity="center"
+                    android:weightSum="1">
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.5"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_margin="5dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:background="@drawable/bg_dialog"
+                            android:translationZ="5dp"
+                            android:elevation="5dp"
+                            android:layout_margin="10dp"
+                            android:id="@+id/weight_layout"
+                            android:orientation="vertical">
+                            <ImageView
+                                android:background="@android:color/transparent"
+                                android:padding="5dp"
+                                android:src="@drawable/ic_load"
+                                android:scaleType="fitCenter"
+                                android:id="@+id/weight"
+                                android:layout_height="60dp"
+                                android:layout_width="60dp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:padding="5dp"
+                                    android:text="Weight Change"
+                                    android:textSize="15sp"
+                                    android:typeface="serif"
+                                    android:textStyle="bold"
+                                    android:background="@android:color/transparent"/>
+                                <!--<TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:padding="5dp"
+                                    android:text="( The Weight Differs )"
+                                    android:textSize="12sp"
+                                    android:textStyle="italic"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:typeface="serif"
+                                    android:layout_marginTop="-10dp"
+                                    android:background="@android:color/transparent"/>
+-->
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="100"
+                            android:textColor="@color/white"
+                            android:minHeight="2dip"
+                            android:minWidth="2dip"
+                            android:gravity="center"
+                            android:id="@+id/weight_issue_nos"
+                            android:textSize="15sp"
+                            android:background="@drawable/ic_error_bubble"
+                            android:layout_toRightOf="@id/weight_layout"
+                            android:layout_marginLeft="-40dp"
+                            android:padding="2dp"
+                            android:elevation="10dp"
+                            />
+
+                    </RelativeLayout>
+
+
+        </LinearLayout>
+
+             </LinearLayout>
+        </RelativeLayout>
+
+
+
+        <!-- missing layout-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:id="@+id/missing_category_layout"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_alignParentTop="true"
+                android:gravity="center">
+
+                <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Missing Count"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
+                android:typeface="serif"
+                android:id="@+id/missing_title" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorPrimaryLight"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="2dp"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorPrimaryLight"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="10dp"/>
+
+            </LinearLayout>
+
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/missing_count"
+                android:text="2000"
+                android:textSize="50sp"
+                android:layout_gravity="center"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+
+
+
+        </RelativeLayout>
+
+
+        <!--damage & weight layout-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/issue_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/no_issue_text"
-            android:text="This Item Reference ID has no issues Yet.Click Below to add one."
-            android:textSize="15sp"
-            android:padding="30dp"
-            android:textStyle="italic"/>
-
-    </LinearLayout>
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:visibility="gone"/>
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/issue_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-       />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/change_type"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="30dp"
+            android:layout_gravity="bottom|right|end"
+            android:src="@drawable/ic_load"
+            android:scaleType="centerInside"
+            app:fabSize="mini"
+            app:backgroundTint="@color/white"
+            app:borderWidth="2dp"
+            />
+
 
     </FrameLayout>
 

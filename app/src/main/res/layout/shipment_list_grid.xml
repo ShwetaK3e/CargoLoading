@@ -22,13 +22,13 @@
 
             <ImageView
                 android:id="@+id/commodity_pic"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@drawable/bg_circle_white"
                 android:elevation="5dp"
                 android:padding="5dp"
                 android:src="@drawable/ic_truck"
-                android:translationZ="5dp" />
+                android:translationZ="2dp" />
 
         </LinearLayout>
 

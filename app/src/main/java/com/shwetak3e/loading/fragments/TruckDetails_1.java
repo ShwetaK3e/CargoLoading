@@ -319,44 +319,35 @@ public class TruckDetails_1 extends Fragment {
                 }
                 shipmentAdapter.notifyDataSetChanged();
                 itemDialog.dismiss();
-                Intent intent=new Intent(getActivity(), IssueVideoActivity.class);
-                intent.putExtra("Shipment_ID",item.getId());
-                startActivity(intent);
 
-            }
-        });
-
-        holder.go_to_issues.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 Intent intent=new Intent(getActivity(),MainActivity.class);
                 intent.putExtra("Activity", "ISSUES");
                 intent.putExtra("Shipment_ID",item.getId());
+                intent.putExtra("From","item");
                 startActivity(intent);
+
             }
         });
 
-        LinkedList<Issues> issue_list=(LinkedList)item.getIssues();
-        String count;
-        if(issue_list!=null) {
-           count=String.valueOf(issue_list.size());
-        }else{
-            count="0";
+
+
+        LinkedList<Issues> list1=(LinkedList)item.getDamaged_list();
+        LinkedList<Issues> list2=((LinkedList)item.getWeight_list());
+        int count=0;
+        if(list1!=null) {
+           count+=list1.size();
+        }
+        if(list2!=null){
+            count+=list2.size();
         }
 
-            holder.issue_nos.setText(count);
+
+            holder.issue_nos.setText(String.valueOf(count));/**/
 
 
         holder.skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LinkedList<ShipmentItem> item_list=AddNewTruck_1.current_truck.getShipmentItems();
-                if(!item_list.isEmpty()) {
-                    item_list.remove(shipment_pos);
-                    item_list.add(shipment_pos, item);
-                    AddNewTruck_1.current_truck.setShipmentItems(item_list);
-                }
-                shipmentAdapter.notifyDataSetChanged();
                 itemDialog.dismiss();
             }
         });
@@ -365,17 +356,22 @@ public class TruckDetails_1 extends Fragment {
             @Override
             public void onClick(View v) {
                 LinkedList<ShipmentItem> item_list=AddNewTruck_1.current_truck.getShipmentItems();
-                item.setStatus(0);
-                int count=item_list.size();
-                if(!item_list.isEmpty()) {
-                    item_list.remove(shipment_pos);
-                    item_list.add(count-1,item);
+                if(item_list!=null){
+                    item_list.remove(current_item);
+                    item.setStatus(0);
+                    item_list.add(item);
                     AddNewTruck_1.current_truck.setShipmentItems(item_list);
                 }
+
+
                 itemDialog.dismiss();
                 shipmentAdapter.notifyDataSetChanged();
-                current_item=AddNewTruck_1.current_truck.getShipmentItems().get(++shipment_pos);
-                openShipment(current_item);
+                current_item=AddNewTruck_1.current_truck.getShipmentItems().get(shipment_pos);
+                if(current_item.getStatus()==0){
+                      complete();
+                }else {
+                    openShipment(current_item);
+                }
             }
         });
 
@@ -411,7 +407,6 @@ public class TruckDetails_1 extends Fragment {
 
 
         LinearLayout raise_issue_layout;
-        RelativeLayout go_to_issues;
         TextView issue_nos;
 
         Button skip;
@@ -423,7 +418,7 @@ public class TruckDetails_1 extends Fragment {
         TextView  commodity_width;
         TextView  commodity_height;
         TextView  commodity_weight;
-        SlidingLinearLayout other_details;
+        LinearLayout other_details;
 
 
 
@@ -456,32 +451,55 @@ public class TruckDetails_1 extends Fragment {
             nxt_dest=(ImageButton)dialog.findViewById(R.id.next_dest);
 
 
-            go_to_issues=(RelativeLayout)dialog.findViewById(R.id.go_to_issues);
             issue_nos=(TextView)dialog.findViewById(R.id.issue_nos) ;
 
             skip=(Button)dialog.findViewById(R.id.skip);
             next=(Button)dialog.findViewById(R.id.next);
 
 
-            other_details=(SlidingLinearLayout) dialog.findViewById(R.id.other_details);
-            //other_details=new SlidingLinearLayout(getContext(),R.id.other_details);
+            other_details=(LinearLayout) dialog.findViewById(R.id.other_details);
+
             booking_desc=(TextView)dialog.findViewById(R.id.booking_desc);
-            //commodity_name.setText(TruckDetails_1.current_item.getBookedItem().getCommodityName());
+
             commodity_length=(TextView)dialog.findViewById(R.id.commodity_length);
-            //commodity_length.setText(TruckDetails_1.current_item.getBookedItem().getLength().toString());
+
             commodity_width=(TextView)dialog.findViewById(R.id.commodity_width);
-            //commodity_width.setText(TruckDetails_1.current_item.getBookedItem().getWidth().toString());
+
             commodity_height=(TextView)dialog.findViewById(R.id.commodity_height);
-            //commodity_height.setText(TruckDetails_1.current_item.getBookedItem().getHeight().toString());
+
             commodity_weight=(TextView)dialog.findViewById(R.id.commodity_weight);
-            //commodity_weight.setText(TruckDetails_1.current_item.getBookedItem().getActualWeight().toString());
 
 
-            //booking_desc.setText(TruckDetails_1.current_item.getBookedItem().getDescription().toString());
 
-            //loading_count.setText(TruckDetails_1.current_item.getLoadedCount().toString());
 
             raise_issue_layout=(LinearLayout)dialog.findViewById(R.id.raise_issue_layout);
+        }
+    }
+
+    Dialog complete_dialog;
+    void complete(){
+        complete_dialog=new Dialog(getActivity(), R.style.MyDialogTheme);
+        complete_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        complete_dialog.getWindow().getAttributes().windowAnimations=R.style.DialogAnimation;
+        complete_dialog.setContentView(R.layout.save_truck_dialog);
+        complete_dialog.show();
+        complete_dialog.setCancelable(true);
+
+        final  CompleteDialogHolder holder=new CompleteDialogHolder(complete_dialog);
+        holder.ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.trucks.add(AddNewTruck_1.current_truck);
+            }
+        });
+
+    }
+
+    class CompleteDialogHolder{
+        Button ok;
+        CompleteDialogHolder(Dialog dialog){
+
+            ok=(Button)dialog.findViewById(R.id.save);
         }
     }
 

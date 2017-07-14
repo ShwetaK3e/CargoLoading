@@ -31,6 +31,7 @@ import com.shwetak3e.loading.fragments.ReadBookingID;
 import com.shwetak3e.loading.fragments.TruckDetails;
 import com.shwetak3e.loading.fragments.TruckDetails_1;
 import com.shwetak3e.loading.fragments.TruckList;
+import com.shwetak3e.loading.fragments.TruckList_1;
 import com.shwetak3e.loading.model.Booking;
 import com.shwetak3e.loading.model.Issues;
 import com.shwetak3e.loading.model.ShipmentItem;
@@ -50,17 +51,18 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity implements DrawerFragment.FragmentDrawerListener {
 
     public static Map<String,Booking> bookings=new HashMap<>();
+    public static String context="L";
     static int i=-1;
 
 
     Toolbar mToolbar;
     DrawerFragment drawerFragment;
     static public List<String> truck_drop_loc=new ArrayList<>();
-    static public List<Truck> trucks=new LinkedList<>();
+    static public List<Truck_1> trucks=new LinkedList<>();
     static public Map<String,Truck_1> trucks_1=new HashMap<>();
-    static public Truck current_truck=new Truck();
+    static public Truck_1 current_truck=new Truck_1();
     static public boolean express=false;
-    public static Map<String,List<Issues>> issueList=new HashMap<>();
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,13 +102,11 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         }*/
 
         if("TRUCK_DETAILS_1".equalsIgnoreCase(activity)){
-            displayView(1);
-        }else if("LOAD_THIS_ITEM".equalsIgnoreCase(activity)){
-            displayView(2);
-        }else if("ISSUES".equalsIgnoreCase(activity)){
             displayView(3);
+        } else if("ISSUES".equalsIgnoreCase(activity)){
+            displayView(1);
         } else{
-            displayView(0);
+            displayView(2);
         }
 
     }
@@ -140,26 +140,23 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         String title = getString(R.string.app_name);
         switch (position) {
             case 0:
-                fragment = AddNewTruck_1.newInstance();
-                title = getString(R.string.nav_add_new_truck);
-                /*fragment = TruckList.newInstance();;
-                title = getString(R.string.nav_truck_list);*/
-                break;
-            case 1:
-                fragment = TruckDetails_1.newInstance();
-                title = getString(R.string.nav_truck_details);
-                /*fragment = LoadingSheet.newInstance();
-                title = getString(R.string.nav_add_new_truck);*/
-                break;
-            case 2:
-                fragment = LoadItemsItemwise_1.newInstance();
-                title = getString(R.string.nav_item_to_load);
+                fragment = TruckList_1.newInstance();;
+                title = getString(R.string.nav_truck_list)+context;
                 break;
 
-            case 3:
-                fragment= IssueList.newInstance();
-                title="Issues";
+            case 1:
+                fragment = IssueList.newInstance();;
+                title = getString(R.string.nav_issue_list)+context;
                 break;
+            case 2:
+                fragment = AddNewTruck_1.newInstance();
+                title = getString(R.string.nav_add_new_truck)+context;
+                break;
+            case 3:
+                fragment = TruckDetails_1.newInstance();
+                title = getString(R.string.nav_truck_details)+context;
+                break;
+
             /*case 2:
                 fragment = LoadItemsItemwise.newInstance();
                 title = getString(R.string.nav_item_to_load);
@@ -214,6 +211,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.setUnloadedCount(20);
         shipmentItem.setStatus(1);
         shipmentItem.setDamaged_count(0);
+        shipmentItem.setWeight_count(0);
         shipmentItem.setMissing_count(0);
         shipmentItem.setLeakage_count(0);
         shipmentItem.setDamagedStatus(false);
@@ -237,6 +235,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.setUnloadedCount(5);
         shipmentItem.setStatus(1);
         shipmentItem.setDamaged_count(0);
+        shipmentItem.setWeight_count(0);
         shipmentItem.setMissing_count(0);
         shipmentItem.setLeakage_count(0);
         shipmentItem.setDamagedStatus(false);
@@ -261,6 +260,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.setUnloadedCount(2);
         shipmentItem.setStatus(1);
         shipmentItem.setDamaged_count(0);
+        shipmentItem.setWeight_count(0);
         shipmentItem.setMissing_count(0);
         shipmentItem.setLeakage_count(0);
         shipmentItem.setDamagedStatus(false);
@@ -302,6 +302,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.setUnloadedCount(500);
         shipmentItem.setStatus(1);
         shipmentItem.setDamaged_count(0);
+        shipmentItem.setWeight_count(0);
         shipmentItem.setMissing_count(0);
         shipmentItem.setLeakage_count(0);
         shipmentItem.setDamagedStatus(false);
@@ -322,6 +323,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.setUnloadedCount(50);
         shipmentItem.setStatus(1);
         shipmentItem.setDamaged_count(0);
+        shipmentItem.setWeight_count(0);
         shipmentItem.setMissing_count(0);
         shipmentItem.setLeakage_count(0);
         shipmentItem.setDamagedStatus(false);
@@ -345,6 +347,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.setUnloadedCount(60);
         shipmentItem.setStatus(1);
         shipmentItem.setDamaged_count(0);
+        shipmentItem.setWeight_count(0);
         shipmentItem.setMissing_count(0);
         shipmentItem.setLeakage_count(0);
         shipmentItem.setDamagedStatus(false);
@@ -369,6 +372,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.setUnloadedCount(60);
         shipmentItem.setStatus(1);
         shipmentItem.setDamaged_count(0);
+        shipmentItem.setWeight_count(0);
         shipmentItem.setMissing_count(0);
         shipmentItem.setLeakage_count(0);
         shipmentItem.setDamagedStatus(false);
@@ -406,6 +410,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.setUnloadedCount(20);
         shipmentItem.setStatus(1);
         shipmentItem.setDamaged_count(0);
+        shipmentItem.setWeight_count(0);
         shipmentItem.setMissing_count(0);
         shipmentItem.setLeakage_count(0);
         shipmentItem.setDamagedStatus(false);
@@ -426,6 +431,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         shipmentItem.setImageUri(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_ac).toString());
         shipmentItem.setShippedItemCount(50);
         shipmentItem.setLoadedCount(0);
+        shipmentItem.setWeight_count(0);
         shipmentItem.setUnloadedCount(50);
         shipmentItem.setStatus(1);
         shipmentItem.setDamaged_count(0);
@@ -449,7 +455,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
     }
 
 
-    void setTruckList(){
+   /* void setTruckList(){
         Truck truck =new Truck();
 
         truck.setId("HYD-18346506");
@@ -559,7 +565,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
 
 
     }
-
+*/
     public static final Map<String,ShipmentItem> shipments_1=new HashMap<>();
     void setTruckList_1(){
         Truck_1 truck_1=new Truck_1();
@@ -586,7 +592,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         trucks_1.put(truck_1.getId(),truck_1);
 
         truck_1=new Truck_1();
-        truck_1.setId("CJFLRGHT67");
+        truck_1.setId("MNOPQRST34");
         truck_1.setOrigin("HYD");
         truck_1.setDestination("AHM");
         truck_1.setStops(Arrays.asList("HYD","CAL","MUM","SUR","AHM"));
@@ -638,6 +644,9 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         truck_drop_loc.add("KOL");
         truck_drop_loc.add("DEL");
     }
+
+
+
 
 
 

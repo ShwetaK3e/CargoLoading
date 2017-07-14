@@ -17,6 +17,7 @@ import com.shwetak3e.loading.R;
 import com.shwetak3e.loading.model.Booking;
 import com.shwetak3e.loading.model.ShipmentItem;
 import com.shwetak3e.loading.model.Truck;
+import com.shwetak3e.loading.model.Truck_1;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ public class TruckAdapter extends RecyclerView.Adapter<TruckAdapter.ViewHolder> 
             @Override
             public void onClick(View v) {
                 String Id=holder.truck_id.getText().toString().trim();
-                for(Truck truck: trucks){
+                for(Truck_1 truck: trucks){
                     if(Id.equalsIgnoreCase(truck.getId())){
                         current_truck=truck;
                         break;
@@ -63,7 +64,7 @@ public class TruckAdapter extends RecyclerView.Adapter<TruckAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.truck_id.setText(MainActivity.trucks.get(position).getId());
-        holder.driver_name.setText(MainActivity.trucks.get(position).getDriver_name());
+       // holder.driver_name.setText(MainActivity.trucks.get(position).getDriver_name());
 
         /*holder.origin.setText(MainActivity.trucks.get(position).getOrigin());
         holder.dest.setText(MainActivity.trucks.get(position).getDestination());*/
@@ -92,7 +93,7 @@ public class TruckAdapter extends RecyclerView.Adapter<TruckAdapter.ViewHolder> 
         public ViewHolder(View itemView) {
             super(itemView);
             truck_id=(TextView)itemView.findViewById(R.id.truck_id);
-            driver_name=(TextView)itemView.findViewById(R.id.driver_name);
+           // driver_name=(TextView)itemView.findViewById(R.id.driver_name);
             /*origin=(TextView)itemView.findViewById(R.id.origin);
             dest=(TextView)itemView.findViewById(R.id.dest);*/
 
