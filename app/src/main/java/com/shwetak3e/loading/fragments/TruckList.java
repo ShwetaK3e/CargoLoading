@@ -72,7 +72,11 @@ public class TruckList extends Fragment {
         truck_list=(RecyclerView)view.findViewById(R.id.truckList);
         truckAdapter=new TruckAdapter(getActivity(), new TruckAdapter.OnMyItemClickListener() {
             @Override
-            public void onClick() {
+            public void onClick(String truck_ID) {
+                AddNewTruck_1.current_truck=MainActivity.trucks_1.get(truck_ID);
+                if(AddNewTruck_1.current_truck==null) {
+                    Log.i("REWR", "null");
+                }
                 Intent intent=new Intent(getActivity(), MainActivity.class);
                 intent.putExtra("Activity","Enter_booking_ID");
                 startActivity(intent);

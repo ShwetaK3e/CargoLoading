@@ -46,6 +46,7 @@ public class ShipmentAdapter extends RecyclerView.Adapter<ShipmentAdapter.ViewHo
             holder.shipment_id.setTextColor(context.getResources().getColor(R.color.light_grey));
             holder.loading_status.setImageResource(R.drawable.ic_complete);
             holder.itemView.setEnabled(false);
+            holder.load_shipment.setVisibility(View.INVISIBLE);
         }
         if(shipmentItems.get(position).getDamagedStatus()){
             holder.damage_status.setVisibility(View.VISIBLE);

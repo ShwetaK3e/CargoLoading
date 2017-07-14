@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -47,14 +48,19 @@ public class TruckDetails_1 extends Fragment {
     private ImageView truck_img;
     private TextView truck_no;
     private TextView driver_name;
+    private TextView info;
     private  Button reenter_truck_id;
     LinearLayout truck_details;
     private RecyclerView stops_list;
     ImageButton see_more_details;
 
     boolean truck_details_visible=false;
+    TextView title;
     private RecyclerView shipment_list;
     ShipmentAdapter shipmentAdapter;
+
+    FloatingActionButton show_issue;
+    boolean show_issue_value;
 
     public static ShipmentItem current_item;
     public static int shipment_pos;
@@ -65,7 +71,6 @@ public class TruckDetails_1 extends Fragment {
 
     public static TruckDetails_1 newInstance() {
         TruckDetails_1 fragment = new TruckDetails_1();
-        Log.i(TAG,"shipment list");
         return fragment;
     }
 
@@ -75,10 +80,12 @@ public class TruckDetails_1 extends Fragment {
         View view= inflater.inflate(R.layout.fragment_truck_details_1, container,false);
 
 
-        Log.i(TAG,"shipment_list");
+        show_issue_value=getActivity().getIntent().getBooleanExtra("SHOW_ISSUE",false);
 
         //truck_img=(ImageView)view.findViewById(R.id.truck_img);
         truck_no=(TextView)view.findViewById(R.id.truck_no);
+        info=(TextView)view.findViewById(R.id.info);
+
         reenter_truck_id=(Button)view.findViewById(R.id.reenter_truck_id);
         reenter_truck_id.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +94,18 @@ public class TruckDetails_1 extends Fragment {
                 startActivity(i);
             }
         });
+
+        if(show_issue_value){
+            if(MainActivity.context.contains("L")) {
+                info.setText(" This Truck Has Been Loaded.");
+            } else {
+                info.setText(" This Truck Has Been UnLoaded.");
+            }
+            reenter_truck_id.setVisibility(View.GONE);
+        }else{
+            info.setText(" This is Not the Correct ID.");
+            reenter_truck_id.setVisibility(View.VISIBLE);
+        }
         //driver_name=(TextView)view.findViewById(R.id.driver_name);
 
         truck_details=(LinearLayout)view.findViewById(R.id.truck_details);
@@ -108,14 +127,15 @@ public class TruckDetails_1 extends Fragment {
 
             }
         });
+
+        title=(TextView)view.findViewById(R.id.title);
+        if(MainActivity.context.contains("L")){
+            title.setText("ITEMS TO LOAD");
+        }else{
+            title.setText("ITEMS TO UNLOAD");
+        }
         shipment_list=(RecyclerView)view.findViewById(R.id.shipmemt_list);
 
-         if(AddNewTruck_1.current_truck==null){
-             Log.i("ABCD","Its null");
-         }else{
-             Truck_1 trck=AddNewTruck_1.current_truck;
-             Log.i("ABCD","not null"+trck.getId());
-         }
         truck_no.setText(AddNewTruck_1.current_truck.getId().toString().trim());
         //driver_name.setText("Ram Lal");
         stops_list.setLayoutManager(new GridLayoutManager(getActivity(),3));
@@ -125,21 +145,37 @@ public class TruckDetails_1 extends Fragment {
         shipmentAdapter=new ShipmentAdapter(getActivity(),AddNewTruck_1.current_truck.getShipmentItems(), new ShipmentAdapter.OnItemClickListener() {
             @Override
             public void onClick(String shipment_id, int position) {
-                current_item=MainActivity.shipments_1.get(shipment_id);
+                current_item=AddNewTruck_1.current_truck.getShipmentItems().get(position);
                 shipment_pos=position;
 
                  /*Intent intent=new Intent(getActivity(), MainActivity.class);
                  intent.putExtra("Activity","LOAD_THIS_ITEM");
                  startActivity(intent);*/
 
-                openShipment(MainActivity.shipments_1.get(shipment_id));
+                openShipment(current_item);
             }
         });
         shipment_list.setAdapter(shipmentAdapter);
 
-        if(current_item!=null){
+        if(current_item!=null && !show_issue_value){
             openShipment(current_item);
         }
+
+
+        show_issue=(FloatingActionButton)view.findViewById(R.id.show_issues);
+        if(!show_issue_value){
+            show_issue.setVisibility(View.INVISIBLE);
+        }
+        show_issue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                current_item=AddNewTruck_1.current_truck.getShipmentItems().get(0);
+                Intent i=new Intent(getActivity(), MainActivity.class);
+                i.putExtra("Activity","ISSUES");
+                i.putExtra("Shipment_ID",AddNewTruck_1.current_truck.getShipmentItems().get(0).getId());
+                startActivity(i);
+            }
+        });
 
         return view;
     }
@@ -170,6 +206,7 @@ public class TruckDetails_1 extends Fragment {
 
 
         Glide.with(getContext()).load(item.getImageUri()).into(holder.commodity_img);
+        holder.shipment_ID.setText(item.getId());
         holder.commodity_name.setText(item.getBookedItem().getCommodityName());
         holder.booking_desc_short.setText(item.getBookedItem().getDescription());
         holder.see_more_details.setOnClickListener(new View.OnClickListener() {
@@ -281,6 +318,9 @@ public class TruckDetails_1 extends Fragment {
 
 
         final LinkedList<String> item_stops=item.getStops();
+        if(MainActivity.context.contains("U")){
+            holder.stop_layout.setVisibility(View.GONE);
+        }
         holder.origin.setText(item.getOrigin());
         holder.drop_loc.setText(item.getOrigin());
         if(item_stops.size()!=0 && item.isStopSet() ){
@@ -311,14 +351,6 @@ public class TruckDetails_1 extends Fragment {
         holder.raise_issue_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LinkedList<ShipmentItem> item_list=AddNewTruck_1.current_truck.getShipmentItems();
-                if(!item_list.isEmpty()) {
-                    item_list.remove(shipment_pos);
-                    item_list.add(shipment_pos, item);
-                    AddNewTruck_1.current_truck.setShipmentItems(item_list);
-                }
-                shipmentAdapter.notifyDataSetChanged();
-                itemDialog.dismiss();
 
                 Intent intent=new Intent(getActivity(),MainActivity.class);
                 intent.putExtra("Activity", "ISSUES");
@@ -336,10 +368,16 @@ public class TruckDetails_1 extends Fragment {
         int count=0;
         if(list1!=null) {
            count+=list1.size();
+
+
         }
         if(list2!=null){
             count+=list2.size();
+
+
         }
+        count+=item.getMissing_count();
+        Log.i("COUNT123 TRU","1 "+item.getDamaged_list().size());
 
 
             holder.issue_nos.setText(String.valueOf(count));/**/
@@ -368,12 +406,25 @@ public class TruckDetails_1 extends Fragment {
                 shipmentAdapter.notifyDataSetChanged();
                 current_item=AddNewTruck_1.current_truck.getShipmentItems().get(shipment_pos);
                 if(current_item.getStatus()==0){
-                      complete();
+                    if(shipment_pos!=0){
+                        shipment_pos=0;
+                        current_item=AddNewTruck_1.current_truck.getShipmentItems().get(shipment_pos);
+                        openShipment(current_item);
+                    }else {
+                        complete();
+                    }
                 }else {
                     openShipment(current_item);
                 }
             }
         });
+
+
+        holder.booking_desc.setText(item.getBookedItem().getDescription());
+        holder.commodity_length.setText(item.getBookedItem().getLength().toString());
+        holder.commodity_width.setText(item.getBookedItem().getWidth().toString());
+        holder.commodity_height.setText(item.getBookedItem().getHeight().toString());
+        holder.commodity_weight.setText(item.getBookedItem().getActualWeight().toString());
 
 
 
@@ -389,8 +440,10 @@ public class TruckDetails_1 extends Fragment {
 
     class ShipmentItemDialogHolder{
 
+
         ImageView commodity_img;
         ImageButton see_more_details;
+        TextView  shipment_ID;
         TextView  commodity_name;
         TextView  booking_desc_short;
 
@@ -401,6 +454,7 @@ public class TruckDetails_1 extends Fragment {
         TextView  total_count;
 
 
+        LinearLayout stop_layout;
         TextView origin;
         TextView drop_loc;
         ImageButton nxt_dest;
@@ -425,6 +479,7 @@ public class TruckDetails_1 extends Fragment {
 
         ShipmentItemDialogHolder(Dialog dialog){
             commodity_img=(ImageView)dialog.findViewById(R.id.commodity_img);
+            shipment_ID=(TextView)dialog.findViewById(R.id.shipment_id);
             commodity_name=(TextView)dialog.findViewById(R.id.commodity_name);
             booking_desc_short=(TextView)dialog.findViewById(R.id.booking_desc_short);
             see_more_details=(ImageButton)dialog.findViewById(R.id.see_more_details);
@@ -446,6 +501,7 @@ public class TruckDetails_1 extends Fragment {
             total_count=(TextView)dialog.findViewById(R.id.total_count);
 
 
+            stop_layout=(LinearLayout)dialog.findViewById(R.id.stop_layout);
             origin=(TextView)dialog.findViewById(R.id.origin);
             drop_loc=(TextView)dialog.findViewById(R.id.drop_loc);
             nxt_dest=(ImageButton)dialog.findViewById(R.id.next_dest);
@@ -490,6 +546,10 @@ public class TruckDetails_1 extends Fragment {
             @Override
             public void onClick(View v) {
                 MainActivity.trucks.add(AddNewTruck_1.current_truck);
+                complete_dialog.dismiss();
+                Intent i=new Intent(getActivity(), MainActivity.class);
+                i.putExtra("Activity","TRUCK_LIST");
+                startActivity(i);
             }
         });
 

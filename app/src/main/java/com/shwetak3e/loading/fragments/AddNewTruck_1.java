@@ -38,6 +38,7 @@ import android.widget.Toast;
 
 import com.shwetak3e.loading.MainActivity;
 import com.shwetak3e.loading.R;
+import com.shwetak3e.loading.model.ShipmentItem;
 import com.shwetak3e.loading.model.Truck;
 import com.shwetak3e.loading.model.Truck_1;
 
@@ -93,7 +94,7 @@ public class AddNewTruck_1 extends Fragment {
     private CameraPreview cameraPreview;
     private boolean isPreviewReady;
 
-    static public Truck_1 current_truck;
+    static public Truck_1 current_truck=new Truck_1();
 
     EditText id;
     /*EditText driver,origin,dest;*/

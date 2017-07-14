@@ -19,8 +19,6 @@
     <string name="nav_log_out">Log Out</string>
     <string-array name="nav_drawer_labels">
         <item>@string/nav_truck_list</item>
-        <item>@string/nav_item_loaded</item>
-        <item>@string/nav_item_to_unload</item>
         <item>@string/nav_blank</item>
         <item>@string/nav_log_out</item>
     </string-array>

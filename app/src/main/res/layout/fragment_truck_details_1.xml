@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white">
 
-<LinearLayout
+       <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
@@ -24,7 +31,7 @@
         <LinearLayout
             android:layout_width="65dp"
             android:layout_height="65dp"
-            android:background="@color/maroon"
+            android:background="@color/colorPrimary"
             android:gravity="center"
             android:layout_gravity="center_horizontal"
             android:layout_margin="5dp">
@@ -143,14 +150,16 @@
                 android:gravity="left"
                 android:orientation="horizontal"
                 android:layout_marginTop="-5dp"
-                android:paddingLeft="5dp">
+                android:paddingLeft="5dp"
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="This ID is not correct."
                     android:typeface="serif"
-                    android:textSize="12sp"/>
+                    android:textSize="12sp"
+                    android:id="@+id/info"/>
 
                 <Button
                     android:layout_width="wrap_content"
@@ -260,7 +269,8 @@
         android:padding="10dp"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@color/colorPrimary"/>
+        android:textColor="@color/colorPrimary"
+        android:id="@+id/title"/>
 
 
     <View
@@ -307,3 +317,22 @@
 
 
 </LinearLayout>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/show_issues"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="30dp"
+        android:layout_gravity="bottom|right|end"
+        android:src="@drawable/ic_issue"
+        android:scaleType="fitCenter"
+        app:fabSize="auto"
+        app:backgroundTint="@color/white"
+        app:borderWidth="2dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        />
+
+
+</RelativeLayout>

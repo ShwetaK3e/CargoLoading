@@ -249,7 +249,7 @@
                     android:gravity="center"
                     android:layout_margin="5dp">
                     <LinearLayout
-                       android:layout_width="match_parent"
+                       android:layout_width="90dp"
                        android:layout_height="wrap_content"
                        android:gravity="center"
                        android:padding="5dp"
@@ -270,12 +270,12 @@
                            android:id="@+id/damage"/>
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:orientation="vertical">
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:padding="5dp"
                                 android:text="Damage"
@@ -313,7 +313,7 @@
                         android:textSize="15sp"
                         android:background="@drawable/ic_error_bubble"
                         android:layout_toRightOf="@id/damage_layout"
-                        android:layout_marginLeft="-40dp"
+                        android:layout_marginLeft="-20dp"
                         android:padding="2dp"
                         android:elevation="10dp"
                         />
@@ -326,7 +326,7 @@
                         android:gravity="center"
                         android:layout_margin="5dp">
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="90dp"
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:padding="5dp"
@@ -347,7 +347,7 @@
                                 android:id="@+id/missing"/>
 
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:orientation="vertical">
@@ -390,7 +390,7 @@
                             android:textSize="15sp"
                             android:background="@drawable/ic_error_bubble"
                             android:layout_toRightOf="@id/missing_layout"
-                            android:layout_marginLeft="-40dp"
+                            android:layout_marginLeft="-20dp"
                             android:padding="2dp"
                             android:elevation="10dp"
                             />
@@ -416,7 +416,7 @@
                         android:gravity="center"
                         android:layout_margin="5dp">
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="90dp"
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:padding="5dp"
@@ -436,7 +436,7 @@
                                 android:layout_width="60dp" />
 
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:orientation="vertical">
@@ -448,6 +448,8 @@
                                     android:textSize="15sp"
                                     android:typeface="serif"
                                     android:textStyle="bold"
+                                    android:maxLines="2"
+                                    android:gravity="center"
                                     android:background="@android:color/transparent"/>
                                 <!--<TextView
                                     android:layout_width="wrap_content"
@@ -479,7 +481,7 @@
                             android:textSize="15sp"
                             android:background="@drawable/ic_error_bubble"
                             android:layout_toRightOf="@id/weight_layout"
-                            android:layout_marginLeft="-40dp"
+                            android:layout_marginLeft="-20dp"
                             android:padding="2dp"
                             android:elevation="10dp"
                             />
@@ -569,8 +571,8 @@
             android:layout_margin="30dp"
             android:layout_gravity="bottom|right|end"
             android:src="@drawable/ic_load"
-            android:scaleType="centerInside"
-            app:fabSize="mini"
+            android:scaleType="fitCenter"
+            app:fabSize="auto"
             app:backgroundTint="@color/white"
             app:borderWidth="2dp"
             />

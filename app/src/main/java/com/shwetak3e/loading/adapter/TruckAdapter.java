@@ -48,13 +48,7 @@ public class TruckAdapter extends RecyclerView.Adapter<TruckAdapter.ViewHolder> 
             @Override
             public void onClick(View v) {
                 String Id=holder.truck_id.getText().toString().trim();
-                for(Truck_1 truck: trucks){
-                    if(Id.equalsIgnoreCase(truck.getId())){
-                        current_truck=truck;
-                        break;
-                    }
-                }
-                onMyItemClickListener.onClick();
+                onMyItemClickListener.onClick(Id);
             }
         });
         return holder;
@@ -66,8 +60,8 @@ public class TruckAdapter extends RecyclerView.Adapter<TruckAdapter.ViewHolder> 
         holder.truck_id.setText(MainActivity.trucks.get(position).getId());
        // holder.driver_name.setText(MainActivity.trucks.get(position).getDriver_name());
 
-        /*holder.origin.setText(MainActivity.trucks.get(position).getOrigin());
-        holder.dest.setText(MainActivity.trucks.get(position).getDestination());*/
+        holder.origin.setText(MainActivity.trucks.get(position).getOrigin());
+        holder.dest.setText(MainActivity.trucks.get(position).getDestination());
 
     }
 
@@ -94,8 +88,8 @@ public class TruckAdapter extends RecyclerView.Adapter<TruckAdapter.ViewHolder> 
             super(itemView);
             truck_id=(TextView)itemView.findViewById(R.id.truck_id);
            // driver_name=(TextView)itemView.findViewById(R.id.driver_name);
-            /*origin=(TextView)itemView.findViewById(R.id.origin);
-            dest=(TextView)itemView.findViewById(R.id.dest);*/
+            origin=(TextView)itemView.findViewById(R.id.origin);
+            dest=(TextView)itemView.findViewById(R.id.dest);
 
         }
 
@@ -103,7 +97,7 @@ public class TruckAdapter extends RecyclerView.Adapter<TruckAdapter.ViewHolder> 
     }
 
     public interface OnMyItemClickListener{
-        void onClick();
+        void onClick(String truck_ID);
     }
 
 

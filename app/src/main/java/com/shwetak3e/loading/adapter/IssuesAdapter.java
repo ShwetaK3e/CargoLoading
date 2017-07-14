@@ -44,11 +44,9 @@ public class IssuesAdapter extends RecyclerView.Adapter<IssuesAdapter.ViewHolder
     @Override
     public void onBindViewHolder(IssuesAdapter.ViewHolder holder, final int position) {
 
-        if(issues.get(position).getIssueDescription()!=null) {
-            holder.issue_desc.setText(issues.get(position).getIssueDescription());
-        }else{
-            holder.issue_desc.setText(issues.get(position).getIssueDescriptionShort());
-        }
+
+        holder.issue_desc.setText(issues.get(position).getIssueDescription());
+
 
         if(issues.get(position).getIssueDescriptionType()==0){
             Glide.with(context).load(Uri.parse("android.resource://com.shwetak3e.loading/" +R.drawable.ic_video)).into(holder.issue_desc_type);
@@ -66,11 +64,7 @@ public class IssuesAdapter extends RecyclerView.Adapter<IssuesAdapter.ViewHolder
             Glide.with(context).load(Uri.parse("android.resource://com.shwetak3e.loading/" +R.drawable.ic_load)).into(holder.issue_type);
         }
 
-        if(issues.get(position).getIssueDescriptionType()==-1){
-            holder.see_issue.setVisibility(View.INVISIBLE);
-            holder.itemView.setEnabled(false);
-            holder.issue_desc_type.setVisibility(View.INVISIBLE);
-        }
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

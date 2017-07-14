@@ -99,6 +99,7 @@ public class IssueList extends Fragment {
 
 
 
+
     public static IssueList newInstance( ) {
         IssueList fragment = new IssueList();
         return fragment;
@@ -124,6 +125,8 @@ public class IssueList extends Fragment {
             @Override
             public void onClick(View v) {
                 getAnotherShipment(false);
+                IssueType="NO_TYPE";
+                Glide.with(getContext()).load(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_truck_2).toString()).into(change_type);
                 shipmentID_txtview.setText(shipmentID);
                 issue_list.setVisibility(INVISIBLE);
                 missing_layout.setVisibility(INVISIBLE);
@@ -142,6 +145,8 @@ public class IssueList extends Fragment {
             public void onClick(View v) {
                 getAnotherShipment(true);
                 shipmentID_txtview.setText(shipmentID);
+                IssueType="NO_TYPE";
+                Glide.with(getContext()).load(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_truck_2).toString()).into(change_type);
                 issue_list.setVisibility(INVISIBLE);
                 missing_layout.setVisibility(INVISIBLE);
                 select_issue_type.setVisibility(VISIBLE);
@@ -169,7 +174,9 @@ public class IssueList extends Fragment {
                 currentIssueList=damageList;
                 change_type.setVisibility(VISIBLE);
                 change_type.setImageResource(R.drawable.ic_error);
-                add_issue.setVisibility(VISIBLE);
+                if("item".equalsIgnoreCase(from)) {
+                    add_issue.setVisibility(VISIBLE);
+                }
                 select_issue_type.setVisibility(INVISIBLE);
                 missing_layout.setVisibility(INVISIBLE);
                 issue_list.setVisibility(VISIBLE);
@@ -190,7 +197,9 @@ public class IssueList extends Fragment {
                 currentIssueList=damageList;
                 change_type.setVisibility(VISIBLE);
                 change_type.setImageResource(R.drawable.ic_error);
-                add_issue.setVisibility(VISIBLE);
+                if("item".equalsIgnoreCase(from)) {
+                    add_issue.setVisibility(VISIBLE);
+                }
                 select_issue_type.setVisibility(INVISIBLE);
                 missing_layout.setVisibility(INVISIBLE);
                 issue_list.setVisibility(VISIBLE);
@@ -211,9 +220,12 @@ public class IssueList extends Fragment {
                 IssueType="missing";
                 change_type.setVisibility(VISIBLE);
                 change_type.setImageResource(R.drawable.ic_missing);
-                add_issue.setVisibility(VISIBLE);
+                if("item".equalsIgnoreCase(from)) {
+                    add_issue.setVisibility(VISIBLE);
+                }
                 select_issue_type.setVisibility(INVISIBLE);
                 missing_layout.setVisibility(View.VISIBLE);
+                missing_layout_count.setText(String.valueOf(missing_no));
                 issue_list.setVisibility(INVISIBLE);
             }
         });
@@ -223,9 +235,13 @@ public class IssueList extends Fragment {
                 IssueType="missing";
                 change_type.setVisibility(VISIBLE);
                 change_type.setImageResource(R.drawable.ic_missing);
-                add_issue.setVisibility(VISIBLE);
+                if("item".equalsIgnoreCase(from)) {
+                    add_issue.setVisibility(VISIBLE);
+                }
+
                 select_issue_type.setVisibility(INVISIBLE);
                 missing_layout.setVisibility(View.VISIBLE);
+                missing_layout_count.setText(String.valueOf(missing_no));
                 issue_list.setVisibility(INVISIBLE);
 
             }
@@ -242,7 +258,9 @@ public class IssueList extends Fragment {
                 currentIssueList=weightIssueList;
                 change_type.setVisibility(VISIBLE);
                 change_type.setImageResource(R.drawable.ic_load);
-                add_issue.setVisibility(VISIBLE);
+                if("item".equalsIgnoreCase(from)) {
+                    add_issue.setVisibility(VISIBLE);
+                }
                 select_issue_type.setVisibility(INVISIBLE);
                 missing_layout.setVisibility(INVISIBLE);
                 issue_list.setVisibility(VISIBLE);
@@ -261,7 +279,9 @@ public class IssueList extends Fragment {
                 currentIssueList=weightIssueList;
                 change_type.setVisibility(VISIBLE);
                 change_type.setImageResource(R.drawable.ic_load);
-                add_issue.setVisibility(VISIBLE);
+                if("item".equalsIgnoreCase(from)) {
+                    add_issue.setVisibility(VISIBLE);
+                }
                 select_issue_type.setVisibility(INVISIBLE);
                 missing_layout.setVisibility(INVISIBLE);
                 issue_list.setVisibility(VISIBLE);
@@ -275,6 +295,7 @@ public class IssueList extends Fragment {
         });
 
 
+
         setCountsonSelectIssue();
 
 
@@ -282,6 +303,9 @@ public class IssueList extends Fragment {
         missing_layout=(RelativeLayout) view.findViewById(R.id.missing_category_layout);
         missing_layout.setVisibility(INVISIBLE);
         missing_layout_count=(EditText)view.findViewById(R.id.missing_count);
+        if(!"item".equalsIgnoreCase(from)){
+            missing_layout_count.setEnabled(false);
+        }
         missing_layout_count.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -295,7 +319,7 @@ public class IssueList extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-               if(!"".equalsIgnoreCase(s.toString())) {
+               if(!"".equalsIgnoreCase(s.toString()) && "item".equalsIgnoreCase(from)) {
                    List<ShipmentItem> items = AddNewTruck_1.current_truck.getShipmentItems();
                    items.remove(TruckDetails_1.current_item);
                    missing_no = Integer.parseInt(s.toString());
@@ -305,7 +329,7 @@ public class IssueList extends Fragment {
                }
             }
         });
-        missing_layout_count.setText(String.valueOf(missing_no));
+
 
 
         //List for damage and weight
@@ -316,14 +340,15 @@ public class IssueList extends Fragment {
 
         //floating button
         change_type=(FloatingActionButton)view.findViewById(R.id.change_type);
-        Glide.with(getContext()).load(TruckDetails_1.current_item.getImageUri()).into(change_type);
+        Glide.with(getContext()).load(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_truck_2).toString()).into(change_type);
         change_type.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentIssueList=new LinkedList<>();
+
                 if(!"NO_TYPE".equalsIgnoreCase(IssueType)){
+                   currentIssueList=new LinkedList<>();
                    IssueType="NO_TYPE";
-                   Glide.with(getContext()).load(TruckDetails_1.current_item.getImageUri()).into(change_type);
+                   Glide.with(getContext()).load(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_truck_2).toString()).into(change_type);
                    setCountsonSelectIssue();
                    add_issue.setVisibility(INVISIBLE);
                    select_issue_type.setVisibility(VISIBLE);
@@ -332,8 +357,10 @@ public class IssueList extends Fragment {
                 }else{
                     Intent i=new Intent(getActivity(), MainActivity.class);
                     i.putExtra("Activity","TRUCK_DETAILS_1");
+                    if(!"item".equalsIgnoreCase(from)){
+                        i.putExtra("SHOW_ISSUE",true);
+                    }
                     startActivity(i);
-
                 }
 
 
@@ -376,8 +403,6 @@ public class IssueList extends Fragment {
                      AddNewTruck_1.current_truck.setShipmentItems((LinkedList)items);
 
 
-                    // updetCounts();
-
                 }
             }
         });
@@ -389,15 +414,8 @@ public class IssueList extends Fragment {
 
 
 
-    void updetCounts(){
-        List<ShipmentItem> items=AddNewTruck_1.current_truck.getShipmentItems();
-        items.remove(TruckDetails_1.current_item);
-        TruckDetails_1.current_item.setDamaged_count(damageList.size());
-        TruckDetails_1.current_item.setMissing_count(missing_no);
-        TruckDetails_1.current_item.setWeight_count(weightIssueList.size());
-        items.add(TruckDetails_1.current_item);
-        AddNewTruck_1.current_truck.setShipmentItems((LinkedList)items);
-    }
+
+
 
     void  getAnotherShipment(boolean next){
         String prev_ID=null;
@@ -405,7 +423,6 @@ public class IssueList extends Fragment {
         int pos=0;
         List<ShipmentItem>shipmentItems=AddNewTruck_1.current_truck.getShipmentItems();
         for(ShipmentItem  item : shipmentItems){
-            Log.i("ABCDE", item.getId());
             if(item.getId().equalsIgnoreCase(shipmentID)){
                 if(!next){
                     pos=shipmentItems.indexOf(item);
@@ -430,8 +447,9 @@ public class IssueList extends Fragment {
     }
 
     void  setCountsonSelectIssue(){
+
         List<ShipmentItem> items=AddNewTruck_1.current_truck.getShipmentItems();
-        for(ShipmentItem item: items){
+        for(ShipmentItem item:items){
             if(shipmentID.equalsIgnoreCase(item.getId())){
                 damageList=item.getDamaged_list();
                 weightIssueList=item.getWeight_list();
@@ -439,10 +457,11 @@ public class IssueList extends Fragment {
                 damage_count.setText(String.valueOf(damageList.size()));
                 weight_change_count.setText(String.valueOf(weightIssueList.size()));
                 missing_count.setText(String.valueOf(missing_no));
-                Log.i("COUNT123",damageList.size()+ " "+weightIssueList.size()+ " "+missing_no);
+
                 break;
             }
         }
+
 
     }
 
@@ -486,6 +505,7 @@ public class IssueList extends Fragment {
             holder.issue_image.setVisibility(VISIBLE);
             Glide.with(getContext()).load(issue.getUri()).into(holder.issue_image);
         }else if(issue.getIssueDescriptionType()==2){
+            holder.issue_details.setVisibility(GONE);
             holder.issue_video_preview.setVisibility(GONE);
             holder.issue_image.setVisibility(GONE);
         }
@@ -495,7 +515,7 @@ public class IssueList extends Fragment {
         }else if(issue.getIssueType()==1){
             holder.short_desc.setText("MISSING");
         }else if(issue.getIssueType()==2){
-            holder.short_desc.setText("WEIGHT CHANGE" + " ( "+TruckDetails_1.current_item.getBookedItem().getActualWeight()+" )");
+            holder.short_desc.setText("WEIGHT CHANGE" + " ( "+TruckDetails_1.current_item.getBookedItem().getActualWeight()+"kgs )");
         }
         if(issue.getIssueDescription()!=null){
             holder.desc.setText(issue.getIssueDescription());

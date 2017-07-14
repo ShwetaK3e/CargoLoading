@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,8 @@ public class TruckList_1 extends Fragment {
 
     public static TruckList_1 newInstance() {
         TruckList_1 fragment = new TruckList_1();
+        AddNewTruck_1.current_truck=null;
+        TruckDetails_1.current_item=null;
         return fragment;
     }
 
@@ -41,6 +44,7 @@ public class TruckList_1 extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(getActivity(), MainActivity.class);
+
                 startActivity(intent);
             }
         });
@@ -48,9 +52,11 @@ public class TruckList_1 extends Fragment {
         truck_list=(RecyclerView)view.findViewById(R.id.truckList);
         truckAdapter=new TruckAdapter(getActivity(), new TruckAdapter.OnMyItemClickListener() {
             @Override
-            public void onClick() {
+            public void onClick( String truck_ID) {
+                AddNewTruck_1.current_truck=MainActivity.trucks_1.get(truck_ID);
                 Intent intent=new Intent(getActivity(), MainActivity.class);
                 intent.putExtra("Activity","TRUCK_DETAILS_1");
+                intent.putExtra("SHOW_ISSUE",true);
                 startActivity(intent);
             }
         });

@@ -41,14 +41,14 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:id="@+id/issue_content">
+        android:layout_height="200dp"
+        android:id="@+id/issue_content"
+        android:padding="2dp">
         <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/issue_video_preview"
         android:layout_margin="3dp"
-            android:padding="2dp"
             android:background="@color/lightest_grey">
 
 

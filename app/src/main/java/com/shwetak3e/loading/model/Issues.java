@@ -9,7 +9,7 @@ public class Issues {
     int issueType=-1; // 0:damage  1:missing  2:weightLoss
     String Uri;
     String issueDescription;
-    String issueDescriptionShort;
+
     int issueDescriptionType=-1;// 0:video 1:Image 2: text
 
 
@@ -39,13 +39,6 @@ public class Issues {
         Uri = uri;
     }
 
-    public String getIssueDescriptionShort() {
-        return issueDescriptionShort;
-    }
-
-    public void setIssueDescriptionShort(String issueDescriptionShort) {
-        this.issueDescriptionShort = issueDescriptionShort;
-    }
 
     public int getIssueDescriptionType() {
         return issueDescriptionType;

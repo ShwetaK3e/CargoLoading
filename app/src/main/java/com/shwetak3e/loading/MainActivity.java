@@ -76,6 +76,9 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
             setData1();
             setData2();
             setData3();
+            setData4();
+            setData5();
+            setData6();
             //setTruckList();
             setTruckList_1();
             //setTruckLoc();
@@ -105,6 +108,8 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
             displayView(3);
         } else if("ISSUES".equalsIgnoreCase(activity)){
             displayView(1);
+        } else if("TRUCK_LIST".equalsIgnoreCase(activity)){
+            displayView(0);
         } else{
             displayView(2);
         }
@@ -454,6 +459,340 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
 
     }
 
+    void setData4() {
+
+        Booking booking=new Booking();
+        booking.setBookingID("OPRTYT");
+
+        List<ShipmentItem> shipmentItems=new ArrayList<>();
+
+        ShipmentItem shipmentItem=new ShipmentItem();
+        shipmentItem.setId("OPRTYT_DEO");
+        shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
+        shipmentItem.getBookedItem().setCommodityName("AXE Deo");
+        shipmentItem.getBookedItem().setDescription("Keep Liquid safe. ");
+        shipmentItem.getBookedItem().setLength(10);
+        shipmentItem.getBookedItem().setWidth(20);
+        shipmentItem.getBookedItem().setHeight(30);
+        shipmentItem.getBookedItem().setActualWeight(20);
+        shipmentItem.setImageUri(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_body_spray).toString());
+        shipmentItem.setShippedItemCount(500);
+        shipmentItem.setLoadedCount(0);
+        shipmentItem.setUnloadedCount(500);
+        shipmentItem.setStatus(1);
+        shipmentItem.setDamaged_count(0);
+        shipmentItem.setWeight_count(0);
+        shipmentItem.setMissing_count(0);
+        shipmentItem.setLeakage_count(0);
+        shipmentItem.setDamagedStatus(false);
+        shipmentItem.setSame_truck_status(false);
+        shipmentItem.setDestination("FGT");
+        shipmentItem.setOrigin("HYD");
+        shipmentItems.add(shipmentItem);
+
+
+        shipmentItem=new ShipmentItem();
+        shipmentItem.setId("OPRTYT_BLB");
+        shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
+        shipmentItem.getBookedItem().setCommodityName("Bulbs");
+        shipmentItem.getBookedItem().setDescription("Contains Glass Items ");
+        shipmentItem.setImageUri(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_bulb).toString());
+        shipmentItem.setShippedItemCount(50);
+        shipmentItem.setLoadedCount(0);
+        shipmentItem.setUnloadedCount(50);
+        shipmentItem.setStatus(1);
+        shipmentItem.setDamaged_count(0);
+        shipmentItem.setWeight_count(0);
+        shipmentItem.setMissing_count(0);
+        shipmentItem.setLeakage_count(0);
+        shipmentItem.setDamagedStatus(false);
+        shipmentItem.setSame_truck_status(false);
+        shipmentItem.getBookedItem().setLength(45);
+        shipmentItem.getBookedItem().setWidth(56);
+        shipmentItem.getBookedItem().setHeight(45);
+        shipmentItem.getBookedItem().setActualWeight(144);
+        shipmentItem.setDestination("RTY");
+        shipmentItem.setOrigin("HYD");
+        shipmentItems.add(shipmentItem);
+
+        shipmentItem=new ShipmentItem();
+        shipmentItem.setId("OPRTYT_WALL");
+        shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
+        shipmentItem.getBookedItem().setCommodityName("Wallpaper");
+        shipmentItem.getBookedItem().setDescription("Contains Paper Items");
+        shipmentItem.setImageUri(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_wallpaper).toString());
+        shipmentItem.setShippedItemCount(60);
+        shipmentItem.setLoadedCount(0);
+        shipmentItem.setUnloadedCount(60);
+        shipmentItem.setStatus(1);
+        shipmentItem.setDamaged_count(0);
+        shipmentItem.setWeight_count(0);
+        shipmentItem.setMissing_count(0);
+        shipmentItem.setLeakage_count(0);
+        shipmentItem.setDamagedStatus(false);
+        shipmentItem.setSame_truck_status(false);
+        shipmentItem.getBookedItem().setLength(106);
+        shipmentItem.getBookedItem().setWidth(520);
+        shipmentItem.getBookedItem().setHeight(45);
+        shipmentItem.getBookedItem().setActualWeight(67);
+        shipmentItem.setDestination("GYJ");
+        shipmentItem.setOrigin("HYD");
+        shipmentItems.add(shipmentItem);
+
+
+        shipmentItem=new ShipmentItem();
+        shipmentItem.setId("OPRTYT_BLN");
+        shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
+        shipmentItem.getBookedItem().setCommodityName("Blanket");
+        shipmentItem.getBookedItem().setDescription("Handle with care ");
+        shipmentItem.setImageUri(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_blanket).toString());
+        shipmentItem.setShippedItemCount(60);
+        shipmentItem.setLoadedCount(0);
+        shipmentItem.setUnloadedCount(60);
+        shipmentItem.setStatus(1);
+        shipmentItem.setDamaged_count(0);
+        shipmentItem.setWeight_count(0);
+        shipmentItem.setMissing_count(0);
+        shipmentItem.setLeakage_count(0);
+        shipmentItem.setDamagedStatus(false);
+        shipmentItem.setSame_truck_status(false);
+        shipmentItem.getBookedItem().setLength(10);
+        shipmentItem.getBookedItem().setWidth(20);
+        shipmentItem.getBookedItem().setHeight(330);
+        shipmentItem.getBookedItem().setActualWeight(2560);
+        shipmentItem.setDestination("FRG");
+        shipmentItem.setOrigin("HYD");
+        shipmentItems.add(shipmentItem);
+
+        booking.setItems(shipmentItems);
+        bookings.put("OPRTYT",booking);
+
+
+    }
+
+    void setData5() {
+
+        Booking booking=new Booking();
+        booking.setBookingID("SSFGTE");
+
+        List<ShipmentItem> shipmentItems=new ArrayList<>();
+
+        ShipmentItem  shipmentItem=new ShipmentItem();
+        shipmentItem.setId("SSFGTE_REF");
+        shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
+        shipmentItem.getBookedItem().setCommodityName("Refrigerator");
+        shipmentItem.getBookedItem().setDescription("Handle Top part with Care ");
+        shipmentItem.setImageUri(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_refrigerator).toString());
+        shipmentItem.setShippedItemCount(20);
+        shipmentItem.setLoadedCount(0);
+        shipmentItem.setUnloadedCount(20);
+        shipmentItem.setStatus(1);
+        shipmentItem.setDamaged_count(0);
+        shipmentItem.setWeight_count(0);
+        shipmentItem.setMissing_count(0);
+        shipmentItem.setLeakage_count(0);
+        shipmentItem.setDamagedStatus(false);
+        shipmentItem.setSame_truck_status(false);
+        shipmentItem.getBookedItem().setLength(1045);
+        shipmentItem.getBookedItem().setWidth(2066);
+        shipmentItem.getBookedItem().setHeight(344);
+        shipmentItem.getBookedItem().setActualWeight(345);
+        shipmentItem.setOrigin("HYD");
+        shipmentItem.setDestination("DEL");
+        shipmentItems.add(shipmentItem);
+
+        shipmentItem=new ShipmentItem();
+        shipmentItem.setId("SSFGTE_CHR");
+        shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
+        shipmentItem.getBookedItem().setCommodityName("Chair");
+        shipmentItem.getBookedItem().setDescription("This contains Cushion ");
+        shipmentItem.setImageUri(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_chair).toString());
+        shipmentItem.setShippedItemCount(5);
+        shipmentItem.setLoadedCount(0);
+        shipmentItem.setUnloadedCount(5);
+        shipmentItem.setStatus(1);
+        shipmentItem.setDamaged_count(0);
+        shipmentItem.setWeight_count(0);
+        shipmentItem.setMissing_count(0);
+        shipmentItem.setLeakage_count(0);
+        shipmentItem.setDamagedStatus(false);
+        shipmentItem.setSame_truck_status(false);
+        shipmentItem.getBookedItem().setLength(105);
+        shipmentItem.getBookedItem().setWidth(5660);
+        shipmentItem.getBookedItem().setHeight(357);
+        shipmentItem.getBookedItem().setActualWeight(450);
+        shipmentItem.setDestination("REW");
+        shipmentItem.setOrigin("HYD");
+        shipmentItems.add(shipmentItem);
+
+
+        shipmentItem=new ShipmentItem();
+        shipmentItem.setId("SSFGTE_BED");
+        shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
+        shipmentItem.getBookedItem().setCommodityName("Bed");
+        shipmentItem.getBookedItem().setDescription("Keep Beside Soft Items ");
+        shipmentItem.setImageUri(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_bed).toString());
+        shipmentItem.setShippedItemCount(2);
+        shipmentItem.setLoadedCount(0);
+        shipmentItem.setUnloadedCount(2);
+        shipmentItem.setStatus(1);
+        shipmentItem.setDamaged_count(0);
+        shipmentItem.setWeight_count(0);
+        shipmentItem.setMissing_count(0);
+        shipmentItem.setLeakage_count(0);
+        shipmentItem.setDamagedStatus(false);
+        shipmentItem.setSame_truck_status(false);
+        shipmentItems.add(shipmentItem);
+        shipmentItem.getBookedItem().setLength(144);
+        shipmentItem.getBookedItem().setWidth(2056);
+        shipmentItem.getBookedItem().setHeight(345);
+        shipmentItem.setDestination("OMA");
+        shipmentItem.setOrigin("HYD");
+        shipmentItem.getBookedItem().setActualWeight(4550);
+
+        booking.setItems(shipmentItems);
+        bookings.put("SSFGTE",booking);
+
+
+    }
+
+    void setData6() {
+
+        Booking booking=new Booking();
+        booking.setBookingID("PWETYU");
+
+        List<ShipmentItem> shipmentItems=new ArrayList<>();
+
+        ShipmentItem shipmentItem=new ShipmentItem();
+        shipmentItem.setId("PWETYU_DEO");
+        shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
+        shipmentItem.getBookedItem().setCommodityName("AXE Deo");
+        shipmentItem.getBookedItem().setDescription("Keep Liquid safe. ");
+        shipmentItem.getBookedItem().setLength(10);
+        shipmentItem.getBookedItem().setWidth(20);
+        shipmentItem.getBookedItem().setHeight(30);
+        shipmentItem.getBookedItem().setActualWeight(20);
+        shipmentItem.setImageUri(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_body_spray).toString());
+        shipmentItem.setShippedItemCount(500);
+        shipmentItem.setLoadedCount(0);
+        shipmentItem.setUnloadedCount(500);
+        shipmentItem.setStatus(1);
+        shipmentItem.setDamaged_count(0);
+        shipmentItem.setWeight_count(0);
+        shipmentItem.setMissing_count(0);
+        shipmentItem.setLeakage_count(0);
+        shipmentItem.setDamagedStatus(false);
+        shipmentItem.setSame_truck_status(false);
+        shipmentItem.setDestination("FGT");
+        shipmentItem.setOrigin("HYD");
+        shipmentItems.add(shipmentItem);
+
+
+        shipmentItem=new ShipmentItem();
+        shipmentItem.setId("PWETYU_BLB");
+        shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
+        shipmentItem.getBookedItem().setCommodityName("Bulbs");
+        shipmentItem.getBookedItem().setDescription("Contains Glass Items ");
+        shipmentItem.setImageUri(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_bulb).toString());
+        shipmentItem.setShippedItemCount(50);
+        shipmentItem.setLoadedCount(0);
+        shipmentItem.setUnloadedCount(50);
+        shipmentItem.setStatus(1);
+        shipmentItem.setDamaged_count(0);
+        shipmentItem.setWeight_count(0);
+        shipmentItem.setMissing_count(0);
+        shipmentItem.setLeakage_count(0);
+        shipmentItem.setDamagedStatus(false);
+        shipmentItem.setSame_truck_status(false);
+        shipmentItem.getBookedItem().setLength(45);
+        shipmentItem.getBookedItem().setWidth(56);
+        shipmentItem.getBookedItem().setHeight(45);
+        shipmentItem.getBookedItem().setActualWeight(144);
+        shipmentItem.setDestination("RTY");
+        shipmentItem.setOrigin("HYD");
+        shipmentItems.add(shipmentItem);
+
+        shipmentItem=new ShipmentItem();
+        shipmentItem.setId("PWETYU_WALL");
+        shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
+        shipmentItem.getBookedItem().setCommodityName("Wallpaper");
+        shipmentItem.getBookedItem().setDescription("Contains Paper Items");
+        shipmentItem.setImageUri(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_wallpaper).toString());
+        shipmentItem.setShippedItemCount(60);
+        shipmentItem.setLoadedCount(0);
+        shipmentItem.setUnloadedCount(60);
+        shipmentItem.setStatus(1);
+        shipmentItem.setDamaged_count(0);
+        shipmentItem.setWeight_count(0);
+        shipmentItem.setMissing_count(0);
+        shipmentItem.setLeakage_count(0);
+        shipmentItem.setDamagedStatus(false);
+        shipmentItem.setSame_truck_status(false);
+        shipmentItem.getBookedItem().setLength(106);
+        shipmentItem.getBookedItem().setWidth(520);
+        shipmentItem.getBookedItem().setHeight(45);
+        shipmentItem.getBookedItem().setActualWeight(67);
+        shipmentItem.setDestination("GYJ");
+        shipmentItem.setOrigin("HYD");
+        shipmentItems.add(shipmentItem);
+
+
+        shipmentItem=new ShipmentItem();
+        shipmentItem.setId("PWETYU_BLN");
+        shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
+        shipmentItem.getBookedItem().setCommodityName("Blanket");
+        shipmentItem.getBookedItem().setDescription("Handle with care ");
+        shipmentItem.setImageUri(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_blanket).toString());
+        shipmentItem.setShippedItemCount(60);
+        shipmentItem.setLoadedCount(0);
+        shipmentItem.setUnloadedCount(60);
+        shipmentItem.setStatus(1);
+        shipmentItem.setDamaged_count(0);
+        shipmentItem.setWeight_count(0);
+        shipmentItem.setMissing_count(0);
+        shipmentItem.setLeakage_count(0);
+        shipmentItem.setDamagedStatus(false);
+        shipmentItem.setSame_truck_status(false);
+        shipmentItem.getBookedItem().setLength(10);
+        shipmentItem.getBookedItem().setWidth(20);
+        shipmentItem.getBookedItem().setHeight(330);
+        shipmentItem.getBookedItem().setActualWeight(2560);
+        shipmentItem.setDestination("FRG");
+        shipmentItem.setOrigin("HYD");
+        shipmentItems.add(shipmentItem);
+
+
+
+        shipmentItem=new ShipmentItem();
+        shipmentItem.setId("PWETYU_WALL");
+        shipmentItem.setBookedItem(new ShipmentItem.BookedItem());
+        shipmentItem.getBookedItem().setCommodityName("WallPaper");
+        shipmentItem.getBookedItem().setDescription("Handle with care ");
+        shipmentItem.setImageUri(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_wallpaper).toString());
+        shipmentItem.setShippedItemCount(60);
+        shipmentItem.setLoadedCount(0);
+        shipmentItem.setUnloadedCount(60);
+        shipmentItem.setStatus(1);
+        shipmentItem.setDamaged_count(0);
+        shipmentItem.setWeight_count(0);
+        shipmentItem.setMissing_count(0);
+        shipmentItem.setLeakage_count(0);
+        shipmentItem.setDamagedStatus(false);
+        shipmentItem.setSame_truck_status(false);
+        shipmentItem.getBookedItem().setLength(10);
+        shipmentItem.getBookedItem().setWidth(20);
+        shipmentItem.getBookedItem().setHeight(330);
+        shipmentItem.getBookedItem().setActualWeight(2560);
+        shipmentItem.setDestination("FRG");
+        shipmentItem.setOrigin("HYD");
+        shipmentItems.add(shipmentItem);
+
+        booking.setItems(shipmentItems);
+        bookings.put("PWETYU",booking);
+
+
+    }
+
 
    /* void setTruckList(){
         Truck truck =new Truck();
@@ -566,29 +905,49 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
 
     }
 */
-    public static final Map<String,ShipmentItem> shipments_1=new HashMap<>();
+    final Map<String,ShipmentItem> shipments_1=new HashMap<>();
+    final Map<String,ShipmentItem> shipments_2=new HashMap<>();
+    final Map<String,ShipmentItem> shipments_3=new HashMap<>();
     void setTruckList_1(){
         Truck_1 truck_1=new Truck_1();
 
         for(Map.Entry<String, Booking> booking:bookings.entrySet()){
             List<ShipmentItem> shipments=booking.getValue().getItems();
             for(ShipmentItem shipmentItem:shipments){
-                shipments_1.put(shipmentItem.getId(),shipmentItem);
+                if("CJKLRR".equalsIgnoreCase(booking.getKey())|| "OPRTYT".equalsIgnoreCase(booking.getKey())) {
+                    shipments_1.put(shipmentItem.getId(), shipmentItem);
+                }else if("DJKFGH".equalsIgnoreCase(booking.getKey())|| "SSFGTE".equalsIgnoreCase(booking.getKey())){
+                    shipments_2.put(shipmentItem.getId(), shipmentItem);
+                }else if("RTYUFG".equalsIgnoreCase(booking.getKey())){
+                    shipments_3.put(shipmentItem.getId(), shipmentItem);
+                }
             }
         }
 
 
-        LinkedList<ShipmentItem> shipment_list=new LinkedList<>();
 
+        List<ShipmentItem> shipment_list1=new LinkedList<>();
+        List<ShipmentItem> shipment_list2=new LinkedList<>();
+        List<ShipmentItem> shipment_list3=new LinkedList<>();
         for(Map.Entry<String,ShipmentItem> entry:shipments_1.entrySet()){
-            shipment_list.add(entry.getValue());
+            shipment_list1.add(entry.getValue());
         }
+        for(Map.Entry<String,ShipmentItem> entry:shipments_2.entrySet()){
+            shipment_list2.add(entry.getValue());
+        }
+        for(Map.Entry<String,ShipmentItem> entry:shipments_3.entrySet()){
+            shipment_list3.add(entry.getValue());
+        }
+
+
+
+
 
         truck_1.setId("ABCDEFGH12");
         truck_1.setOrigin("HYD");
         truck_1.setDestination("VIZ");
         truck_1.setStops(Arrays.asList("HYD","KOL","CHN","DEL","VIZ"));
-        truck_1.setShipmentItems(shipment_list);
+        truck_1.setShipmentItems((LinkedList)shipment_list1);
         trucks_1.put(truck_1.getId(),truck_1);
 
         truck_1=new Truck_1();
@@ -596,7 +955,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         truck_1.setOrigin("HYD");
         truck_1.setDestination("AHM");
         truck_1.setStops(Arrays.asList("HYD","CAL","MUM","SUR","AHM"));
-        truck_1.setShipmentItems(shipment_list);
+        truck_1.setShipmentItems((LinkedList)shipment_list2);
         trucks_1.put(truck_1.getId(),truck_1);
 
 
@@ -605,7 +964,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         truck_1.setOrigin("HYD");
         truck_1.setDestination("BHP");
         truck_1.setStops(Arrays.asList("HYD","TEA","HJK","BHL","BHP"));
-        truck_1.setShipmentItems(shipment_list);
+        truck_1.setShipmentItems((LinkedList)shipment_list3);
         trucks_1.put(truck_1.getId(),truck_1);
 
 
@@ -615,7 +974,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         truck_1.setOrigin("HYD");
         truck_1.setDestination("CGP");
         truck_1.setStops(Arrays.asList("HYD","CGK","FIT","HKL","CGP"));
-        truck_1.setShipmentItems(shipment_list);
+        truck_1.setShipmentItems((LinkedList)shipment_list1);
         trucks_1.put(truck_1.getId(),truck_1);
 
 
@@ -624,7 +983,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         truck_1.setOrigin("HYD");
         truck_1.setDestination("BHP");
         truck_1.setStops(Arrays.asList("HYD","TEA","HJK","BHL","BHP"));
-        truck_1.setShipmentItems(shipment_list);
+        truck_1.setShipmentItems((LinkedList)shipment_list2);
         trucks_1.put(truck_1.getId(),truck_1);
 
         truck_1=new Truck_1();
@@ -632,7 +991,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         truck_1.setOrigin("HYD");
         truck_1.setDestination("BHP");
         truck_1.setStops(Arrays.asList("HYD","TEA","HJK","BHL","BHP"));
-        truck_1.setShipmentItems(shipment_list);
+        truck_1.setShipmentItems((LinkedList)shipment_list3);
         trucks_1.put(truck_1.getId(),truck_1);
 
     }

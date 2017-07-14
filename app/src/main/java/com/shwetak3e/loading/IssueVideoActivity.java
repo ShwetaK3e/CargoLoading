@@ -167,37 +167,18 @@ public class IssueVideoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_issue_video);
 
 
+
+        //Backup the bundle that came with the starting intent.
+
         shipment_ID=getIntent().getStringExtra("Shipment_ID");
         issue_type=getIntent().getStringExtra("IssueType");
 
-        //showIssueTypeDialog();
 
-        //Backup the bundle that came with the starting intent.
 
         setAudioManagerForClickSound();
         camToOpen = getCamNumber();
 
-        /*OrientationEventListener myOrientationEventListener = new OrientationEventListener(IssueVideoActivity.this, SensorManager.SENSOR_DELAY_NORMAL) {
-            public void onOrientationChanged(int iAngle) {
-                if (iAngle != ORIENTATION_UNKNOWN) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-                        setImageRotation(iAngle);
-                    }
-                } else {
-                    setImageRotation(0);
-                    Log.e("onOrientationChanged", "Orientation angle is ORIENTATION_UNKNOWN");
-                }
-            }
-        };
 
-        // To display if orientation detection will work and enable it
-        if (myOrientationEventListener.canDetectOrientation()) {
-            Log.i(TAG + "onCreate", "Enabling orientationListener", null);
-            myOrientationEventListener.enable();
-        } else {
-            Log.i(TAG + "onCreate", "Failed to enable orientationListener", null);
-            Toast.makeText(this, "Cannot detect device orientation. Your image may not be oriented correctly.", Toast.LENGTH_LONG).show();
-        }*/
 
 
 
@@ -254,20 +235,26 @@ public class IssueVideoActivity extends AppCompatActivity {
 
                     if (outputFile == null) {
                         issue.setUri("");
-                        issue.setIssueDescriptionType(2);  //only text
-                        issue.setIssueDescription(damagedesc);
-
+                        issue.setIssueDescriptionType(2);//only text
+                        if(issue.getIssueType()==0){
+                            issue.setIssueDescription(damagedesc);
+                        } else if(issue.getIssueType()==2){
+                            issue.setIssueDescription(damagedesc+" kgs");
+                        }
                     }else{
                         issue.setUri(outputFile.getAbsolutePath());
-                        if(damagedesc.length()!=0)issue.setIssueDescription(damagedesc);
+                        if(issue.getIssueType()==0){
+                            issue.setIssueDescription(damagedesc);
+                        } else if(issue.getIssueType()==2){
+                            issue.setIssueDescription(damagedesc+" kgs");
+                        }
                         if(outputFile.getName().endsWith(".mp4")){
                             issue.setIssueDescriptionType(0);
                         }else if(outputFile.getName().endsWith(".jpeg")){
                             issue.setIssueDescriptionType(1);
                         }
                     }
-                    List<ShipmentItem> shipmentItems=AddNewTruck_1.current_truck.getShipmentItems();
-                    shipmentItems.remove(TruckDetails_1.current_item);
+
                     openSaveDialog(issue);
 
                 }
@@ -449,16 +436,11 @@ public class IssueVideoActivity extends AppCompatActivity {
 
     //used for naming the files
     private int findnoOfIssues(){
-        List<Issues> issuesList=TruckDetails_1.current_item.getDamaged_list();
-        if(issuesList==null){
-            issuesList=new LinkedList<>();
-        }
-        issuesList.addAll(TruckDetails_1.current_item.getWeight_list());
-        if(issuesList==null){
-            return 0;
-        }else{
-            return issuesList.size();
-        }
+        int count=0;
+        List<Issues> issuesList_1=TruckDetails_1.current_item.getDamaged_list();
+        List<Issues> issuesList_2=TruckDetails_1.current_item.getWeight_list();
+        return issuesList_1.size()+issuesList_2.size();
+
     }
 
     private void setImageRotation(int iAngle) {
@@ -714,13 +696,14 @@ public class IssueVideoActivity extends AppCompatActivity {
      */
 
     private void captureImage(){
-        Camera.Parameters focusParams=mCamera.getParameters();
+        Camera.Parameters params=mCamera.getParameters();
         try {
-            List<String> focusModes = focusParams.getSupportedFocusModes();
+            List<String> focusModes = params.getSupportedFocusModes();
             if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
-                focusParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+                params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
             }
-            setParameters(focusParams, "Focus_Param_image");
+            params.setRotation(0);
+            setParameters(params, "Param_image");
         }catch (Exception e){
             Log.e(TAG, "AutoFocus Not Working");
         }try {
@@ -1506,7 +1489,7 @@ public class IssueVideoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 List<ShipmentItem> shipmentItems = AddNewTruck_1.current_truck.getShipmentItems();
                 shipmentItems.remove(TruckDetails_1.current_item);
-
+                TruckDetails_1.current_item.setDamagedStatus(true);
                 if("damage".equalsIgnoreCase(issue_type)){
                     List<Issues> issues=new LinkedList<>();
                     Log.i("COUNT123A","1 "+ TruckDetails_1.current_item.getDamaged_count() + " "+TruckDetails_1.current_item.getDamaged_list().size());
