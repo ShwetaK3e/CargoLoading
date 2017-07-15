@@ -39,6 +39,7 @@ public class TruckList_1 extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_truck_list, container, false);
+        MainActivity.editTruck=false;
         add_truck=(LinearLayout)view.findViewById(R.id.add_truck);
         add_truck.setOnClickListener(new View.OnClickListener() {
             @Override

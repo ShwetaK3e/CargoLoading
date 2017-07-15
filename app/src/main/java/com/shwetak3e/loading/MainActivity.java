@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
     static public Map<String,Truck_1> trucks_1=new HashMap<>();
     static public Truck_1 current_truck=new Truck_1();
     static public boolean express=false;
+    static public boolean editTruck=false;
 
 
     @Override
@@ -155,9 +156,12 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
                     @Override
                     public void onBack() {
                       Intent i=new Intent(MainActivity.this, MainActivity.class);
-                      i.putExtra("Activity","ISSUES");
+                      i.putExtra("Activity","TRUCK_DETAILS_1");
                       i.putExtra("Shipment_ID", TruckDetails_1.current_item.getId());
                       i.putExtra("SKIP", true);
+                      if(MainActivity.editTruck==false){
+                       i.putExtra("SHOW_ISSUE",true);
+                      }
                       startActivity(i);
 
                     }

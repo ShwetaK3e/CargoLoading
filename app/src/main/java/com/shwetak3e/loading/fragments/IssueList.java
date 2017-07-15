@@ -177,7 +177,6 @@ public class IssueList extends Fragment {
 
                 IssueType="damage";
                 currentIssueList=damageList;
-                add_issue.setVisibility(VISIBLE);
                 if("item".equalsIgnoreCase(from)) {
                     add_issue.setVisibility(VISIBLE);
                 }
@@ -199,7 +198,6 @@ public class IssueList extends Fragment {
 
                 IssueType="damage";
                 currentIssueList=damageList;
-                add_issue.setVisibility(VISIBLE);
                 if("item".equalsIgnoreCase(from)) {
                     add_issue.setVisibility(VISIBLE);
                 }
@@ -221,7 +219,6 @@ public class IssueList extends Fragment {
             @Override
             public void onClick(View v) {
                 IssueType="missing";
-                add_issue.setVisibility(VISIBLE);
                 if("item".equalsIgnoreCase(from)) {
                     add_issue.setVisibility(VISIBLE);
                 }
@@ -235,7 +232,6 @@ public class IssueList extends Fragment {
             @Override
             public void onClick(View v) {
                 IssueType="missing";
-                add_issue.setVisibility(VISIBLE);
                 if("item".equalsIgnoreCase(from)) {
                     add_issue.setVisibility(VISIBLE);
                 }
@@ -257,7 +253,6 @@ public class IssueList extends Fragment {
             public void onClick(View v) {
                 IssueType="weight";
                 currentIssueList=weightIssueList;
-                add_issue.setVisibility(VISIBLE);
                 if("item".equalsIgnoreCase(from)) {
                     add_issue.setVisibility(VISIBLE);
                 }
@@ -277,7 +272,6 @@ public class IssueList extends Fragment {
             public void onClick(View v) {
                 IssueType="weight";
                 currentIssueList=weightIssueList;
-                add_issue.setVisibility(VISIBLE);
                 if("item".equalsIgnoreCase(from)) {
                     add_issue.setVisibility(VISIBLE);
                 }
@@ -320,13 +314,6 @@ public class IssueList extends Fragment {
             public void afterTextChanged(Editable s) {
                 List<ShipmentItem> items = AddNewTruck_1.current_truck.getShipmentItems();
                 items.remove(TruckDetails_1.current_item);
-               if(!"".equalsIgnoreCase(s.toString()) && "item".equalsIgnoreCase(from)) {
-
-                   missing_no = Integer.parseInt(s.toString());
-                   TruckDetails_1.current_item.setMissing_count(Integer.parseInt(s.toString()));
-                   items.add(TruckDetails_1.current_item);
-                   AddNewTruck_1.current_truck.setShipmentItems((LinkedList) items);
-               }
 
                 int newCount;
                 if(s.length()!=0) {
@@ -335,30 +322,24 @@ public class IssueList extends Fragment {
                         missing_no=TruckDetails_1.current_item.getMissing_count();
                         missing_layout_count.setText(String.valueOf(missing_no));
                         missing_layout_count.setSelection(missing_layout_count.getText().toString().length());
+                        Toast.makeText(getActivity(), "Put in Appropriate Count", Toast.LENGTH_SHORT).show();
                     }else {
                         missing_layout_count.setSelection(missing_layout_count.getText().toString().length());
+                        missing_no=newCount;
                         TruckDetails_1.current_item.setMissing_count(newCount);
-
-                        if(item.getLoadedCount()+item.getMissing_count()==item.getShippedItemCount()){
-                            holder.inc_load_count.setEnabled(false);
-                            holder.inc_load_count.setBackground(getActivity().getResources().getDrawable(R.drawable.bg_circle_white));
-                            holder.next.setEnabled(true);
-                            holder.next.setTextColor(getActivity().getResources().getColor(R.color.colorPrimary));
-                        }else if(newCount+item.getMissing_count()<item.getShippedItemCount()) {
-                            holder.next.setEnabled(true);
-                            holder.next.setTextColor(getActivity().getResources().getColor(R.color.light_grey));
-                            holder.inc_load_count.setEnabled(true);
-                            holder.inc_load_count.setBackground(getActivity().getResources().getDrawable(R.drawable.bg_circle_green));
+                        if(TruckDetails_1.current_item.getLoadedCount()+TruckDetails_1.current_item.getMissing_count()==TruckDetails_1.current_item.getShippedItemCount()){
+                            add_issue.setEnabled(false);
+                            add_issue.setBackgroundResource(R.color.white);
+                        }else if(newCount+TruckDetails_1.current_item.getMissing_count()<TruckDetails_1.current_item.getShippedItemCount()) {
+                            add_issue.setEnabled(true);
+                            add_issue.setBackgroundResource(R.color.colorPrimary);
                         }
-                    }
-                }else{
-                    item.setLoadedCount(0);
-                    if(item.getLoadedCount()==0){
-                        holder.dec_load_count.setEnabled(false);
-                        holder.dec_load_count.setBackground(getActivity().getResources().getDrawable(R.drawable.bg_circle_white));
-                    }dsa
-                }
 
+                        items.add(TruckDetails_1.current_item);
+                        AddNewTruck_1.current_truck.setShipmentItems((LinkedList) items);
+                    }
+
+                }
 
             }
         });
@@ -464,7 +445,7 @@ public class IssueList extends Fragment {
         String prev_ID=null;
         String ID=null;
         int pos=0;
-        List<ShipmentItem>shipmentItems=AddNewTruck_1.current_truck.getShipmentItems();
+        List<ShipmentItem>shipmentItems=AddNewTruck_1.current_truck.getLoadedItems();
         for(ShipmentItem  item : shipmentItems){
             if(item.getId().equalsIgnoreCase(shipmentID)){
                 if(!next){

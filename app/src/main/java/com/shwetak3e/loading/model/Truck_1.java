@@ -14,6 +14,9 @@ public class Truck_1 {
     String destination;
     List<String> stops;
     LinkedList<ShipmentItem> shipmentItems;
+    LinkedList<ShipmentItem> loadedItems;
+
+
 
 
     public String getId() {
@@ -57,4 +60,18 @@ public class Truck_1 {
     public void setShipmentItems(LinkedList<ShipmentItem> shipmentItems) {
         this.shipmentItems = shipmentItems;
     }
+
+    public LinkedList<ShipmentItem> getLoadedItems() {
+        if (loadedItems == null) {
+            return new LinkedList<>();
+        }
+        return loadedItems;
+    }
+
+
+    public void setLoadedItems(LinkedList<ShipmentItem> loadedItems) {
+        this.loadedItems = loadedItems;
+    }
+
+
 }

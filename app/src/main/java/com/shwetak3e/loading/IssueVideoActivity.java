@@ -714,12 +714,10 @@ public class IssueVideoActivity extends AppCompatActivity {
     };
 
 
-
-
-
-
-
-
+    @Override
+    public void onBackPressed() {
+        //
+    }
 
     @SuppressWarnings("deprecation")
     public long getAvailableInternalMemorySize() {

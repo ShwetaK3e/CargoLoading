@@ -46,6 +46,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.shwetak3e.loading.MainActivity.editTruck;
 import static com.shwetak3e.loading.MainActivity.trucks;
 import static com.shwetak3e.loading.MainActivity.trucks_1;
 
@@ -110,6 +111,10 @@ public class AddNewTruck_1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_new_truck_1, container, false);
 
+        editTruck=true;
+
+        AddNewTruck_1.current_truck=null;
+        TruckDetails_1.current_item=null;
 
         find_truck=(ImageButton)view.findViewById(R.id.find_truck);
         find_truck.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +127,7 @@ public class AddNewTruck_1 extends Fragment {
                     i.putExtra("Activity", "TRUCK_DETAILS_1");
                     startActivity(i);
                 }else{
-                    Log.i(TAG," Truck Not Found");
+                    Toast.makeText(getContext(), "The Truck Is Not Found", Toast.LENGTH_SHORT).show();
                 }
             }
         });

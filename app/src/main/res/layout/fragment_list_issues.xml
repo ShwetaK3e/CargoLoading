@@ -567,15 +567,14 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/add_issue"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_margin="30dp"
             android:layout_gravity="bottom|right|end"
             android:src="@drawable/ic_plus"
             android:scaleType="center"
             app:fabSize="auto"
             app:backgroundTint="@color/colorPrimary"
-
             app:borderWidth="2dp"
             />
 

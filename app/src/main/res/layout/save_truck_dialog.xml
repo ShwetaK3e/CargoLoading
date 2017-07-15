@@ -44,10 +44,33 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:gravity="center">
+                android:gravity="center"
+                android:weightSum="1">
 
                 <Button
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.45"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:text="NO"
+                    android:textSize="20sp"
+                    android:layout_gravity="center"
+                    android:minWidth="2dp"
+                    android:minHeight="2dp"
+                    android:typeface="serif"
+                    android:id="@+id/load"
+                    android:textColor="@color/colorPrimary"/>
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_separator"
+                    android:id="@+id/separator"/>
+
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_weight="0.45"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     android:text="OK"
