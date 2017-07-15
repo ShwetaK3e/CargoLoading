@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         displayView(position);
     }
 
+    IssueList.OnBackPressedListener onBackPressedListener;
     private void displayView(int position) {
         Fragment fragment = null;
         String title = getString(R.string.app_name);
@@ -150,7 +151,18 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
                 break;
 
             case 1:
-                fragment = IssueList.newInstance();;
+                onBackPressedListener=new IssueList.OnBackPressedListener() {
+                    @Override
+                    public void onBack() {
+                      Intent i=new Intent(MainActivity.this, MainActivity.class);
+                      i.putExtra("Activity","ISSUES");
+                      i.putExtra("Shipment_ID", TruckDetails_1.current_item.getId());
+                      i.putExtra("SKIP", true);
+                      startActivity(i);
+
+                    }
+                };
+                fragment = IssueList.newInstance(onBackPressedListener);
                 title = getString(R.string.nav_issue_list)+context;
                 break;
             case 2:
@@ -1005,10 +1017,12 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
     }
 
 
-
-
-
-
-
-
+    @Override
+    public void onBackPressed() {
+        if(onBackPressedListener!=null){
+            onBackPressedListener.onBack();
+            onBackPressedListener=null;
+        }
+        super.onBackPressed();
+    }
 }

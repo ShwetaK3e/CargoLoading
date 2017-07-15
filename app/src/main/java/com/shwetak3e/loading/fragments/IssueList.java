@@ -85,23 +85,26 @@ public class IssueList extends Fragment {
     List<Issues> damageList=new LinkedList<>();
     List<Issues> weightIssueList=new LinkedList<>();
 
-    FloatingActionButton change_type;
+    FloatingActionButton add_issue;
 
 
     String IssueType="NO_TYPE";
 
 
 
-    LinearLayout add_issue;
+
 
     private String shipmentID;
     private  String from;
+    private boolean skip;
+    OnBackPressedListener onBackPressedListener;
 
 
 
 
-    public static IssueList newInstance( ) {
+    public static IssueList newInstance( OnBackPressedListener onBackPressedListener ) {
         IssueList fragment = new IssueList();
+        fragment.onBackPressedListener=onBackPressedListener;
         return fragment;
     }
 
@@ -112,6 +115,8 @@ public class IssueList extends Fragment {
 
         shipmentID=getActivity().getIntent().getStringExtra("Shipment_ID");
         from=getActivity().getIntent().getStringExtra("From");
+        skip=getActivity().getIntent().getBooleanExtra("SKIP",false);
+
 
         shipmentID_txtview=(TextView)view.findViewById(R.id.shipment_id);
         shipmentID_txtview.setText(shipmentID);
@@ -126,7 +131,7 @@ public class IssueList extends Fragment {
             public void onClick(View v) {
                 getAnotherShipment(false);
                 IssueType="NO_TYPE";
-                Glide.with(getContext()).load(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_truck_2).toString()).into(change_type);
+                add_issue.setVisibility(INVISIBLE);
                 shipmentID_txtview.setText(shipmentID);
                 issue_list.setVisibility(INVISIBLE);
                 missing_layout.setVisibility(INVISIBLE);
@@ -146,7 +151,7 @@ public class IssueList extends Fragment {
                 getAnotherShipment(true);
                 shipmentID_txtview.setText(shipmentID);
                 IssueType="NO_TYPE";
-                Glide.with(getContext()).load(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_truck_2).toString()).into(change_type);
+                add_issue.setVisibility(INVISIBLE);
                 issue_list.setVisibility(INVISIBLE);
                 missing_layout.setVisibility(INVISIBLE);
                 select_issue_type.setVisibility(VISIBLE);
@@ -172,8 +177,7 @@ public class IssueList extends Fragment {
 
                 IssueType="damage";
                 currentIssueList=damageList;
-                change_type.setVisibility(VISIBLE);
-                change_type.setImageResource(R.drawable.ic_error);
+                add_issue.setVisibility(VISIBLE);
                 if("item".equalsIgnoreCase(from)) {
                     add_issue.setVisibility(VISIBLE);
                 }
@@ -195,8 +199,7 @@ public class IssueList extends Fragment {
 
                 IssueType="damage";
                 currentIssueList=damageList;
-                change_type.setVisibility(VISIBLE);
-                change_type.setImageResource(R.drawable.ic_error);
+                add_issue.setVisibility(VISIBLE);
                 if("item".equalsIgnoreCase(from)) {
                     add_issue.setVisibility(VISIBLE);
                 }
@@ -218,8 +221,7 @@ public class IssueList extends Fragment {
             @Override
             public void onClick(View v) {
                 IssueType="missing";
-                change_type.setVisibility(VISIBLE);
-                change_type.setImageResource(R.drawable.ic_missing);
+                add_issue.setVisibility(VISIBLE);
                 if("item".equalsIgnoreCase(from)) {
                     add_issue.setVisibility(VISIBLE);
                 }
@@ -233,8 +235,7 @@ public class IssueList extends Fragment {
             @Override
             public void onClick(View v) {
                 IssueType="missing";
-                change_type.setVisibility(VISIBLE);
-                change_type.setImageResource(R.drawable.ic_missing);
+                add_issue.setVisibility(VISIBLE);
                 if("item".equalsIgnoreCase(from)) {
                     add_issue.setVisibility(VISIBLE);
                 }
@@ -256,8 +257,7 @@ public class IssueList extends Fragment {
             public void onClick(View v) {
                 IssueType="weight";
                 currentIssueList=weightIssueList;
-                change_type.setVisibility(VISIBLE);
-                change_type.setImageResource(R.drawable.ic_load);
+                add_issue.setVisibility(VISIBLE);
                 if("item".equalsIgnoreCase(from)) {
                     add_issue.setVisibility(VISIBLE);
                 }
@@ -277,8 +277,7 @@ public class IssueList extends Fragment {
             public void onClick(View v) {
                 IssueType="weight";
                 currentIssueList=weightIssueList;
-                change_type.setVisibility(VISIBLE);
-                change_type.setImageResource(R.drawable.ic_load);
+                add_issue.setVisibility(VISIBLE);
                 if("item".equalsIgnoreCase(from)) {
                     add_issue.setVisibility(VISIBLE);
                 }
@@ -319,14 +318,48 @@ public class IssueList extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                List<ShipmentItem> items = AddNewTruck_1.current_truck.getShipmentItems();
+                items.remove(TruckDetails_1.current_item);
                if(!"".equalsIgnoreCase(s.toString()) && "item".equalsIgnoreCase(from)) {
-                   List<ShipmentItem> items = AddNewTruck_1.current_truck.getShipmentItems();
-                   items.remove(TruckDetails_1.current_item);
+
                    missing_no = Integer.parseInt(s.toString());
                    TruckDetails_1.current_item.setMissing_count(Integer.parseInt(s.toString()));
                    items.add(TruckDetails_1.current_item);
                    AddNewTruck_1.current_truck.setShipmentItems((LinkedList) items);
                }
+
+                int newCount;
+                if(s.length()!=0) {
+                    newCount=Integer.parseInt(s.toString());
+                    if(newCount<0 || newCount +TruckDetails_1.current_item.getLoadedCount()> TruckDetails_1.current_item.getShippedItemCount()){
+                        missing_no=TruckDetails_1.current_item.getMissing_count();
+                        missing_layout_count.setText(String.valueOf(missing_no));
+                        missing_layout_count.setSelection(missing_layout_count.getText().toString().length());
+                    }else {
+                        missing_layout_count.setSelection(missing_layout_count.getText().toString().length());
+                        TruckDetails_1.current_item.setMissing_count(newCount);
+
+                        if(item.getLoadedCount()+item.getMissing_count()==item.getShippedItemCount()){
+                            holder.inc_load_count.setEnabled(false);
+                            holder.inc_load_count.setBackground(getActivity().getResources().getDrawable(R.drawable.bg_circle_white));
+                            holder.next.setEnabled(true);
+                            holder.next.setTextColor(getActivity().getResources().getColor(R.color.colorPrimary));
+                        }else if(newCount+item.getMissing_count()<item.getShippedItemCount()) {
+                            holder.next.setEnabled(true);
+                            holder.next.setTextColor(getActivity().getResources().getColor(R.color.light_grey));
+                            holder.inc_load_count.setEnabled(true);
+                            holder.inc_load_count.setBackground(getActivity().getResources().getDrawable(R.drawable.bg_circle_green));
+                        }
+                    }
+                }else{
+                    item.setLoadedCount(0);
+                    if(item.getLoadedCount()==0){
+                        holder.dec_load_count.setEnabled(false);
+                        holder.dec_load_count.setBackground(getActivity().getResources().getDrawable(R.drawable.bg_circle_white));
+                    }dsa
+                }
+
+
             }
         });
 
@@ -339,30 +372,25 @@ public class IssueList extends Fragment {
 
 
         //floating button
-        change_type=(FloatingActionButton)view.findViewById(R.id.change_type);
-        Glide.with(getContext()).load(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_truck_2).toString()).into(change_type);
-        change_type.setOnClickListener(new View.OnClickListener() {
+        add_issue=(FloatingActionButton)view.findViewById(R.id.add_issue);
+        add_issue.setVisibility(INVISIBLE);
+        add_issue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if(!"NO_TYPE".equalsIgnoreCase(IssueType)){
-                   currentIssueList=new LinkedList<>();
-                   IssueType="NO_TYPE";
-                   Glide.with(getContext()).load(Uri.parse("android.resource://com.shwetak3e.loading/" + R.drawable.ic_truck_2).toString()).into(change_type);
-                   setCountsonSelectIssue();
-                   add_issue.setVisibility(INVISIBLE);
-                   select_issue_type.setVisibility(VISIBLE);
-                   missing_layout.setVisibility(INVISIBLE);
-                   issue_list.setVisibility(INVISIBLE);
+                if(!"missing".equalsIgnoreCase(IssueType)) {
+                    Intent intent = new Intent(getActivity(), IssueVideoActivity.class);
+                    intent.putExtra("Shipment_ID", shipmentID);
+                    intent.putExtra("IssueType", IssueType);
+                    startActivity(intent);
                 }else{
-                    Intent i=new Intent(getActivity(), MainActivity.class);
-                    i.putExtra("Activity","TRUCK_DETAILS_1");
-                    if(!"item".equalsIgnoreCase(from)){
-                        i.putExtra("SHOW_ISSUE",true);
-                    }
-                    startActivity(i);
+                    missing_no ++;
+                    missing_layout_count.setText(String.valueOf(missing_no));
+                    List<ShipmentItem> items=AddNewTruck_1.current_truck.getShipmentItems();
+                    items.remove(TruckDetails_1.current_item);
+                    TruckDetails_1.current_item.setMissing_count(missing_no);
+                    items.add(TruckDetails_1.current_item);
+                    AddNewTruck_1.current_truck.setShipmentItems((LinkedList)items);
                 }
-
 
             }
         });
@@ -383,7 +411,7 @@ public class IssueList extends Fragment {
         }
 
 
-        add_issue=(LinearLayout)view.findViewById(R.id.add_issue);
+       /* add_issue=(LinearLayout)view.findViewById(R.id.add_issue);
         add_issue.setVisibility(INVISIBLE);
         add_issue.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -405,10 +433,25 @@ public class IssueList extends Fragment {
 
                 }
             }
-        });
+        });*/
+
+       if(skip) {
+
+           if (select_issue_type.getVisibility() == VISIBLE) {
+               Intent i = new Intent(getActivity(), MainActivity.class);
+               i.putExtra("Activity", "TRUCK_DETAILS_1");
+               startActivity(i);
+           }else{
+               missing_layout.setVisibility(INVISIBLE);
+               issue_list.setVisibility(INVISIBLE);
+           }
+
+       }
 
         return view;
     }
+
+
 
 
 
@@ -676,6 +719,11 @@ public class IssueList extends Fragment {
             desc=(TextView)dialog.findViewById(R.id.desc);
         }
     }
+
+    public interface OnBackPressedListener{
+        void onBack();
+    }
+
 
 
 

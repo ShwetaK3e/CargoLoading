@@ -170,6 +170,7 @@
                     android:padding="5dp"
                     android:id="@+id/loading_count"
                     android:hint="Loaded"
+                      android:digits="0123456789"
                     android:gravity="center"
                       android:textColor="#00ff00"
                       android:textSize="18sp"
